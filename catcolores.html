@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Catalogo de colores</title>
+        <link rel="stylesheet" href="stylecolors.css">
+
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Antic&family=Big+Shoulders+Text:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poiret+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&family=Thasadith:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        
+        <!-- Font Awesome -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+        
+        <!-- Bootstrap CSS and JS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        
+     
+    </head>
+    
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg" style="background-color: black;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="images/IMG_5160.JPG" alt="Logo" width="30" height="30">
+                </a>
+                <a class="navbar-brand" href="index.html" style="color: white; text-align: center;">
+                    LINEAS RECTAS<br>
+                    <span class="subheader">AMOBLAMIENTOS</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="color: white;"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html" style="color: white;">HOME</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">PRODUCTOS</a>
+                            <ul class="dropdown-menu" style="background-color: black;">
+                                <li><a id="vertodos" class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'todos')" style="color: white;">Ver Todos</a></li>
+                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'living')" style="color: white;">Living</a></li>
+                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'dormitorio')" style="color: white;">Dormitorio</a></li>
+                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'comedor')" style="color: white;">Comedor</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="catcolores.html" style="color: white;">CATALOGO DE COLORES</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contacto.html" style="color: white;">CONTACTO</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Styles -->
+    <style>
+        .dropdown-menu .dropdown-item:hover {
+            color: black !important;
+        }
+    </style>
+    <div class="botonesss">
+        <a href="#lineaNature" class="btn">Línea Nature</a>
+        <a href="#lineaBlend" class="btn">Línea Blend</a>
+        <a href="#lineaMaderasClasicas" class="btn">Línea Maderas clásicas</a>
+        <a href="#lineaLisos" class="btn">Línea Lisos</a>
+        <a href="#lineaHilados" class="btn">Línea Hilados</a>
+        <a href="#lineaUrbanConcept" class="btn">Línea Urban Concept</a>
+        <a href="#lineaMesopotamia" class="btn">Línea Mesopotamia</a>
+        <a href="#lineaNordica" class="btn">Línea Nórdica</a>
+        <a href="#lineaEtnica" class="btn">Línea Étnica</a>
+        
+    </div>
+    
+    <div class="titulocolor" id="lineaNature">Línea Nature</div>
+    <div class="catalog-container">
+        <!-- Ejemplo de item de color -->
+         
+        <div class="color-item">
+            <img src="fotosColores/lineanature/caju.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Cajú</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/gaudi.jpg" alt="Color 2"
+            onclick="openModal(this)">
+            <div class="color-name">Gaudí</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/montblanc.jpg" alt="Color 3" onclick="openModal(this)">
+            <div class="color-name">Mont Blanc</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/tekaartico.jpg" alt="Color 4" onclick="openModal(this)">
+            <div class="color-name">Teka Artico</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/venezia.jpg" alt="Color 5" onclick="openModal(this)">
+            <div class="color-name">Venezia</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/nogal.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Nogal Terracota</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/terrarum.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Terrarum</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/linoza.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Linosa Cinza</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/carvahlomezo.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Carvalho Mezzo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/carvaloazzerado.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Carvalho Aserrado</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/noccemilano.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Nocce Milano</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanature/blanconature.jpg" alt="Color 6" onclick="openModal(this)">
+            <div class="color-name">Blanco Nature</div>
+        </div>
+        
+    </div>
+    <div class="titulocolor" id="lineaBlend">Línea Blend </div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineablend/sauco.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Sauco</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineablend/pinotgris.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Pinot Gris</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineablend/camelia.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Camellia</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineablend/merlot.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Merlot</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineablend/scotch.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Scotch</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineablend/amaranto.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Amaranto</div>
+        </div>
+        
+    </div>
+    <div class="titulocolor" id="lineaMaderasClasicas">Línea Maderas clásicas</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/roblesdakarnature.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Roble Dakar Nature</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/robleamernature.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Roble Americano Nature</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/cedro.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Cedro Nature</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/robledakar woodtext.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Roble Dakar Woodtext</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/cedro woodtext.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Cedro Woodtext</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/tabaco.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Tanganica Tabaco</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/ebano negro.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Ebano Negro</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamaderasclasicas/robleamericanosupermate.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Roble Americano Supermate</div>
+        </div>
+        
+    </div>
+
+    <div class="titulocolor" id="lineaLisos">Línea Lisos</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/linealisos/ceniza.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Ceniza</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/grafito.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Grafito</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/negroprofundo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Negro Profundo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/grishumo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Gris Humo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/almendra.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Almendra</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/aluminio.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Aluminio</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/ceniza.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Litio</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/azullago.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Azul Lago</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/rojo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Rojo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/linealisos/blancotundra.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Blanco Tundra</div>
+        </div>
+    </div>
+
+    <div class="titulocolor" id="lineaHilados">Línea Hilados</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/sedaazzura.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Seda Azzurra</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/sedagiorno.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Seda Giorno</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/sedanotte.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Seda Notte</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/linochiaro.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Lino Chiaro</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/linoblanco.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Lino Blanco</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/linoterra.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Lino Terra</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineahilados/linonegro.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Lino Negro</div>
+        </div>
+    </div>
+
+    <div class="titulocolor" id="lineaUrbanConcept">Línea Urban Concept </div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/coliseo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Coliseo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/amberes.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Amberes</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/viena.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Viena</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/moscu.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Moscú</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/praga.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Praga</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/street.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Street</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaurban/home.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Home</div>
+        </div>
+    </div>
+
+    <div class="titulocolor" id="lineaMesopotamia">Línea Mesopotamia</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/GrisBasalto.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Gris Basalto</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/gristapir.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Gris Tapir</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/amastista.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Amatista</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/jade.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Jade</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/kiri.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Kiri</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/paraiso.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Paraíso</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineamesopotamia/griscaliza.jpg" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Gris Caliza</div>
+        </div> 
+    </div>
+
+    <div class="titulocolor" id="lineaNordica">Línea Nórdica</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineanordica/helsinki.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Helsinki</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanordica/baltico.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Báltico</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanordica/olmo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Olmo Finlandés</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanordica/robleescandi.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Roble Escandinavo</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineanordica/tekaoslo.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Teka Oslo</div>
+        </div>
+    </div>
+
+    <div class="titulocolor" id="lineaEtnica">Línea Étnica</div>
+    <div class="catalog-container">
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/triba.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Tribal</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/sahara.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Sahara</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/tuareg.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Tuareg</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/himalaya.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Himalaya</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/safari.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Safari</div>
+        </div>
+        <div class="color-item">
+            <img src="fotosColores/lineaetnica/everest.jfif" alt="Color 1" onclick="openModal(this)">
+            <div class="color-name">Everest</div>
+        </div>
+        
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="Imagen ampliada">
+    </div>
+    <!-- Pie de Página -->
+    <footer>
+        <div id="contacto" class="footer-info">
+            <img class="logoabajo" src="images/IMG_5013.JPG" alt="">
+            <h3>LINEAS RECTAS</h3>
+            <p>Villa Maria, CBA.</p>
+            <p>Porfirio Seppey 315</p>
+            <p>+54-9353 6574696</p>
+            <p>lineasrectas@gmail.com</p>
+        </div>
+        <div class="footer-redes"> 
+            <ul>
+                <!-- Enlace a Instagram -->
+                <li>
+                    <img id="fotou" src="images/instagram-new.png" alt="Instagram">
+                    <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
+                </li>
+        
+                <!-- Enlace a WhatsApp -->
+                <li>
+                    <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
+                    <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                </li>
+            </ul>
+        </div>
+        
+    </footer>
+    <script>
+        // Función para abrir el modal y mostrar la imagen
+        function openModal(image) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = image.src; // Usar la misma imagen
+            modal.style.display = 'flex'; // Mostrar el modal
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'none'; // Ocultar el modal
+        }
+    </script>
+</body>
+</html>

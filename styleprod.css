@@ -1,0 +1,280 @@
+/* Estilos generales */
+html, body {
+    background-color: #000000;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+/* Encabezado */
+/* Header */
+
+.subheader {
+    font-size: 0.45em; /* Tamaño más pequeño */
+    font-weight: normal; /* Peso normal para diferenciar del encabezado */
+    color: white; /* Mismo color blanco que el texto principal */
+    display: block; /* Para asegurarte de que se muestre en una nueva línea */
+    margin-top: -5px; /* Ajuste para reducir el espacio entre los textos */
+  }
+.producto-filtrer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+.filtro-categorias{
+    margin-left: 65px;
+    color: #555;
+    
+}
+.filtro-categorias select {
+    padding: 5px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    background-color: rgb(255, 255, 255); /* Fondo blanco para el select */
+    color: #010101; /* Color de texto predeterminado */
+}
+
+/* Cuando el mouse pasa sobre el select */
+
+
+
+/* Para las opciones dentro del select */
+.filtro-categorias select option:hover {
+    color: white; /* Cambia el color de las opciones a blanco */
+    background-color: #000000; /* Cambia el fondo de las opciones al pasar el mouse */
+    font-weight: bold; /* Establece las opciones en negrita */
+}
+#categoria{
+    max-width: 650px;
+    margin-right: 250px;
+}
+
+.breadcrumb{
+    margin-top: 38px;
+    margin-left: 85px;
+    margin-bottom: 40px;
+}
+#home{
+    text-decoration: none;
+    color: #555;
+}
+.producter{
+    margin-top: 26px;
+    margin-left: 85px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.6rem;
+}
+
+h1 {
+    margin: 0;
+}
+
+/* Contenedor de productos */
+#catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+/* Estilo para cada producto */
+.producto {
+    background-color: white;
+    width: 250px;
+    margin: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    
+    text-align: center;
+    padding: 15px;
+}
+
+.producto h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.producto p {
+    font-size: 1em;
+    color: #555;
+}
+
+.producto button {
+    background-color: #000000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.producto button:hover {
+    background-color: #ffffff;
+    color: black;
+    border: solid 1px black;
+    font-weight: bold;
+}
+
+/* Estilo para las imágenes de los productos */
+.producto img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    
+}
+
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    width: 100%;
+  }
+  
+  .footer-info { margin-bottom: 20px; }
+  .footer-info h3, .footer-info p { margin: 10px 0; }
+  
+  .footer-redes {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .footer-redes ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  .wpp-footer{
+    text-decoration: none;
+    color: white;
+  }
+  .ig-footer{
+    text-decoration: none;
+    color: white;
+  }
+  .footer-redes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .footer-copy { margin-top: 20px; }
+  
+  #fotou {
+    width: 30px;
+    height: auto;
+  }
+  
+  .logoabajo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+  }
+  
+
+/* Media Query para pantallas de celular */
+@media (max-width: 768px) {
+    /* Cambiar el contenedor para que los productos se vean en dos columnas */
+    #catalogo {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .producto {
+        width: 45%; /* Dos productos por fila */
+        margin: 10px; /* Ajustar el margen */
+    }
+   
+    /* Ajustar la apariencia de los filtros y categorías */
+    .filtro-categorias {
+        margin-right: 5px;
+        color: #555;
+    }
+    
+    #categoria {
+        max-width: 200px;
+        
+    }
+    
+  
+    .breadcrumb {
+        margin-top: 20px;
+        margin-left: 30px;
+    }
+    
+    #home {
+        text-decoration: none;
+        color: #555;
+    }
+    
+    .producter {
+        margin-left: 30px;
+        font-family: "Montserrat", sans-serif;
+    }
+}
+/* Media Query para pantallas muy pequeñas (menos de 480px) */
+@media (max-width: 480px) {
+    /* Ajuste del contenedor de productos para que se organicen en 2 columnas */
+    #catalogo {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+        gap: 10px; /* Espaciado entre los productos */
+        padding: 10px;
+    }
+    
+    .producto {
+        width: 45%; /* Los productos ocuparán el 100% del ancho de su celda */
+        margin: 0; /* Eliminar márgenes de los productos */
+    }
+    .producto-filtrer{
+        display: flex;
+        flex-direction: row;
+        
+    }
+    /* Ajuste en los filtros y categorías */
+    .filtro-categorias {
+
+        color: #555;
+        
+        
+    }
+    
+    #categoria {
+        
+        
+        align-items: center;
+    }
+
+
+    .breadcrumb {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    .producter {
+        margin-left: 10px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.7rem;
+    }
+
+    /* Ajuste del título de los productos */
+    .producto h3 {
+        font-size: 1.1em; /* Reducir el tamaño del título */
+    }
+
+    .producto p {
+        font-size: 0.9em; /* Reducir el tamaño del texto descriptivo */
+    }
+}
