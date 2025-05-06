@@ -5,10 +5,18 @@ html, body {
     font-size: 16px;
     margin: 0;
     padding: 0;
+    overflow-x: hidden; /* Prevención de desbordamiento horizontal */
   }
-
-/* Encabezado */
-/* Header */
+  
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  /* Asegura que los grids y contenedores no excedan el ancho */
+  .furniture-grid, .services-grid, .container {
+    max-width: 100%;
+  }
+  
 
 .subheader {
     font-size: 0.45em; /* Tamaño más pequeño */
@@ -24,7 +32,7 @@ html, body {
     
 }
 .filtro-categorias{
-    margin-left: 65px;
+    margin-left: 61px;
     color: #555;
     
 }
