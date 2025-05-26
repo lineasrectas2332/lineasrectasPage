@@ -1,549 +1,447 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Catálogo con Modo Admin en Footer</title>
-<link rel="stylesheet" href="styleprod.css">
-<!-- Bootstrap CSS and JS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Antic&family=Big+Shoulders+Text:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poiret+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&family=Thasadith:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo con Modo Admin en Footer</title>
+  <link rel="stylesheet" href="styleprod.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Font Awesome y Google Fonts omitidos para brevedad -->
+
+  <style>
     body {
-        background-color: #fff;
-        color: #333;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+      background-color: #fff;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     main {
-        flex: 1;
-        padding: 20px;
+      flex: 1;
+      padding: 20px;
     }
     .producto {
-        width: 18rem;
-        margin: 10px;
+      width: 18rem;
+      margin: 10px;
     }
     .admin-panel {
-        margin: 20px 0;
+      margin: 20px 0;
     }
     .formulario-producto {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
     }
-    
-    /* Pie de página */
-    footer {
-        text-align: center;
-        padding: 10px;
-        background-color: black;
-        color: white;
-        width: 100%;
-    }
-
-    .footer-info { margin-bottom: 20px; }
-    .footer-info h3, .footer-info p { margin: 10px 0; }
-
-    .footer-redes {
-        display: flex;
-        justify-content: center;
-    }
-
-    .footer-redes ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-    .wpp-footer{
-        text-decoration: none;
-        color: white;
-    }
-    .ig-footer{
-        text-decoration: none;
-        color: white;
-    }
-    .footer-redes li {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .footer-copy { margin-top: 20px; }
-
-    #fotou {
-        width: 30px;
-        height: auto;
-    }
-
-    .logoabajo {
-        width: 100px;
-        height: auto;
-        margin: 0 auto;
-    }
-
-    /* Botón modo admin en footer */
-    #btnModoAdminFooter {
-        background-color: #000000;
-        color: rgb(214, 214, 214);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background-color 0.3s;
-        margin-top: 10px;
-    }
-    #btnModoAdminFooter:hover {
-        background-color: #ffffff;
-        color: rgb(0, 0, 0);
-    }
-    .btn-agregar-nuevo {
-        margin-bottom: 20px;
-    }
-    
     .card-img-top {
-        height: 200px;
-        object-fit: cover;
+      height: 200px;
+      object-fit: cover;
     }
-     .dropdown-menu .dropdown-item:hover {
-            color: black !important;
-        }
-</style>
+    /* ...el resto de tu CSS (footer, menú, etc.) ... */
+  </style>
 </head>
 <body>
 
-<!-- Mantener el mismo header y estructura HTML -->
+<!-- Header + Breadcrumb + Filtro idénticos a tu HTML -->
 <header class="header">
-        <nav class="navbar navbar-expand-lg" style="background-color: black;">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="images/IMG_5160.JPG" alt="Logo" width="30" height="30">
-                </a>
-                <a class="navbar-brand" href="index.html" style="color: white; text-align: center;">
-                    LINEAS RECTAS<br>
-                    <span class="subheader">AMOBLAMIENTOS</span>
-                </a>
-                
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon" style="color: white;"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html" style="color: white;">HOME</a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">PRODUCTOS</a>
-                            <ul class="dropdown-menu" style="background-color: black;">
-                                <li><a id="vertodos" class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'todos')" style="color: white;">Ver Todos</a></li>
-                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'living')" style="color: white;">Living</a></li>
-                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'dormitorio')" style="color: white;">Dormitorio</a></li>
-                                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'comedor')" style="color: white;">Comedor</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="catcolores.html" style="color: white;">CATALOGO DE COLORES</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contacto.html" style="color: white;">CONTACTO</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+  <nav class="navbar navbar-expand-lg" style="background-color: black;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="images/IMG_5160.JPG" alt="Logo" width="30" height="30"></a>
+      <a class="navbar-brand" href="index.html" style="color: white; text-align: center;">
+        LINEAS RECTAS<br><span class="subheader">AMOBLAMIENTOS</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="color: white;"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html" style="color: white;">HOME</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">PRODUCTOS</a>
+            <ul class="dropdown-menu" style="background-color: black;">
+              <li><a id="vertodos" class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria','todos')" style="color: white;">Ver Todos</a></li>
+              <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria','living')" style="color: white;">Living</a></li>
+              <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria','dormitorio')" style="color: white;">Dormitorio</a></li>
+              <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria','comedor')" style="color: white;">Comedor</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="catcolores.html" style="color: white;">CATÁLOGO DE COLORES</a></li>
+          <li class="nav-item"><a class="nav-link" href="contacto.html" style="color: white;">CONTACTO</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </header>
- 
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a id="home" href="index.html">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Productos</li>
-        </ol>
-    </nav>
+<nav aria-label="breadcrumb" class="ms-3 mt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a id="home" href="index.html">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Productos</li>
+  </ol>
+</nav>
+
 <main class="container">
-    <h1 class="producter">Productos</h1>
-<!-- Filtro personalizado -->
-    <div class="filtro-categorias">
+  <h1 class="producter">Productos</h1>
+
+  <!-- Filtro de Categorías -->
+  <div class="filtro-categorias mb-3">
     <label for="categoria">Filtrar por categoría:</label>
-    <select id="categoria" onchange="filtrarProductos()">
-        <option value="todos">Todos</option>
-        <option value="living">Living</option>
-        <option value="comedor">Comedor</option>
-        <option value="dormitorio">Dormitorio</option>
+    <select id="categoria" class="form-select w-auto" onchange="mostrarProductos()">
+      <option value="todos">Todos</option>
+      <option value="living">Living</option>
+      <option value="comedor">Comedor</option>
+      <option value="dormitorio">Dormitorio</option>
     </select>
-    </div>
+  </div>
 
+  <!-- Aquí aparecerá el buscador y los cards -->
+  <div id="productos" class="d-flex flex-wrap"></div>
 
-    <div id="productos" class="d-flex flex-wrap">
+  <!-- Panel de Admin (igual que tu HTML) -->
+  <div id="adminPanel" class="admin-panel d-none">
+    <div id="formAgregarContainer" class="formulario-producto">
+      <h3>Agregar Nuevo Producto</h3>
+      <form id="formAgregarProducto">
         <div class="mb-3">
-            <label for="busquedaInput" class="form-label">Buscar por nombre:</label>
-            <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa...">
+          <label for="nombreNuevo" class="form-label">Nombre</label>
+          <input type="text" id="nombreNuevo" class="form-control" required />
         </div>
+        <div class="mb-3">
+          <label for="categoriaNuevo" class="form-label">Categoría</label>
+          <select id="categoriaNuevo" class="form-select" required>
+            <option value="" disabled selected>Seleccione categoría</option>
+            <option value="living">Living</option>
+            <option value="comedor">Comedor</option>
+            <option value="dormitorio">Dormitorio</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="medidasNuevo" class="form-label">Medidas</label>
+          <input type="text" id="medidasNuevo" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
+        </div>
+        <div class="mb-3">
+          <label for="precioNuevo" class="form-label">Precio</label>
+          <input type="number" id="precioNuevo" class="form-control" min="0" step="0.01" required />
+        </div>
+        <div class="mb-3">
+          <label for="imagenFileNuevo" class="form-label">Imagen (JPG)</label>
+          <input type="file" id="imagenFileNuevo" class="form-control" accept=".jpg,.jpeg" required />
+        </div>
+        <button type="submit" class="btn btn-success">Agregar Producto</button>
+      </form>
     </div>
 
-    <!-- Panel de administración -->
-    <div id="adminPanel" class="admin-panel d-none">
-        <!-- Formulario para agregar nuevo producto -->
-        <div id="formAgregarContainer" class="formulario-producto">
-            <h3>Agregar Nuevo Producto</h3>
-            <form id="formAgregarProducto">
-                <div class="mb-3">
-                    <label for="nombreNuevo" class="form-label">Nombre</label>
-                    <input type="text" id="nombreNuevo" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <label for="categoriaNuevo" class="form-label">Categoría</label>
-                    <select id="categoriaNuevo" class="form-select" required>
-                        <option value="" disabled selected>Seleccione categoría</option>
-                        <option value="living">Living</option>
-                        <option value="comedor">Comedor</option>
-                        <option value="dormitorio">Dormitorio</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="medidasNuevo" class="form-label">Medidas</label>
-                    <input type="text" id="medidasNuevo" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
-                </div>
-                <div class="mb-3">
-                    <label for="precioNuevo" class="form-label">Precio</label>
-                    <input type="number" id="precioNuevo" class="form-control" min="0" step="0.01" required />
-                </div>
-                <div class="mb-3">
-                    <label for="imagenFileNuevo" class="form-label">Imagen (JPG)</label>
-                    <input type="file" id="imagenFileNuevo" class="form-control" accept=".jpg,.jpeg" required />
-                </div>
-                <button type="submit" class="btn btn-success">Agregar Producto</button>
-            </form>
+    <div id="formEditarContainer" class="formulario-producto d-none">
+      <h3>Editar Producto</h3>
+      <form id="formEditarProducto">
+        <input type="hidden" id="idEditar">
+        <div class="mb-3">
+          <label for="nombreEditar" class="form-label">Nombre</label>
+          <input type="text" id="nombreEditar" class="form-control" required />
         </div>
-
-        <!-- Formulario para editar producto -->
-        <div id="formEditarContainer" class="formulario-producto d-none">
-            <h3>Editar Producto</h3>
-            <form id="formEditarProducto">
-                <input type="hidden" id="idEditar">
-                <div class="mb-3">
-                    <label for="nombreEditar" class="form-label">Nombre</label>
-                    <input type="text" id="nombreEditar" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <label for="categoriaEditar" class="form-label">Categoría</label>
-                    <select id="categoriaEditar" class="form-select" required>
-                        <option value="living">Living</option>
-                        <option value="comedor">Comedor</option>
-                        <option value="dormitorio">Dormitorio</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="medidasEditar" class="form-label">Medidas</label>
-                    <input type="text" id="medidasEditar" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
-                </div>
-                <div class="mb-3">
-                    <label for="precioEditar" class="form-label">Precio</label>
-                    <input type="number" id="precioEditar" class="form-control" min="0" step="0.01" required />
-                </div>
-                <div class="mb-3">
-                    <label for="imagenFileEditar" class="form-label">Imagen (JPG)</label>
-                    <input type="file" id="imagenFileEditar" class="form-control" accept=".jpg,.jpeg" />
-                    <small class="text-muted">Dejar en blanco para mantener la imagen actual.</small>
-                </div>
-                <div class="mb-3">
-                    <img id="imagenActual" src="" class="img-thumbnail" style="max-width: 200px; display: none;">
-                </div>
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <button type="button" class="btn btn-secondary ms-2" onclick="cancelarEdicion()">Cancelar</button>
-            </form>
+        <div class="mb-3">
+          <label for="categoriaEditar" class="form-label">Categoría</label>
+          <select id="categoriaEditar" class="form-select" required>
+            <option value="living">Living</option>
+            <option value="comedor">Comedor</option>
+            <option value="dormitorio">Dormitorio</option>
+          </select>
         </div>
+        <div class="mb-3">
+          <label for="medidasEditar" class="form-label">Medidas</label>
+          <input type="text" id="medidasEditar" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
+        </div>
+        <div class="mb-3">
+          <label for="precioEditar" class="form-label">Precio</label>
+          <input type="number" id="precioEditar" class="form-control" min="0" step="0.01" required />
+        </div>
+        <div class="mb-3">
+          <label for="imagenFileEditar" class="form-label">Imagen (JPG)</label>
+          <input type="file" id="imagenFileEditar" class="form-control" accept=".jpg,.jpeg" />
+          <small class="text-muted">Dejar en blanco para mantener la imagen actual.</small>
+        </div>
+        <div class="mb-3">
+          <img id="imagenActual" src="" class="img-thumbnail" style="max-width: 200px; display: none;">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary ms-2" onclick="cancelarEdicion()">Cancelar</button>
+      </form>
     </div>
+  </div>
 </main>
 
 <footer>
-    <div id="contacto" class="footer-info">
-        <img class="logoabajo" src="images/IMG_5160.JPG" alt="Logo abajo">
-        <h3>LINEAS RECTAS</h3>
-        <p>Villa Maria, CBA.</p>
-        <p>Porfirio Seppey 315</p>
-        <p>+54-9353 6574696</p>
-        <p>lineasrectas@gmail.com</p>
-    </div>
-    <div class="footer-redes"> 
-        <ul>
-            <li>
-                <img id="fotou" src="images/instagram-new.png" alt="Instagram">
-                <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
-            </li>
-            <li>
-                <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
-                <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            </li>
-            <li>
-                <img id="fotou" src="images/facebook.png" alt="Facebook">
-                <a class="fb-footer" href="https://www.facebook.com/lineasrectas.amoblamientos" target="_blank" rel="noopener noreferrer">Facebook</a>
-            </li>
-        </ul>
-    </div>
-    <button id="btnModoAdminFooter">Modo Admin</button>
-
+  <!-- ... tu footer ... -->
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    let productos = [];
-    let modoAdminActivo = false;
+  let productos = [];
+  let modoAdminActivo = false;
 
-    // Cargar datos al iniciar
-    document.addEventListener('DOMContentLoaded', () => {
-        cargarProductosDesdeStorage();
-        mostrarProductos();
+  // 1) Al cargarse la página:
+  document.addEventListener('DOMContentLoaded', () => {
+    cargarProductosDesdeStorage();
+    mostrarProductos();
 
-        document.getElementById('formAgregarProducto').addEventListener('submit', function(e) {
-            e.preventDefault();
-            guardarProducto('nuevo');
-        });
+    document.getElementById('formAgregarProducto').addEventListener('submit', function(e) {
+      e.preventDefault();
+      guardarProducto('nuevo');
+    });
+    document.getElementById('formEditarProducto').addEventListener('submit', function(e) {
+      e.preventDefault();
+      guardarProducto('editar');
+    });
+    document.getElementById('btnModoAdminFooter').addEventListener('click', toggleModoAdmin);
+    document.getElementById('categoria').addEventListener('change', mostrarProductos);
+  });
 
-        document.getElementById('formEditarProducto').addEventListener('submit', function(e) {
-            e.preventDefault();
-            guardarProducto('editar');
-        });
+  // 2) Activar/Desactivar modo admin
+  function toggleModoAdmin() {
+    if (!modoAdminActivo) {
+      const pass = prompt('Ingrese la contraseña de administrador:');
+      if (pass === 'admin123') {
+        modoAdminActivo = true;
+        document.getElementById('adminPanel').classList.remove('d-none');
+      } else if (pass !== null) {
+        alert('Contraseña incorrecta.');
+        return;
+      }
+    } else {
+      modoAdminActivo = false;
+      cancelarEdicion();
+      document.getElementById('adminPanel').classList.add('d-none');
+    }
+    mostrarProductos();
+  }
 
-        document.getElementById('btnModoAdminFooter').addEventListener('click', toggleModoAdmin);
+  // 3) Cargar productos desde localStorage (ó crear ejemplos)
+  function cargarProductosDesdeStorage() {
+    const datos = localStorage.getItem('productos');
+    if (datos) {
+      productos = JSON.parse(datos);
+    } else {
+      productos = [
+        {
+          id: 1,
+          nombre: "Sofá Clásico",
+          categoria: "living",
+          medidas: "2m x 0.8m x 0.9m",
+          precio: 120000,
+          // URL “segura” (funciona en cualquier servidor)
+          imagen: "https://via.placeholder.com/300x200?text=Sof%C3%A1+Cl%C3%A1sico"
+        },
+        {
+          id: 2,
+          nombre: "Mesa de Comedor",
+          categoria: "comedor",
+          medidas: "1.5m x 0.9m x 0.75m",
+          precio: 85000,
+          imagen: "https://via.placeholder.com/300x200?text=Mesa+de+Comedor"
+        }
+      ];
+      localStorage.setItem('productos', JSON.stringify(productos));
+    }
+  }
 
-        // Evento global para filtrado (se adjunta tras crear el input dinámico)
-        document.addEventListener('input', function (e) {
-            if (e.target && e.target.id === 'busquedaInput') {
-                filtrarProductos();
-            }
-        });
+  // 4) Guardar array completo en localStorage
+  function guardarEnStorage() {
+    localStorage.setItem('productos', JSON.stringify(productos));
+  }
+
+  // 5) Renderizar Productos (cards + buscador + filtro)
+  function mostrarProductos() {
+    const contenedor = document.getElementById('productos');
+    contenedor.innerHTML = '';
+
+    //––– Crear/Dibujar primer bloque: buscador
+    const buscadorDiv = document.createElement('div');
+    buscadorDiv.className = 'mb-3 w-100';
+    buscadorDiv.innerHTML = `
+      <label for="busquedaInput" class="form-label">Buscar por nombre o categoría:</label>
+      <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa..." />
+    `;
+    contenedor.appendChild(buscadorDiv);
+
+    // Al teclear en el buscador, filtramos en tiempo real
+    document.getElementById('busquedaInput').addEventListener('input', filtrarYMostrar);
+
+    filtrarYMostrar(); // Llamada inicial para pintar cards
+  }
+
+  // 6) Filtrar según buscador + select y luego dibujar los cards
+  function filtrarYMostrar() {
+    const contenedor = document.getElementById('productos');
+    // Elimina todo menos el buscador (que es el primer hijo)
+    Array.from(contenedor.children).forEach((child, idx) => {
+      if (idx > 0) contenedor.removeChild(child);
     });
 
-    function toggleModoAdmin() {
-        if (!modoAdminActivo) {
-            const pass = prompt('Ingrese la contraseña de administrador:');
-            if (pass === 'admin123') {
-                modoAdminActivo = true;
-                document.getElementById('adminPanel').classList.remove('d-none');
-            } else if (pass !== null) {
-                alert('Contraseña incorrecta.');
-                return;
-            }
-        } else {
-            modoAdminActivo = false;
-            cancelarEdicion();
-            document.getElementById('adminPanel').classList.add('d-none');
-        }
-        mostrarProductos();
+    const texto = document.getElementById('busquedaInput').value.toLowerCase();
+    const categoriaFiltro = document.getElementById('categoria').value;
+
+    // Filtrar array
+    const filtrados = productos.filter(p => {
+      const coincideTexto = p.nombre.toLowerCase().includes(texto) 
+                         || p.categoria.toLowerCase().includes(texto);
+      const coincideCat = (categoriaFiltro === 'todos') || (p.categoria === categoriaFiltro);
+      return coincideTexto && coincideCat;
+    });
+
+    if (filtrados.length === 0) {
+      const alerta = document.createElement('div');
+      alerta.className = 'alert alert-info w-100';
+      alerta.textContent = 'No hay productos para mostrar.';
+      contenedor.appendChild(alerta);
+      return;
     }
 
-    function cargarProductosDesdeStorage() {
-        const productosGuardados = localStorage.getItem('productos');
-        if (productosGuardados) {
-            productos = JSON.parse(productosGuardados);
-        } else {
-            productos = [
-                {
-                    id: 1,
-                    nombre: "Sofá Clásico",
-                    categoria: "living",
-                    medidas: "2m x 0.8m x 0.9m",
-                    precio: 120000,
-                    imagen: "https://via.placeholder.com/300x200?text=Sofá+Clásico"
-                },
-                {
-                    id: 2,
-                    nombre: "Mesa de Comedor",
-                    categoria: "comedor",
-                    medidas: "1.5m x 0.9m x 0.75m",
-                    precio: 85000,
-                    imagen: "https://via.placeholder.com/300x200?text=Mesa+Comedor"
-                }
-            ];
-            guardarEnStorage();
-        }
+    // Dibujar cada card
+    filtrados.forEach(producto => {
+      const card = document.createElement('div');
+      card.className = 'card producto';
+      let srcImg = producto.imagen;
+
+      // Si no tiene string de imagen (ej: ""), mostrar un placeholder genérico
+      if (!srcImg) {
+        srcImg = 'https://via.placeholder.com/300x200?text=Sin+imagen';
+      }
+
+      card.innerHTML = `
+        <img src="${srcImg}" class="card-img-top" alt="${producto.nombre}">
+        <div class="card-body">
+          <h5 class="card-title">${producto.nombre}</h5>
+          <p class="card-text">Categoría: ${producto.categoria}</p>
+          <p class="card-text">Medidas: ${producto.medidas || '-'}</p>
+          <p class="card-text fw-bold">$${producto.precio.toLocaleString('es-AR')}</p>
+          ${modoAdminActivo
+            ? `<div class="d-flex">
+                 <button class="btn btn-warning flex-grow-1 me-1" onclick="editarProducto(${producto.id})">Editar</button>
+                 <button class="btn btn-danger flex-grow-1" onclick="eliminarProducto(${producto.id})">Eliminar</button>
+               </div>`
+            : `<button class="btn btn-primary flex-grow-1">Comprar</button>`}
+        </div>
+      `;
+      contenedor.appendChild(card);
+    });
+  }
+
+  // 7) Guardar nuevo o editar existente
+  function guardarProducto(tipo) {
+    // Obtenemos datos del formulario
+    const datos = {};
+    if (tipo === 'nuevo') {
+      datos.id = productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1;
+      datos.nombre = document.getElementById('nombreNuevo').value.trim();
+      datos.categoria = document.getElementById('categoriaNuevo').value;
+      datos.medidas = document.getElementById('medidasNuevo').value.trim();
+      datos.precio = parseFloat(document.getElementById('precioNuevo').value);
+      datos.imagenFile = document.getElementById('imagenFileNuevo');
+    } else {
+      datos.id = parseInt(document.getElementById('idEditar').value);
+      datos.nombre = document.getElementById('nombreEditar').value.trim();
+      datos.categoria = document.getElementById('categoriaEditar').value;
+      datos.medidas = document.getElementById('medidasEditar').value.trim();
+      datos.precio = parseFloat(document.getElementById('precioEditar').value);
+      datos.imagenFile = document.getElementById('imagenFileEditar');
+      datos.imagenActual = document.getElementById('imagenActual').src;
     }
 
-    function guardarEnStorage() {
-        localStorage.setItem('productos', JSON.stringify(productos));
+    // Validar campos obligatorios
+    if (!datos.nombre || !datos.categoria || isNaN(datos.precio)) {
+      alert('Por favor complete todos los campos obligatorios.');
+      return;
+    }
+    if (tipo === 'nuevo' && datos.imagenFile.files.length === 0) {
+      alert('Por favor seleccione una imagen para el producto.');
+      return;
     }
 
-    function mostrarProductos() {
-        const contenedor = document.getElementById('productos');
-        contenedor.innerHTML = '';
-
-        // Crear y agregar buscador y filtro
-        const buscadorContainer = document.createElement('div');
-        buscadorContainer.className = 'mb-3';
-        buscadorContainer.innerHTML = `
-            <label for="busquedaInput" class="form-label">Buscar por nombre o categoría:</label>
-            <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa...">
-        `;
-        contenedor.appendChild(buscadorContainer);
-
-        const textoBusqueda = document.getElementById('busquedaInput').value.toLowerCase();
-        const categoriaSelect = document.getElementById('categoria');
-        const categoriaFiltro = categoriaSelect ? categoriaSelect.value : 'todos';
-
-        const productosFiltrados = productos.filter(p => {
-            const coincideBusqueda = p.nombre.toLowerCase().includes(textoBusqueda) || 
-                                    p.categoria.toLowerCase().includes(textoBusqueda);
-            const coincideCategoria = categoriaFiltro === 'todos' || p.categoria === categoriaFiltro;
-            return coincideBusqueda && coincideCategoria;
-        });
-
-        if (productosFiltrados.length === 0) {
-            contenedor.innerHTML += '<div class="alert alert-info w-100">No hay productos para mostrar.</div>';
-            return;
-        }
-
-        productosFiltrados.forEach(producto => {
-            const card = document.createElement('div');
-            card.className = 'card producto mb-3';
-            card.innerHTML = `
-                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
-                <div class="card-body">
-                    <h5 class="card-title">${producto.nombre}</h5>
-                    <p class="card-text">Categoría: ${producto.categoria}</p>
-                    <p class="card-text">Medidas: ${producto.medidas || '-'}</p>
-                    <p class="card-text fw-bold">$${producto.precio.toLocaleString('es-AR')}</p>
-                    ${modoAdminActivo ? `
-                        <div class="d-flex">
-                            <button class="btn btn-warning flex-grow-1 me-1" onclick="editarProducto(${producto.id})">Editar</button>
-                            <button class="btn btn-danger flex-grow-1" onclick="eliminarProducto(${producto.id})">Eliminar</button>
-                        </div>
-                    ` : '<button class="btn btn-primary">Comprar</button>'}
-                </div>
-            `;
-            contenedor.appendChild(card);
-        });
-    }
-
-    function guardarProducto(tipo) {
-        const obtenerDatos = () => {
-            if (tipo === 'nuevo') {
-                return {
-                    id: productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1,
-                    nombre: document.getElementById('nombreNuevo').value.trim(),
-                    categoria: document.getElementById('categoriaNuevo').value,
-                    medidas: document.getElementById('medidasNuevo').value.trim(),
-                    precio: parseFloat(document.getElementById('precioNuevo').value),
-                    imagenFile: document.getElementById('imagenFileNuevo')
-                };
-            } else {
-                return {
-                    id: parseInt(document.getElementById('idEditar').value),
-                    nombre: document.getElementById('nombreEditar').value.trim(),
-                    categoria: document.getElementById('categoriaEditar').value,
-                    medidas: document.getElementById('medidasEditar').value.trim(),
-                    precio: parseFloat(document.getElementById('precioEditar').value),
-                    imagenFile: document.getElementById('imagenFileEditar'),
-                    imagenActual: document.getElementById('imagenActual').src
-                };
-            }
+    // Procesar imagen con FileReader (Base64)
+    const procesarImagen = (callback) => {
+      if (datos.imagenFile.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          callback(e.target.result);
         };
+        reader.readAsDataURL(datos.imagenFile.files[0]);
+      } else {
+        // Para edición sin cambiar imagen
+        callback(datos.imagenActual || '');
+      }
+    };
 
-        const datos = obtenerDatos();
+    // Una vez procesada la imagen, construimos el objeto final
+    procesarImagen((imagenBase64) => {
+      const nuevoProd = {
+        id: datos.id,
+        nombre: datos.nombre,
+        categoria: datos.categoria,
+        medidas: datos.medidas,
+        precio: datos.precio,
+        imagen: imagenBase64 || ''
+      };
 
-        if (!datos.nombre || !datos.categoria || isNaN(datos.precio)) {
-            alert('Por favor complete todos los campos obligatorios.');
-            return;
-        }
+      if (tipo === 'nuevo') {
+        productos.push(nuevoProd);
+        document.getElementById('formAgregarProducto').reset();
+      } else {
+        const idx = productos.findIndex(p => p.id === datos.id);
+        if (idx !== -1) productos[idx] = nuevoProd;
+        cancelarEdicion();
+      }
 
-        if (tipo === 'nuevo' && datos.imagenFile.files.length === 0) {
-            alert('Por favor seleccione una imagen para el producto.');
-            return;
-        }
+      guardarEnStorage();
+      mostrarProductos();
+    });
+  }
 
-        const procesarImagen = (callback) => {
-            if (datos.imagenFile.files.length > 0) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    callback(e.target.result);
-                };
-                reader.readAsDataURL(datos.imagenFile.files[0]);
-            } else {
-                callback(tipo === 'editar' ? datos.imagenActual : null);
-            }
-        };
-
-        procesarImagen((imagenBase64) => {
-            const producto = {
-                id: datos.id,
-                nombre: datos.nombre,
-                categoria: datos.categoria,
-                medidas: datos.medidas,
-                precio: datos.precio,
-                imagen: imagenBase64 || datos.imagenActual || 'https://via.placeholder.com/300x200?text=Sin+imagen'
-            };
-
-            if (tipo === 'nuevo') {
-                productos.push(producto);
-                document.getElementById('formAgregarProducto').reset();
-            } else {
-                const index = productos.findIndex(p => p.id === producto.id);
-                if (index !== -1) {
-                    productos[index] = producto;
-                }
-                cancelarEdicion();
-            }
-
-            guardarEnStorage();
-            mostrarProductos();
-        });
+  // 8) Rellenar formulario para editar
+  function editarProducto(id) {
+    const prod = productos.find(p => p.id === id);
+    if (!prod) {
+      alert('Producto no encontrado');
+      return;
     }
+    document.getElementById('idEditar').value = prod.id;
+    document.getElementById('nombreEditar').value = prod.nombre;
+    document.getElementById('categoriaEditar').value = prod.categoria;
+    document.getElementById('medidasEditar').value = prod.medidas;
+    document.getElementById('precioEditar').value = prod.precio;
 
-    function editarProducto(id) {
-        const producto = productos.find(p => p.id === id);
-        if (!producto) {
-            alert('Producto no encontrado');
-            return;
-        }
+    const imgAct = document.getElementById('imagenActual');
+    imgAct.src = prod.imagen || '';
+    imgAct.style.display = prod.imagen ? 'block' : 'none';
 
-        document.getElementById('idEditar').value = producto.id;
-        document.getElementById('nombreEditar').value = producto.nombre;
-        document.getElementById('categoriaEditar').value = producto.categoria;
-        document.getElementById('medidasEditar').value = producto.medidas;
-        document.getElementById('precioEditar').value = producto.precio;
+    document.getElementById('formAgregarContainer').classList.add('d-none');
+    document.getElementById('formEditarContainer').classList.remove('d-none');
+    window.scrollTo({ top: document.getElementById('formEditarContainer').offsetTop, behavior: 'smooth' });
+  }
 
-        const imgActual = document.getElementById('imagenActual');
-        imgActual.src = producto.imagen;
-        imgActual.style.display = 'block';
+  // 9) Cancelar edición y volver al formulario de alta
+  function cancelarEdicion() {
+    document.getElementById('formEditarProducto').reset();
+    document.getElementById('imagenActual').style.display = 'none';
+    document.getElementById('formEditarContainer').classList.add('d-none');
+    document.getElementById('formAgregarContainer').classList.remove('d-none');
+  }
 
-        document.getElementById('formAgregarContainer').classList.add('d-none');
-        document.getElementById('formEditarContainer').classList.remove('d-none');
-        window.scrollTo({
-            top: document.getElementById('formEditarContainer').offsetTop,
-            behavior: 'smooth'
-        });
+  // 10) Eliminar producto
+  function eliminarProducto(id) {
+    if (confirm('¿Está seguro que desea eliminar este producto?')) {
+      productos = productos.filter(p => p.id !== id);
+      guardarEnStorage();
+      mostrarProductos();
     }
-
-    function cancelarEdicion() {
-        document.getElementById('formEditarProducto').reset();
-        document.getElementById('imagenActual').style.display = 'none';
-        document.getElementById('formEditarContainer').classList.add('d-none');
-        document.getElementById('formAgregarContainer').classList.remove('d-none');
-    }
-
-    function eliminarProducto(id) {
-        if (confirm('¿Está seguro que desea eliminar este producto?')) {
-            productos = productos.filter(p => p.id !== id);
-            guardarEnStorage();
-            mostrarProductos();
-        }
-    }
-
-    function filtrarProductos() {
-        mostrarProductos();
-    }
+  }
 </script>
-
 </body>
 </html>
