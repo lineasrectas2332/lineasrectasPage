@@ -17,10 +17,10 @@ label[for="busquedaInput"] {
 /* ====================
    Contenido Principal
    ==================== */
-/* Reducimos el padding-top para acercar todo al header */
+/* Mantenemos el mismo padding en todas las pantallas */
 main {
     flex: 1;
-    padding: 20px 60px; /* Antes: 40px 60px */
+    padding: 20px 60px; /* Igual en escritorio, tablet y celular */
 }
 
 /* ====================
@@ -36,15 +36,15 @@ main {
 }
 
 .navbar {
-    min-height: 65px; /* o el valor que quieras */
+    min-height: 65px; /* Igual en todas las pantallas */
     line-height: 1;
 }
 
 .subheader {
-    font-size: 0.45em; /* Tamaño más pequeño */
-    font-weight: normal; /* Peso normal para diferenciar del encabezado */
-    color: white; /* Mismo color blanco que el texto principal */
-    display: block; /* Para asegurarte de que se muestre en una nueva línea */
+    font-size: 0.45em; /* Igual en todas las pantallas */
+    font-weight: normal;
+    color: white;
+    display: block;
 }
 
 .navprodprincipal div {
@@ -53,12 +53,12 @@ main {
     align-items: center;
     margin-top: 37px;
     margin-bottom: 37px;
-    color: #ffffff; /* Este puede ser opcional ya que se hereda de .navprodprincipal */
+    color: #ffffff;
 }
 
 .navprodprincipal div a {
-    color: white; /* Cambia el color del enlace a blanco */
-    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: white;
+    text-decoration: none;
 }
 
 .navprodprincipal div:hover {
@@ -71,17 +71,17 @@ main {
 }
 
 .navprodprincipal div a:hover {
-    color: #6e5b5b; /* Color al pasar el mouse sobre el enlace */
+    color: #6e5b5b;
 }
 
 /* ====================
    Breadcrumb y Título de Sección
    ==================== */
-/* Reducimos márgenes para acercar al header */
+/* Mantenemos siempre los mismos márgenes sin cambios */
 .breadcrumb {
-    margin-top: 10px;     /* Antes: 38px */
+    margin-top: 10px;     /* Igual en escritorio, tablet y celular */
     margin-left: 85px;
-    margin-bottom: 20px;  /* Antes: 40px */
+    margin-bottom: 20px;
 }
 
 #home {
@@ -89,9 +89,8 @@ main {
     color: #555;
 }
 
-/* Ajustamos .producter para que quede más cerca del breadcrumb */
 .producter {
-    margin-top: 5px;      /* Antes: 26px */
+    margin-top: 5px;      /* Igual en todas las pantallas */
     margin-left: 85px;
     font-family: "Montserrat", sans-serif;
     font-size: 2.6rem;
@@ -100,19 +99,18 @@ main {
 /* ====================
    Filtro de Categorías
    ==================== */
-/* Ajuste para acercar el filtro al borde derecho y al título */
 .filtro-categorias {
     display: flex;
-    justify-content: flex-end; /* Sigue alineado a la derecha */
+    justify-content: flex-end; /* Siempre alineado a la derecha */
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
     font-size: 0.95rem;
     color: #333;
-    margin-top: 5px;          /* En lugar de 0, agregamos 5px para un espacio mínimo */
+    margin-top: 5px;          /* Igual en todas las pantallas */
     margin-bottom: 10px;
-    margin-left: 85px;        /* Alinea con breadcrumb y título */
+    margin-left: 85px;        /* Constante */
     width: calc(100% - 85px);
-    padding-right: 0.5rem;     /* Reducido para acercar al borde */
+    padding-right: 0.5rem;     /* Constante */
     box-sizing: border-box;
 }
 
@@ -140,7 +138,7 @@ main {
 
 #categoria {
     max-width: 650px;
-    margin-right: 20px;      /* Reducido para acercar al borde derecho */
+    margin-right: 20px;      /* Constante en todas las pantallas */
 }
 
 /* ====================
@@ -158,12 +156,13 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 40px;
+    /* Sin cambios en móviles/tablets: mantiene exactamente el mismo layout */
 }
 
 .producto {
     border: none !important;
     box-shadow: none !important;
-    width: 250px;
+    width: 250px;    /* Constante: igual en escritorio y dispositivos */
     text-align: center;
 }
 
@@ -209,89 +208,6 @@ h1 {
     height: 200px;
     object-fit: cover;
     border-radius: 5px;
-}
-
-/* ====================
-   Media Query: Tablets / Celulares < 768px
-   ==================== */
-@media (max-width: 768px) {
-    /* Ajustes para Products + breadcrumb + filtro */
-    .breadcrumb {
-        margin-top: 8px;
-        margin-left: 30px;
-        margin-bottom: 15px;
-    }
-
-    .producter {
-        margin-top: 3px;
-        margin-left: 30px;
-        font-size: 2.2rem;
-    }
-
-    .filtro-categorias {
-        justify-content: flex-end;
-        margin-top: 5px;
-        margin-left: 30px;
-        padding-right: 0.3rem;
-        color: #555;
-    }
-
-    #categoria {
-        max-width: 200px;
-        margin-right: 10px;
-    }
-
-    /* Ajustes de productos en tablet */
-    .productos-container {
-        justify-content: center;
-    }
-
-    .producto {
-        width: 45%;
-        margin: 10px;
-    }
-}
-
-/* ====================
-   Media Query: Pantallas muy pequeñas < 480px
-   ==================== */
-@media (max-width: 480px) {
-    .breadcrumb {
-        margin-top: 5px;
-        margin-left: 10px;
-        margin-bottom: 10px;
-    }
-
-    .producter {
-        margin-top: 2px;
-        margin-left: 10px;
-        font-size: 1.7rem;
-    }
-
-    .filtro-categorias {
-        justify-content: flex-end;
-        margin-top: 5px;
-        margin-left: 10px;
-        padding-right: 0.3rem;
-        color: #555;
-    }
-
-    #categoria {
-        max-width: 200px;
-        margin-right: 10px;
-    }
-
-    .productos-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .producto {
-        width: 45%;
-        margin: 0;
-    }
 }
 
 /* ====================
@@ -377,19 +293,10 @@ footer {
 }
 
 /* ====================
-   Responsivo General
+   RESPONSIVIDAD ELIMINADA
    ==================== */
-@media screen and (max-width: 768px) {
-    .productos-container {
-        justify-content: center;
-    }
-
-    .producto {
-        width: 100%;
-        max-width: 320px;
-    }
-
-    .filtro-categorias {
-        justify-content: center;
-    }
-}
+/* 
+   Cualquier media query que altere márgenes, anchos o disposición 
+   ha sido removida para que el diseño permanezca idéntico en móvil, tablet y escritorio. 
+   ¡Las tarjetas, el breadcrumb y el filtro siempre se verán exactamente igual!
+*/
