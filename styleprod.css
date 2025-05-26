@@ -1,288 +1,395 @@
-/* Estilos generales */
+/* ====================
+   Estilos Globales
+   ==================== */
 html, body {
     background-color: #000000;
     font-family: "Montserrat", sans-serif;
     font-size: 16px;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Prevención de desbordamiento horizontal */
-  }
-  
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  
-  /* Asegura que los grids y contenedores no excedan el ancho */
-  .furniture-grid, .services-grid, .container {
-    max-width: 100%;
-  }
-  
+}
+
+#busquedaInput,
+label[for="busquedaInput"] {
+    display: none;
+}
+
+/* ====================
+   Contenido Principal
+   ==================== */
+/* Reducimos el padding-top para acercar todo al header */
+main {
+    flex: 1;
+    padding: 20px 60px; /* Antes: 40px 60px */
+}
+
+/* ====================
+   Navegación Principal
+   ==================== */
+.navprodprincipal {
+    background-color: #000000;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    font-family: "Montserrat", sans-serif;
+    color: #ffffff; /* Asegura que todos los textos sean blancos */
+}
+
+.navbar {
+    min-height: 65px; /* o el valor que quieras */
+    line-height: 1;
+}
 
 .subheader {
     font-size: 0.45em; /* Tamaño más pequeño */
     font-weight: normal; /* Peso normal para diferenciar del encabezado */
     color: white; /* Mismo color blanco que el texto principal */
     display: block; /* Para asegurarte de que se muestre en una nueva línea */
-    margin-top: -5px; /* Ajuste para reducir el espacio entre los textos */
-  }
-.producto-filtrer{
+}
+
+.navprodprincipal div {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    
-}
-.filtro-categorias{
-    margin-left: 61px;
-    color: #555;
-    
-}
-.filtro-categorias select {
-    padding: 5px;
-    font-size: 1rem;
-    border-radius: 4px;
-    border: 1px solid #000000;
-    background-color: rgb(255, 255, 255); /* Fondo blanco para el select */
-    color: #010101; /* Color de texto predeterminado */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 37px;
+    margin-bottom: 37px;
+    color: #ffffff; /* Este puede ser opcional ya que se hereda de .navprodprincipal */
 }
 
-/* Cuando el mouse pasa sobre el select */
-
-
-
-/* Para las opciones dentro del select */
-.filtro-categorias select option:hover {
-    color: white; /* Cambia el color de las opciones a blanco */
-    background-color: #000000; /* Cambia el fondo de las opciones al pasar el mouse */
-    font-weight: bold; /* Establece las opciones en negrita */
-}
-#categoria{
-    max-width: 650px;
-    margin-right: 250px;
+.navprodprincipal div a {
+    color: white; /* Cambia el color del enlace a blanco */
+    text-decoration: none; /* Elimina el subrayado del enlace */
 }
 
-.breadcrumb{
-    margin-top: 38px;
+.navprodprincipal div:hover {
+    font-size: large;
+    color: #6e5b5b;
+}
+
+.navprodprincipal div img {
+    width: 55px;
+}
+
+.navprodprincipal div a:hover {
+    color: #6e5b5b; /* Color al pasar el mouse sobre el enlace */
+}
+
+/* ====================
+   Breadcrumb y Título de Sección
+   ==================== */
+/* Reducimos márgenes para acercar al header */
+.breadcrumb {
+    margin-top: 10px;     /* Antes: 38px */
     margin-left: 85px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;  /* Antes: 40px */
 }
-#home{
+
+#home {
     text-decoration: none;
     color: #555;
 }
-.producter{
-    margin-top: 26px;
+
+/* Ajustamos .producter para que quede más cerca del breadcrumb */
+.producter {
+    margin-top: 5px;      /* Antes: 26px */
     margin-left: 85px;
     font-family: "Montserrat", sans-serif;
     font-size: 2.6rem;
 }
 
-h1 {
-    margin: 0;
-}
-
-/* Contenedor de productos */
-#catalogo {
+/* ====================
+   Filtro de Categorías
+   ==================== */
+/* Ajuste para acercar el filtro al borde derecho y al título */
+.filtro-categorias {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-}
-
-/* Estilo para cada producto */
-.producto {
-    background-color: white;
-    width: 250px;
-    margin: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-    
-    text-align: center;
-    padding: 15px;
-}
-
-.producto h3 {
-    font-size: 1.2em;
+    justify-content: flex-end; /* Sigue alineado a la derecha */
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    color: #333;
+    margin-top: 5px;          /* En lugar de 0, agregamos 5px para un espacio mínimo */
     margin-bottom: 10px;
+    margin-left: 85px;        /* Alinea con breadcrumb y título */
+    width: calc(100% - 85px);
+    padding-right: 0.5rem;     /* Reducido para acercar al borde */
+    box-sizing: border-box;
 }
 
-.producto p {
-    font-size: 1em;
-    color: #555;
+.filtro-categorias label {
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
-.producto button {
-    background-color: #000000;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s;
+.filtro-categorias select {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+    min-width: 140px;
+    outline: none;
 }
 
-.producto button:hover {
-    background-color: #ffffff;
-    color: black;
-    border: solid 1px black;
+.filtro-categorias select option:hover {
+    background-color: #000;
+    color: #fff;
     font-weight: bold;
 }
 
-/* Estilo para las imágenes de los productos */
-.producto img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    border-radius: 8px;
-    
+#categoria {
+    max-width: 650px;
+    margin-right: 20px;      /* Reducido para acercar al borde derecho */
 }
 
+/* ====================
+   Productos (Cards)
+   ==================== */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: left;
+}
 
-/* Pie de página */
-footer {
+.productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.producto {
+    border: none !important;
+    box-shadow: none !important;
+    width: 250px;
     text-align: center;
-    padding: 10px;
+}
+
+.producto img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.producto h4 {
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.producto p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.producto button {
     background-color: black;
     color: white;
-    width: 100%;
-  }
-  
-  .footer-info { margin-bottom: 20px; }
-  .footer-info h3, .footer-info p { margin: 10px 0; }
-  
-  .footer-redes {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .footer-redes ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  .wpp-footer{
-    text-decoration: none;
-    color: white;
-  }
-  .ig-footer{
-    text-decoration: none;
-    color: white;
-  }
-  .footer-redes li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .footer-copy { margin-top: 20px; }
-  
-  #fotou {
-    width: 30px;
-    height: auto;
-  }
-  
-  .logoabajo {
-    width: 100px;
-    height: auto;
-    margin: 0 auto;
-  }
-  
+    border: none;
+    padding: 10px 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
 
-/* Media Query para pantallas de celular */
+.producto button:hover {
+    background-color: #333;
+}
+
+/* ====================
+   Imagen de Productos en Cards
+   ==================== */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* ====================
+   Media Query: Tablets / Celulares < 768px
+   ==================== */
 @media (max-width: 768px) {
-    /* Cambiar el contenedor para que los productos se vean en dos columnas */
-    #catalogo {
-        display: flex;
-        flex-wrap: wrap;
+    /* Ajustes para Products + breadcrumb + filtro */
+    .breadcrumb {
+        margin-top: 8px;
+        margin-left: 30px;
+        margin-bottom: 15px;
+    }
+
+    .producter {
+        margin-top: 3px;
+        margin-left: 30px;
+        font-size: 2.2rem;
+    }
+
+    .filtro-categorias {
+        justify-content: flex-end;
+        margin-top: 5px;
+        margin-left: 30px;
+        padding-right: 0.3rem;
+        color: #555;
+    }
+
+    #categoria {
+        max-width: 200px;
+        margin-right: 10px;
+    }
+
+    /* Ajustes de productos en tablet */
+    .productos-container {
         justify-content: center;
     }
 
     .producto {
-        width: 45%; /* Dos productos por fila */
-        margin: 10px; /* Ajustar el margen */
-    }
-   
-    /* Ajustar la apariencia de los filtros y categorías */
-    .filtro-categorias {
-        margin-right: 5px;
-        color: #555;
-    }
-    
-    #categoria {
-        max-width: 200px;
-        
-    }
-    
-  
-    .breadcrumb {
-        margin-top: 20px;
-        margin-left: 30px;
-    }
-    
-    #home {
-        text-decoration: none;
-        color: #555;
-    }
-    
-    .producter {
-        margin-left: 30px;
-        font-family: "Montserrat", sans-serif;
+        width: 45%;
+        margin: 10px;
     }
 }
-/* Media Query para pantallas muy pequeñas (menos de 480px) */
+
+/* ====================
+   Media Query: Pantallas muy pequeñas < 480px
+   ==================== */
 @media (max-width: 480px) {
-    /* Ajuste del contenedor de productos para que se organicen en 2 columnas */
-    #catalogo {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-        gap: 10px; /* Espaciado entre los productos */
-        padding: 10px;
-    }
-    
-    .producto {
-        width: 45%; /* Los productos ocuparán el 100% del ancho de su celda */
-        margin: 0; /* Eliminar márgenes de los productos */
-    }
-    .producto-filtrer{
-        display: flex;
-        flex-direction: row;
-        
-    }
-    /* Ajuste en los filtros y categorías */
-    .filtro-categorias {
-
-        color: #555;
-        
-        
-    }
-    
-    #categoria {
-        
-        
-        align-items: center;
-    }
-
-
     .breadcrumb {
-        margin-top: 10px;
+        margin-top: 5px;
         margin-left: 10px;
+        margin-bottom: 10px;
     }
 
     .producter {
+        margin-top: 2px;
         margin-left: 10px;
-        font-family: "Montserrat", sans-serif;
         font-size: 1.7rem;
     }
 
-    /* Ajuste del título de los productos */
-    .producto h3 {
-        font-size: 1.1em; /* Reducir el tamaño del título */
+    .filtro-categorias {
+        justify-content: flex-end;
+        margin-top: 5px;
+        margin-left: 10px;
+        padding-right: 0.3rem;
+        color: #555;
     }
 
-    .producto p {
-        font-size: 0.9em; /* Reducir el tamaño del texto descriptivo */
+    #categoria {
+        max-width: 200px;
+        margin-right: 10px;
+    }
+
+    .productos-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .producto {
+        width: 45%;
+        margin: 0;
+    }
+}
+
+/* ====================
+   Pie de Página
+   ==================== */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: black;
+    color: white;
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer-info {
+    margin-bottom: 20px;
+}
+
+.footer-info h3,
+.footer-info p {
+    margin: 10px 0;
+}
+
+.footer-redes {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-redes ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-redes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.wpp-footer,
+.ig-footer {
+    text-decoration: none;
+    color: white;
+}
+
+.footer-copy {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+#fotou {
+    width: 30px;
+    height: auto;
+}
+
+.logoabajo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* ====================
+   Botón Modo Admin
+   ==================== */
+#btnModoAdminFooter {
+    background-color: #000;
+    color: #d6d6d6;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+#btnModoAdminFooter:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* ====================
+   Responsivo General
+   ==================== */
+@media screen and (max-width: 768px) {
+    .productos-container {
+        justify-content: center;
+    }
+
+    .producto {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .filtro-categorias {
+        justify-content: center;
     }
 }

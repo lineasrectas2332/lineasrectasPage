@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
-    <link rel="stylesheet" href="styleprod.css">
-     
-    <!-- Bootstrap CSS and JS -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Catálogo con Modo Admin en Footer</title>
+<link rel="stylesheet" href="styleprod.css">
+<!-- Bootstrap CSS and JS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
@@ -22,10 +21,117 @@
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    body {
+        background-color: #fff;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    main {
+        flex: 1;
+        padding: 20px;
+    }
+    .producto {
+        width: 18rem;
+        margin: 10px;
+    }
+    .admin-panel {
+        margin: 20px 0;
+    }
+    .formulario-producto {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+    
+    /* Pie de página */
+    footer {
+        text-align: center;
+        padding: 10px;
+        background-color: black;
+        color: white;
+        width: 100%;
+    }
+
+    .footer-info { margin-bottom: 20px; }
+    .footer-info h3, .footer-info p { margin: 10px 0; }
+
+    .footer-redes {
+        display: flex;
+        justify-content: center;
+    }
+
+    .footer-redes ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .wpp-footer{
+        text-decoration: none;
+        color: white;
+    }
+    .ig-footer{
+        text-decoration: none;
+        color: white;
+    }
+    .footer-redes li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .footer-copy { margin-top: 20px; }
+
+    #fotou {
+        width: 30px;
+        height: auto;
+    }
+
+    .logoabajo {
+        width: 100px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    /* Botón modo admin en footer */
+    #btnModoAdminFooter {
+        background-color: #000000;
+        color: rgb(214, 214, 214);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+    #btnModoAdminFooter:hover {
+        background-color: #ffffff;
+        color: rgb(0, 0, 0);
+    }
+    .btn-agregar-nuevo {
+        margin-bottom: 20px;
+    }
+    
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+     .dropdown-menu .dropdown-item:hover {
+            color: black !important;
+        }
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
+
+<!-- Mantener el mismo header y estructura HTML -->
+<header class="header">
         <nav class="navbar navbar-expand-lg" style="background-color: black;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
@@ -35,6 +141,7 @@
                     LINEAS RECTAS<br>
                     <span class="subheader">AMOBLAMIENTOS</span>
                 </a>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon" style="color: white;"></span>
                 </button>
@@ -56,14 +163,8 @@
                 </div>
             </div>
         </nav>
-    </header>
-
-    <!-- Styles -->
-    <style>
-        .dropdown-menu .dropdown-item:hover {
-            color: black !important;
-        }
-    </style>
+</header>
+ 
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -71,231 +172,378 @@
             <li class="breadcrumb-item active" aria-current="page">Productos</li>
         </ol>
     </nav>
-    
-    <section class="producto-filtrer">
-        <h3 class="producter">PRODUCTOS</h3>
-        <!-- Filtro por categorías -->
-        <div class="filtro-categorias">
-            <label class="cat" for="categoria">Filtrar por categoría:</label>
-            <select id="categoria" class="form-select w-50" onchange="filtrarProductos()">
-                <option value="todos">Todos</option>
-                <option value="living">Living</option>
-                <option value="dormitorio">Dormitorio</option>
-                <option value="comedor">Comedor</option>
-            </select>
-        </div>
-    </section>
+<main class="container">
+    <h1 class="producter">Productos</h1>
+<!-- Filtro personalizado -->
+    <div class="filtro-categorias">
+    <label for="categoria">Filtrar por categoría:</label>
+    <select id="categoria" onchange="filtrarProductos()">
+        <option value="todos">Todos</option>
+        <option value="living">Living</option>
+        <option value="comedor">Comedor</option>
+        <option value="dormitorio">Dormitorio</option>
+    </select>
+    </div>
 
-    <section id="catalogo" class="d-flex flex-wrap">
-        
-        <div class="producto" data-categoria="dormitorio">
-            <img src="imagesProductos/MLU12.jpg" alt="Mesa Ratona 1">
-            <h3>MLU12</h3>
-            <p>Mesa Ratona 61cm x 51cm x 45cm</p>
-            <p> $ 95.000,00</p>
-            <button onclick="verDetalle(1)">Ver Producto</button>
+
+    <div id="productos" class="d-flex flex-wrap">
+        <div class="mb-3">
+            <label for="busquedaInput" class="form-label">Buscar por nombre:</label>
+            <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa...">
+        </div>
+    </div>
+
+    <!-- Panel de administración -->
+    <div id="adminPanel" class="admin-panel d-none">
+        <!-- Formulario para agregar nuevo producto -->
+        <div id="formAgregarContainer" class="formulario-producto">
+            <h3>Agregar Nuevo Producto</h3>
+            <form id="formAgregarProducto">
+                <div class="mb-3">
+                    <label for="nombreNuevo" class="form-label">Nombre</label>
+                    <input type="text" id="nombreNuevo" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="categoriaNuevo" class="form-label">Categoría</label>
+                    <select id="categoriaNuevo" class="form-select" required>
+                        <option value="" disabled selected>Seleccione categoría</option>
+                        <option value="living">Living</option>
+                        <option value="comedor">Comedor</option>
+                        <option value="dormitorio">Dormitorio</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="medidasNuevo" class="form-label">Medidas</label>
+                    <input type="text" id="medidasNuevo" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
+                </div>
+                <div class="mb-3">
+                    <label for="precioNuevo" class="form-label">Precio</label>
+                    <input type="number" id="precioNuevo" class="form-control" min="0" step="0.01" required />
+                </div>
+                <div class="mb-3">
+                    <label for="imagenFileNuevo" class="form-label">Imagen (JPG)</label>
+                    <input type="file" id="imagenFileNuevo" class="form-control" accept=".jpg,.jpeg" required />
+                </div>
+                <button type="submit" class="btn btn-success">Agregar Producto</button>
+            </form>
         </div>
 
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/bah04.jpg" alt="Silla de Oficina 2">
-            <h3>BAH04</h3>
-            <p>Aparador 66cm x 154cm x 41cm</p>
-            <p>$271.000,00</p>
-            <button onclick="verDetalle(2)">Ver Producto</button>
+        <!-- Formulario para editar producto -->
+        <div id="formEditarContainer" class="formulario-producto d-none">
+            <h3>Editar Producto</h3>
+            <form id="formEditarProducto">
+                <input type="hidden" id="idEditar">
+                <div class="mb-3">
+                    <label for="nombreEditar" class="form-label">Nombre</label>
+                    <input type="text" id="nombreEditar" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="categoriaEditar" class="form-label">Categoría</label>
+                    <select id="categoriaEditar" class="form-select" required>
+                        <option value="living">Living</option>
+                        <option value="comedor">Comedor</option>
+                        <option value="dormitorio">Dormitorio</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="medidasEditar" class="form-label">Medidas</label>
+                    <input type="text" id="medidasEditar" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
+                </div>
+                <div class="mb-3">
+                    <label for="precioEditar" class="form-label">Precio</label>
+                    <input type="number" id="precioEditar" class="form-control" min="0" step="0.01" required />
+                </div>
+                <div class="mb-3">
+                    <label for="imagenFileEditar" class="form-label">Imagen (JPG)</label>
+                    <input type="file" id="imagenFileEditar" class="form-control" accept=".jpg,.jpeg" />
+                    <small class="text-muted">Dejar en blanco para mantener la imagen actual.</small>
+                </div>
+                <div class="mb-3">
+                    <img id="imagenActual" src="" class="img-thumbnail" style="max-width: 200px; display: none;">
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <button type="button" class="btn btn-secondary ms-2" onclick="cancelarEdicion()">Cancelar</button>
+            </form>
         </div>
+    </div>
+</main>
 
-        <div class="producto" data-categoria="comedor">
-            <img src="imagesProductos/msa05.jpg" alt="Cama King 3">
-            <h3>MSA05 </h3>
-            <p>Mesa de comedor 75cm x 180cm x 90cm </p>
-            <p> $268.900,00</p>
-            <button onclick="verDetalle(3)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="comedor">
-            <img src="imagesProductos/msa06.jpg" alt="Cama King 3">
-            <h3>MSA06 </h3>
-            <p>Mesa de comedor 75cm x 210cm x 100cm </p>
-            <p> $386.000,00</p>
-            <button onclick="verDetalle(4)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/pl05.jpg" alt="Cama King 3">
-            <h3>PL05 </h3>
-            <p>Panel TV 130cm x 180cm x 20cm </p>
-            <p> $313.420,00</p>
-            <button onclick="verDetalle(5)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr07.jpg" alt="Cama King 3">
-            <h3>MR07</h3>
-            <p>Mesa Ratona 42cm x 90cm x 54cm</p>
-            <p> $90.000,00</p>
-            <button onclick="verDetalle(6)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr08.jpg" alt="Cama King 3">
-            <h3>MR08</h3>
-            <p>Mesa Ratona 42cm x 110cm x 60cm</p>
-            <p> $124.600,00</p>
-            <button onclick="verDetalle(7)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr09.jpg" alt="Cama King 3">
-            <h3>MR09</h3>
-            <p>Mesa Ratona 32cm X 105cm X 60cm</p>
-            <p> $130.800,00</p>
-            <button onclick="verDetalle(8)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr10.jpg" alt="Cama King 3">
-            <h3>MR10</h3>
-            <p>Mesa Ratona 40cm x 90cm x 50cm</p>
-            <p> $182.000,00</p>
-            <button onclick="verDetalle(9)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr11.jpg" alt="Cama King 3">
-            <h3>MR11</h3>
-            <p>Mesa Ratona 34cm x 95cm x 50cm</p>
-            <p> $60.000,00</p>
-            <button onclick="verDetalle(10)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr12.jpg" alt="Cama King 3">
-            <h3>MR12</h3>
-            <p>Mesa Ratona 35cm x 81cm x 50cm</p>
-            <p> $81.700,00</p>
-            <button onclick="verDetalle(11)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/pl11.jpg" alt="Cama King 3">
-            <h3>PL11</h3>
-            <p>Panel TV 130cm x 180cm x 30cm</p>
-            <p> $225.200,00</p>
-            <button onclick="verDetalle(12)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/pl06.jpg" alt="Cama King 3">
-            <h3>PL06</h3>
-            <p>Panel TV 156cm x 180cm x 33cm</p>
-            <p> $374.240,00</p>
-            <button onclick="verDetalle(13)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="dormitorio">
-            <img src="imagesProductos/mlu09.jpg" alt="Cama King 3">
-            <h3>MLU09</h3>
-            <p>Mesa De Luz 45cm x 50cm x 45cm </p>
-            <p> $89.999,99</p>
-            <button onclick="verDetalle(14)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/mr04.jpg" alt="Cama King 3">
-            <h3>MR04</h3>
-            <p>Mesa Ratona 40cm x 80cm x 40cm</p>
-            <p> $84.499,99</p>
-            <button onclick="verDetalle(15)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/RK15.jpg" alt="Cama King 3">
-            <h3>RK15</h3>
-            <p>Rack Judith 42cm x 126cm x 36cm</p>
-            <p> $127.999,99</p>
-            <button onclick="verDetalle(16)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="living">
-            <img src="imagesProductos/rk22.jpg" alt="Cama King 3">
-            <h3>RK22</h3>
-            <p>Rack Camelia 47cm x 165cm x 40cm</p>
-            <p> $186.999,99</p>
-            <button onclick="verDetalle(17)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="dormitorio">
-            <img src="imagesProductos/MLU07.jpg" alt="Cama King 3">
-            <h3>MLU07</h3>
-            <p>Mesa De Luz 45cm x 47cm x 39cm</p>
-            <p> $72.999,99</p>
-            <button onclick="verDetalle(18)">Ver Producto</button>
-        </div>
-        <div class="producto" data-categoria="dormitorio">
-            <img src="imagesProductos/COM09.jpg" alt="Cama King 3">
-            <h3>COM09</h3>
-            <p>Cómoda 80cm x 80cm x 40cm</p>
-            <p> $176.999,99</p>
-            <button onclick="verDetalle(19)">Ver Producto</button>
-        </div>
-    </section>
-    <!-- Pie de Página -->
-    <footer>
-        <div id="contacto" class="footer-info">
-            <img class="logoabajo" src="images/IMG_5013.JPG" alt="">
-            <h3>LINEAS RECTAS</h3>
-            <p>Villa Maria, CBA.</p>
-            <p>Porfirio Seppey 315</p>
-            <p>+54-9353 6574696</p>
-            <p>lineasrectas@gmail.com</p>
-        </div>
-        <div class="footer-redes"> 
-            <ul>
-                <!-- Enlace a Instagram -->
-                <li>
-                    <img id="fotou" src="images/instagram-new.png" alt="Instagram">
-                    <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
-                </li>
-        
-                <!-- Enlace a WhatsApp -->
-                <li>
-                    <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
-                    <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                </li>
-            </ul>
-        </div>
-        
-    </footer>
+<footer>
+    <div id="contacto" class="footer-info">
+        <img class="logoabajo" src="images/IMG_5160.JPG" alt="Logo abajo">
+        <h3>LINEAS RECTAS</h3>
+        <p>Villa Maria, CBA.</p>
+        <p>Porfirio Seppey 315</p>
+        <p>+54-9353 6574696</p>
+        <p>lineasrectas@gmail.com</p>
+    </div>
+    <div class="footer-redes"> 
+        <ul>
+            <li>
+                <img id="fotou" src="images/instagram-new.png" alt="Instagram">
+                <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </li>
+            <li>
+                <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
+                <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            </li>
+            <li>
+                <img id="fotou" src="images/facebook.png" alt="Facebook">
+                <a class="fb-footer" href="https://www.facebook.com/lineasrectas.amoblamientos" target="_blank" rel="noopener noreferrer">Facebook</a>
+            </li>
+        </ul>
+    </div>
+    <button id="btnModoAdminFooter">Modo Admin</button>
 
-    <script>
-        // Función para redirigir al detalle del producto
-        function verDetalle(id) {
-            window.location.href = "detalle-producto.html?id=" + id;
-        }
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let productos = [];
+    let modoAdminActivo = false;
 
-        // Función para filtrar productos por categoría
-        function filtrarProductos() {
-            const categoriaSeleccionada = document.getElementById("categoria").value;
-            const productos = document.querySelectorAll('.producto');
+    // Cargar datos al iniciar
+    document.addEventListener('DOMContentLoaded', () => {
+        cargarProductosDesdeStorage();
+        mostrarProductos();
 
-            productos.forEach((producto) => {
-                const categoria = producto.getAttribute("data-categoria");
-                if (categoriaSeleccionada === "todos" || categoria === categoriaSeleccionada) {
-                    producto.style.display = "block";
-                } else {
-                    producto.style.display = "none";
-                }
-            });
-        }
-// Leer el filtro desde el localStorage y aplicarlo
-function aplicarFiltro() {
-    const categoriaSeleccionada = localStorage.getItem('categoria');
-    const productos = document.querySelectorAll('.producto');
+        document.getElementById('formAgregarProducto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            guardarProducto('nuevo');
+        });
 
-    if (categoriaSeleccionada) {
-        productos.forEach((producto) => {
-            const categoria = producto.getAttribute('data-categoria');
-            if (categoria === categoriaSeleccionada || categoriaSeleccionada === 'todos') {
-                producto.style.display = 'block'; // Mostrar si coincide
-            } else {
-                producto.style.display = 'none'; // Ocultar si no coincide
+        document.getElementById('formEditarProducto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            guardarProducto('editar');
+        });
+
+        document.getElementById('btnModoAdminFooter').addEventListener('click', toggleModoAdmin);
+
+        // Evento global para filtrado (se adjunta tras crear el input dinámico)
+        document.addEventListener('input', function (e) {
+            if (e.target && e.target.id === 'busquedaInput') {
+                filtrarProductos();
             }
         });
-    } else {
-        // Mostrar todos los productos si no hay filtro
-        productos.forEach((producto) => {
-            producto.style.display = 'block';
+    });
+
+    function toggleModoAdmin() {
+        if (!modoAdminActivo) {
+            const pass = prompt('Ingrese la contraseña de administrador:');
+            if (pass === 'admin123') {
+                modoAdminActivo = true;
+                document.getElementById('adminPanel').classList.remove('d-none');
+            } else if (pass !== null) {
+                alert('Contraseña incorrecta.');
+                return;
+            }
+        } else {
+            modoAdminActivo = false;
+            cancelarEdicion();
+            document.getElementById('adminPanel').classList.add('d-none');
+        }
+        mostrarProductos();
+    }
+
+    function cargarProductosDesdeStorage() {
+        const productosGuardados = localStorage.getItem('productos');
+        if (productosGuardados) {
+            productos = JSON.parse(productosGuardados);
+        } else {
+            productos = [
+                {
+                    id: 1,
+                    nombre: "Sofá Clásico",
+                    categoria: "living",
+                    medidas: "2m x 0.8m x 0.9m",
+                    precio: 120000,
+                    imagen: "https://via.placeholder.com/300x200?text=Sofá+Clásico"
+                },
+                {
+                    id: 2,
+                    nombre: "Mesa de Comedor",
+                    categoria: "comedor",
+                    medidas: "1.5m x 0.9m x 0.75m",
+                    precio: 85000,
+                    imagen: "https://via.placeholder.com/300x200?text=Mesa+Comedor"
+                }
+            ];
+            guardarEnStorage();
+        }
+    }
+
+    function guardarEnStorage() {
+        localStorage.setItem('productos', JSON.stringify(productos));
+    }
+
+    function mostrarProductos() {
+        const contenedor = document.getElementById('productos');
+        contenedor.innerHTML = '';
+
+        // Crear y agregar buscador y filtro
+        const buscadorContainer = document.createElement('div');
+        buscadorContainer.className = 'mb-3';
+        buscadorContainer.innerHTML = `
+            <label for="busquedaInput" class="form-label">Buscar por nombre o categoría:</label>
+            <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa...">
+        `;
+        contenedor.appendChild(buscadorContainer);
+
+        const textoBusqueda = document.getElementById('busquedaInput').value.toLowerCase();
+        const categoriaSelect = document.getElementById('categoria');
+        const categoriaFiltro = categoriaSelect ? categoriaSelect.value : 'todos';
+
+        const productosFiltrados = productos.filter(p => {
+            const coincideBusqueda = p.nombre.toLowerCase().includes(textoBusqueda) || 
+                                    p.categoria.toLowerCase().includes(textoBusqueda);
+            const coincideCategoria = categoriaFiltro === 'todos' || p.categoria === categoriaFiltro;
+            return coincideBusqueda && coincideCategoria;
+        });
+
+        if (productosFiltrados.length === 0) {
+            contenedor.innerHTML += '<div class="alert alert-info w-100">No hay productos para mostrar.</div>';
+            return;
+        }
+
+        productosFiltrados.forEach(producto => {
+            const card = document.createElement('div');
+            card.className = 'card producto mb-3';
+            card.innerHTML = `
+                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+                <div class="card-body">
+                    <h5 class="card-title">${producto.nombre}</h5>
+                    <p class="card-text">Categoría: ${producto.categoria}</p>
+                    <p class="card-text">Medidas: ${producto.medidas || '-'}</p>
+                    <p class="card-text fw-bold">$${producto.precio.toLocaleString('es-AR')}</p>
+                    ${modoAdminActivo ? `
+                        <div class="d-flex">
+                            <button class="btn btn-warning flex-grow-1 me-1" onclick="editarProducto(${producto.id})">Editar</button>
+                            <button class="btn btn-danger flex-grow-1" onclick="eliminarProducto(${producto.id})">Eliminar</button>
+                        </div>
+                    ` : '<button class="btn btn-primary">Comprar</button>'}
+                </div>
+            `;
+            contenedor.appendChild(card);
         });
     }
-}
 
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', aplicarFiltro);
-    </script>
+    function guardarProducto(tipo) {
+        const obtenerDatos = () => {
+            if (tipo === 'nuevo') {
+                return {
+                    id: productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1,
+                    nombre: document.getElementById('nombreNuevo').value.trim(),
+                    categoria: document.getElementById('categoriaNuevo').value,
+                    medidas: document.getElementById('medidasNuevo').value.trim(),
+                    precio: parseFloat(document.getElementById('precioNuevo').value),
+                    imagenFile: document.getElementById('imagenFileNuevo')
+                };
+            } else {
+                return {
+                    id: parseInt(document.getElementById('idEditar').value),
+                    nombre: document.getElementById('nombreEditar').value.trim(),
+                    categoria: document.getElementById('categoriaEditar').value,
+                    medidas: document.getElementById('medidasEditar').value.trim(),
+                    precio: parseFloat(document.getElementById('precioEditar').value),
+                    imagenFile: document.getElementById('imagenFileEditar'),
+                    imagenActual: document.getElementById('imagenActual').src
+                };
+            }
+        };
+
+        const datos = obtenerDatos();
+
+        if (!datos.nombre || !datos.categoria || isNaN(datos.precio)) {
+            alert('Por favor complete todos los campos obligatorios.');
+            return;
+        }
+
+        if (tipo === 'nuevo' && datos.imagenFile.files.length === 0) {
+            alert('Por favor seleccione una imagen para el producto.');
+            return;
+        }
+
+        const procesarImagen = (callback) => {
+            if (datos.imagenFile.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    callback(e.target.result);
+                };
+                reader.readAsDataURL(datos.imagenFile.files[0]);
+            } else {
+                callback(tipo === 'editar' ? datos.imagenActual : null);
+            }
+        };
+
+        procesarImagen((imagenBase64) => {
+            const producto = {
+                id: datos.id,
+                nombre: datos.nombre,
+                categoria: datos.categoria,
+                medidas: datos.medidas,
+                precio: datos.precio,
+                imagen: imagenBase64 || datos.imagenActual || 'https://via.placeholder.com/300x200?text=Sin+imagen'
+            };
+
+            if (tipo === 'nuevo') {
+                productos.push(producto);
+                document.getElementById('formAgregarProducto').reset();
+            } else {
+                const index = productos.findIndex(p => p.id === producto.id);
+                if (index !== -1) {
+                    productos[index] = producto;
+                }
+                cancelarEdicion();
+            }
+
+            guardarEnStorage();
+            mostrarProductos();
+        });
+    }
+
+    function editarProducto(id) {
+        const producto = productos.find(p => p.id === id);
+        if (!producto) {
+            alert('Producto no encontrado');
+            return;
+        }
+
+        document.getElementById('idEditar').value = producto.id;
+        document.getElementById('nombreEditar').value = producto.nombre;
+        document.getElementById('categoriaEditar').value = producto.categoria;
+        document.getElementById('medidasEditar').value = producto.medidas;
+        document.getElementById('precioEditar').value = producto.precio;
+
+        const imgActual = document.getElementById('imagenActual');
+        imgActual.src = producto.imagen;
+        imgActual.style.display = 'block';
+
+        document.getElementById('formAgregarContainer').classList.add('d-none');
+        document.getElementById('formEditarContainer').classList.remove('d-none');
+        window.scrollTo({
+            top: document.getElementById('formEditarContainer').offsetTop,
+            behavior: 'smooth'
+        });
+    }
+
+    function cancelarEdicion() {
+        document.getElementById('formEditarProducto').reset();
+        document.getElementById('imagenActual').style.display = 'none';
+        document.getElementById('formEditarContainer').classList.add('d-none');
+        document.getElementById('formAgregarContainer').classList.remove('d-none');
+    }
+
+    function eliminarProducto(id) {
+        if (confirm('¿Está seguro que desea eliminar este producto?')) {
+            productos = productos.filter(p => p.id !== id);
+            guardarEnStorage();
+            mostrarProductos();
+        }
+    }
+
+    function filtrarProductos() {
+        mostrarProductos();
+    }
+</script>
+
 </body>
 </html>
