@@ -3,290 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catálogo con Modo Admin en Footer</title>
+  <title>Catálogo con Modo Admin</title>
 
   <!-- Tu CSS personalizado -->
   <link rel="stylesheet" href="styleprod.css">
 
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap CSS (opcional) -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
-  
-  <!-- Font Awesome (opcional si usas íconos) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
-  <style>
-    /* ====================
-       Estilos Globales
-       ==================== */
-    html, body {
-      background-color: #fff;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      font-family: "Montserrat", sans-serif;
-      font-size: 16px;
-      margin: 0;
-      padding: 0;
-    }
-    #busquedaInput,
-    label[for="busquedaInput"] {
-      display: none;
-    }
-    main {
-      flex: 1;
-      padding: 20px 60px; /* Ajustado para acercar al header */
-    }
-
-    /* ====================
-       Navegación Principal
-       ==================== */
-    .navprodprincipal {
-      background-color: #000;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      color: #fff;
-    }
-    .navbar {
-      min-height: 65px;
-      line-height: 1;
-    }
-    .subheader {
-      font-size: 0.45em;
-      font-weight: normal;
-      color: #fff;
-      display: block;
-    }
-    .navprodprincipal div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 37px;
-      margin-bottom: 37px;
-      color: #fff;
-    }
-    .navprodprincipal div a {
-      color: #fff;
-      text-decoration: none;
-    }
-    .navprodprincipal div:hover {
-      font-size: large;
-      color: #6e5b5b;
-    }
-    .navprodprincipal div img {
-      width: 55px;
-    }
-    .navprodprincipal div a:hover {
-      color: #6e5b5b;
-    }
-
-    /* ====================
-       Breadcrumb y Título de Sección
-       ==================== */
-    .breadcrumb {
-      margin-top: 10px;     /* Reducido para acercar al header */
-      margin-left: 85px;
-      margin-bottom: 20px;
-    }
-    #home {
-      text-decoration: none;
-      color: #555;
-    }
-    .producter {
-      margin-top: 5px;      /* Más cerca del breadcrumb */
-      margin-left: 85px;
-      font-family: "Montserrat", sans-serif;
-      font-size: 2.6rem;
-    }
-
-    /* ====================
-       Filtro de Categorías
-       ==================== */
-    .filtro-categorias {
-      display: flex;
-      justify-content: flex-end; /* Alineado a la derecha */
-      align-items: center;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 0.95rem;
-      color: #333;
-      margin-top: 5px;
-      margin-bottom: 10px;
-      margin-left: 85px;
-      width: calc(100% - 85px);
-      padding-right: 0.5rem;
-      box-sizing: border-box;
-    }
-    .filtro-categorias label {
-      margin-right: 10px;
-      white-space: nowrap;
-    }
-    .filtro-categorias select {
-      padding: 5px 10px;
-      font-size: 0.9rem;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-      background-color: #fff;
-      color: #000;
-      min-width: 140px;
-      outline: none;
-    }
-    .filtro-categorias select option:hover {
-      background-color: #000;
-      color: #fff;
-      font-weight: bold;
-    }
-    #categoria {
-      max-width: 650px;
-      margin-right: 20px; /* Cercano al borde derecho */
-    }
-
-    /* ====================
-       Productos (Cards)
-       ==================== */
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 600;
-      margin-bottom: 30px;
-      text-align: left;
-    }
-    .productos-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 40px;
-    }
-    .producto {
-      border: none !important;
-      box-shadow: none !important;
-      width: 250px;
-      text-align: center;
-      margin: 10px;
-    }
-    .producto img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-    .producto h4 {
-      font-size: 1.2rem;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-    .producto p {
-      margin: 5px 0;
-      font-size: 0.95rem;
-      color: #333;
-    }
-    .producto button {
-      background-color: black;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.3s ease;
-    }
-    .producto button:hover {
-      background-color: #333;
-    }
-    .card-img-top {
-      height: 200px;
-      object-fit: cover;
-      border-radius: 5px;
-    }
-
-    /* ====================
-       Pie de Página
-       ==================== */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: black;
-      color: white;
-      width: 100%;
-      margin-top: auto;
-    }
-    .footer-info {
-      margin-bottom: 20px;
-    }
-    .footer-info h3,
-    .footer-info p {
-      margin: 10px 0;
-    }
-    .footer-redes {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .footer-redes ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    .footer-redes li {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .wpp-footer,
-    .ig-footer {
-      text-decoration: none;
-      color: white;
-    }
-    .footer-copy {
-      margin-top: 20px;
-      font-size: 0.9rem;
-    }
-    #fotou {
-      width: 30px;
-      height: auto;
-    }
-    .logoabajo {
-      width: 100px;
-      height: auto;
-      margin: 0 auto;
-    }
-
-    /* ====================
-       Botón Modo Admin
-       ==================== */
-    #btnModoAdminFooter {
-      background-color: #000;
-      color: #d6d6d6;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-    }
-    #btnModoAdminFooter:hover {
-      background-color: #fff;
-      color: #000;
-    }
-
-    /* ====================
-       Responsividad retirado:
-       ==================== */
-    /* Removidas todas las media queries para que se vea igual en escritorio, tablet y móvil */
-  </style>
 </head>
 <body>
-
-  <!-- ====================
-       Header y Navegación
-       ==================== -->
+  <!-- =========== HEADER / NAVBAR =========== -->
   <header class="header">
     <nav class="navbar navbar-expand-lg" style="background-color: black;">
       <div class="container-fluid">
@@ -329,8 +60,8 @@
                   <a
                     id="vertodos"
                     class="dropdown-item"
-                    href="indexprod.html"
-                    onclick="localStorage.setItem('categoria','todos')"
+                    href="index.html"
+                    onclick="document.getElementById('categoria').value = 'todos'; mostrarProductos();"
                     style="color: white;"
                   >
                     Ver Todos
@@ -339,8 +70,8 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="indexprod.html"
-                    onclick="localStorage.setItem('categoria','living')"
+                    href="index.html"
+                    onclick="document.getElementById('categoria').value = 'living'; mostrarProductos();"
                     style="color: white;"
                   >
                     Living
@@ -349,21 +80,21 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="indexprod.html"
-                    onclick="localStorage.setItem('categoria','dormitorio')"
+                    href="index.html"
+                    onclick="document.getElementById('categoria').value = 'comedor'; mostrarProductos();"
                     style="color: white;"
                   >
-                    Dormitorio
+                    Comedor
                   </a>
                 </li>
                 <li>
                   <a
                     class="dropdown-item"
-                    href="indexprod.html"
-                    onclick="localStorage.setItem('categoria','comedor')"
+                    href="index.html"
+                    onclick="document.getElementById('categoria').value = 'dormitorio'; mostrarProductos();"
                     style="color: white;"
                   >
-                    Comedor
+                    Dormitorio
                   </a>
                 </li>
               </ul>
@@ -380,9 +111,7 @@
     </nav>
   </header>
 
-  <!-- ====================
-       Breadcrumb
-       ==================== -->
+  <!-- =========== BREADCRUMB =========== -->
   <nav aria-label="breadcrumb" class="ms-3 mt-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a id="home" href="index.html">Home</a></li>
@@ -390,9 +119,7 @@
     </ol>
   </nav>
 
-  <!-- ====================
-       Contenido Principal (Productos)
-       ==================== -->
+  <!-- =========== MAIN =========== -->
   <main class="container">
     <h1 class="producter">Productos</h1>
 
@@ -407,12 +134,12 @@
       </select>
     </div>
 
-    <!-- Aquí se inyectarán buscador y cards de producto -->
+    <!-- Aquí inyectamos: buscador + cards -->
     <div id="productos" class="d-flex flex-wrap"></div>
 
-    <!-- Panel de Administración (inicialmente oculto) -->
+    <!-- =========== PANEL ADMIN (oculto inicialmente) =========== -->
     <div id="adminPanel" class="admin-panel d-none">
-      <!-- Formulario Agregar -->
+      <!-- → FORMULARIO AGREGAR -->
       <div id="formAgregarContainer" class="formulario-producto">
         <h3>Agregar Nuevo Producto</h3>
         <form id="formAgregarProducto">
@@ -445,7 +172,7 @@
         </form>
       </div>
 
-      <!-- Formulario Editar -->
+      <!-- → FORMULARIO EDITAR -->
       <div id="formEditarContainer" class="formulario-producto d-none">
         <h3>Editar Producto</h3>
         <form id="formEditarProducto">
@@ -485,9 +212,7 @@
     </div>
   </main>
 
-  <!-- ====================
-       Pie de Página
-       ==================== -->
+  <!-- =========== FOOTER =========== -->
   <footer>
     <div id="contacto" class="footer-info">
       <img class="logoabajo" src="images/IMG_5160.JPG" alt="Logo abajo">
@@ -501,22 +226,28 @@
       <ul>
         <li>
           <img id="fotou" src="images/instagram-new.png" alt="Instagram">
-          <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
         </li>
         <li>
           <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
-          <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">
+            WhatsApp
+          </a>
         </li>
         <li>
           <img id="fotou" src="images/facebook.png" alt="Facebook">
-          <a class="fb-footer" href="https://www.facebook.com/lineasrectas.amoblamientos" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a class="fb-footer" href="https://www.facebook.com/lineasrectas.amoblamientos" target="_blank" rel="noopener noreferrer">
+            Facebook
+          </a>
         </li>
       </ul>
     </div>
     <button id="btnModoAdminFooter">Modo Admin</button>
   </footer>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS (opcional) -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -524,19 +255,28 @@
   ></script>
 
   <script>
+    /**
+     * Parámetros de configuración (repón con tus valores)
+     */
+    const GITHUB_USER = 'lineasrectas2332';
+    const GITHUB_REPO = 'lineasrectasPage';
+    const GITHUB_TOKEN = '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'; 
+    const FILE_PATH = 'productos.json';
+
     let productos = [];
     let modoAdminActivo = false;
 
-    // 1) Al cargar la página, inicializar
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarProductosDesdeStorage();
+    // 1) Al cargar la página, leemos productos.json desde GitHub y luego pintamos
+    document.addEventListener('DOMContentLoaded', async () => {
+      await cargarProductosDesdeGitHub();
       mostrarProductos();
 
-      document.getElementById('formAgregarProducto').addEventListener('submit', function(e) {
+      // Formularios y botones
+      document.getElementById('formAgregarProducto').addEventListener('submit', e => {
         e.preventDefault();
         guardarProducto('nuevo');
       });
-      document.getElementById('formEditarProducto').addEventListener('submit', function(e) {
+      document.getElementById('formEditarProducto').addEventListener('submit', e => {
         e.preventDefault();
         guardarProducto('editar');
       });
@@ -544,7 +284,7 @@
       document.getElementById('categoria').addEventListener('change', mostrarProductos);
     });
 
-    // 2) Activar/Desactivar modo admin
+    // 2) Alternar modo admin
     function toggleModoAdmin() {
       if (!modoAdminActivo) {
         const pass = prompt('Ingrese la contraseña de administrador:');
@@ -563,45 +303,72 @@
       mostrarProductos();
     }
 
-    // 3) Cargar productos desde localStorage
-    function cargarProductosDesdeStorage() {
-      const datos = localStorage.getItem('productos');
-      if (datos) {
-        productos = JSON.parse(datos);
-      } else {
-        productos = [
-          {
-            id: 1,
-            nombre: "Sofá Clásico",
-            categoria: "living",
-            medidas: "2m x 0.8m x 0.9m",
-            precio: 120000,
-            imagen: "https://via.placeholder.com/300x200?text=Sof%C3%A1+Cl%C3%A1sico"
-          },
-          {
-            id: 2,
-            nombre: "Mesa de Comedor",
-            categoria: "comedor",
-            medidas: "1.5m x 0.9m x 0.75m",
-            precio: 85000,
-            imagen: "https://via.placeholder.com/300x200?text=Mesa+de+Comedor"
-          }
-        ];
-        localStorage.setItem('productos', JSON.stringify(productos));
+    // 3) Leer productos.json desde GitHub usando la API REST
+    async function cargarProductosDesdeGitHub() {
+      try {
+        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('No se pudo leer productos.json');
+        const data = await response.json();
+        // data.content viene en base64
+        const contenidoBase64 = data.content;
+        const jsonString = atob(contenidoBase64.replace(/\n/g, ''));
+        productos = JSON.parse(jsonString);
+      } catch (err) {
+        console.error('Error al cargar productos desde GitHub:', err);
+        productos = [];
       }
     }
 
-    // 4) Guardar array en localStorage
-    function guardarEnStorage() {
-      localStorage.setItem('productos', JSON.stringify(productos));
+    // 4) Actualizar productos.json en GitHub (modo admin)
+    async function actualizarProductosEnGitHub(nuevoArray) {
+      try {
+        // 4.1) Obtener SHA actual del archivo
+        const getUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+        const getResp = await fetch(getUrl, {
+          headers: { Authorization: 'token ' + GITHUB_TOKEN }
+        });
+        if (!getResp.ok) throw new Error('No se pudo obtener SHA de productos.json');
+        const getData = await getResp.json();
+        const currentSha = getData.sha;
+
+        // 4.2) Convertir el array a JSON formateado y luego a base64
+        const nuevoContenido = btoa(JSON.stringify(nuevoArray, null, 2));
+
+        // 4.3) Hacer PUT para sobrescribir el archivo en el repo
+        const putUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+        const commitMessage = 'Actualización de productos desde modo admin (front-end)';
+        const body = {
+          message: commitMessage,
+          content: nuevoContenido,
+          sha: currentSha
+        };
+
+        const putResp = await fetch(putUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'token ' + GITHUB_TOKEN
+          },
+          body: JSON.stringify(body)
+        });
+        if (!putResp.ok) {
+          const errorData = await putResp.json();
+          throw new Error('Error al actualizar productos.json: ' + JSON.stringify(errorData));
+        }
+        alert('Productos actualizados correctamente en GitHub.');
+      } catch (err) {
+        console.error(err);
+        alert('Hubo un error al intentar actualizar GitHub:\n' + err.message);
+      }
     }
 
-    // 5) Renderizar productos (crea buscador y cards)
+    // 5) Pintar productos en la página (crea buscador + cards)
     function mostrarProductos() {
       const contenedor = document.getElementById('productos');
       contenedor.innerHTML = '';
 
-      // Crear buscador
+      // 5.1) Crear buscador
       const buscadorDiv = document.createElement('div');
       buscadorDiv.className = 'mb-3 w-100';
       buscadorDiv.innerHTML = `
@@ -610,17 +377,17 @@
       `;
       contenedor.appendChild(buscadorDiv);
 
-      // Al escribir en el buscador, filtrar en tiempo real
+      // Al tipear en el buscador, filtramos en tiempo real
       document.getElementById('busquedaInput').addEventListener('input', filtrarYMostrar);
 
-      // Llamada inicial
+      // Mostrar inicialmente (sin texto)
       filtrarYMostrar();
     }
 
-    // 6) Filtrar y mostrar cards
+    // 6) Filtrar array y dibujar las tarjetas
     function filtrarYMostrar() {
       const contenedor = document.getElementById('productos');
-      // Eliminar todo excepto buscador (primer hijo)
+      // Borrar todo excepto el buscador (índice 0)
       Array.from(contenedor.children).forEach((child, idx) => {
         if (idx > 0) contenedor.removeChild(child);
       });
@@ -629,8 +396,10 @@
       const categoriaFiltro = document.getElementById('categoria').value;
 
       const filtrados = productos.filter(p => {
-        const coincideTexto = p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto);
-        const coincideCat = (categoriaFiltro === 'todos') || (p.categoria === categoriaFiltro);
+        const coincideTexto =
+          p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto);
+        const coincideCat =
+          categoriaFiltro === 'todos' || p.categoria === categoriaFiltro;
         return coincideTexto && coincideCat;
       });
 
@@ -645,7 +414,7 @@
       filtrados.forEach(producto => {
         const card = document.createElement('div');
         card.className = 'card producto';
-        let srcImg = producto.imagen;
+        let srcImg = producto.imagen || '';
         if (!srcImg) {
           srcImg = 'https://via.placeholder.com/300x200?text=Sin+imagen';
         }
@@ -668,8 +437,8 @@
       });
     }
 
-    // 7) Guardar nuevo o editar existente
-    function guardarProducto(tipo) {
+    // 7) Guardar producto (nuevo o editar) y luego subir a GitHub
+    async function guardarProducto(tipo) {
       const datos = {};
       if (tipo === 'nuevo') {
         datos.id = productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1;
@@ -688,6 +457,7 @@
         datos.imagenActual = document.getElementById('imagenActual').src;
       }
 
+      // Validaciones
       if (!datos.nombre || !datos.categoria || isNaN(datos.precio)) {
         alert('Por favor complete todos los campos obligatorios.');
         return;
@@ -697,6 +467,7 @@
         return;
       }
 
+      // Leer y convertir imagen a Base64
       const procesarImagen = callback => {
         if (datos.imagenFile.files.length > 0) {
           const reader = new FileReader();
@@ -709,14 +480,14 @@
         }
       };
 
-      procesarImagen(imagenBase64 => {
+      procesarImagen(async imagenBase64 => {
         const nuevoProd = {
           id: datos.id,
           nombre: datos.nombre,
           categoria: datos.categoria,
           medidas: datos.medidas,
           precio: datos.precio,
-          imagen: imagenBase64 || ''
+          imagen: imagenBase64
         };
 
         if (tipo === 'nuevo') {
@@ -728,12 +499,15 @@
           cancelarEdicion();
         }
 
-        guardarEnStorage();
+        // 7.1) Sobrescribo productos.json en GitHub
+        await actualizarProductosEnGitHub(productos);
+        // 7.2) Releo el JSON recién subido y actualizo la vista
+        await cargarProductosDesdeGitHub();
         mostrarProductos();
       });
     }
 
-    // 8) Rellenar formulario con datos para editar
+    // 8) Rellenar formulario para edición
     function editarProducto(id) {
       const prod = productos.find(p => p.id === id);
       if (!prod) {
@@ -758,7 +532,7 @@
       });
     }
 
-    // 9) Cancelar edición y regresar al formulario de alta
+    // 9) Cancelar edición
     function cancelarEdicion() {
       document.getElementById('formEditarProducto').reset();
       document.getElementById('imagenActual').style.display = 'none';
@@ -766,11 +540,12 @@
       document.getElementById('formAgregarContainer').classList.remove('d-none');
     }
 
-    // 10) Eliminar producto
-    function eliminarProducto(id) {
+    // 10) Eliminar producto y subir JSON actualizado
+    async function eliminarProducto(id) {
       if (confirm('¿Está seguro que desea eliminar este producto?')) {
         productos = productos.filter(p => p.id !== id);
-        guardarEnStorage();
+        await actualizarProductosEnGitHub(productos);
+        await cargarProductosDesdeGitHub();
         mostrarProductos();
       }
     }
