@@ -23,7 +23,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin-bottom: 30px;
     }
-    input, textarea, button {
+    input, textarea, select, button {
       margin: 8px 0;
       padding: 10px;
       width: 100%;
@@ -36,15 +36,11 @@
       resize: vertical;
     }
     button {
-      background-color: #4CAF50;
       color: white;
       border: none;
       cursor: pointer;
       font-weight: bold;
       transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #45a049;
     }
     #productos {
       display: grid;
@@ -84,6 +80,12 @@
     .eliminar-btn:hover {
       background-color: #d32f2f;
     }
+    .submit-btn {
+      background-color: #4CAF50;
+    }
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
     @media (max-width: 768px) {
       #productos {
         grid-template-columns: 1fr;
@@ -99,14 +101,20 @@
     <input type="text" name="nombre" placeholder="Nombre del producto" required>
     <textarea name="descripcion" placeholder="Descripción del producto" required></textarea>
     <input type="number" name="precio" placeholder="Precio (ej: 19.99)" step="0.01" min="0" required>
+    <select name="categoria" required>
+      <option value="" disabled selected>Seleccione categoría</option>
+      <option value="living">Living</option>
+      <option value="dormitorio">Dormitorio</option>
+      <option value="comedor">Comedor</option>
+    </select>
     <input type="file" name="imagen" accept="image/*" required>
-    <button type="submit">Agregar Producto</button>
+    <button type="submit" class="submit-btn">Agregar Producto</button>
   </form>
 
   <div id="productos"></div>
 
   <script>
-    const API_URL = "https://productos-backend-d1di.onrender.com"; // Cambiar por tu URL real
+    const API_URL = "https://productos-backend-d1di.onrender.com";
     
     // Cargar productos al iniciar
     document.addEventListener('DOMContentLoaded', cargarProductos);
@@ -127,6 +135,11 @@
               <input type="text" value="${p.nombre}" id="nombre-${p.id}" placeholder="Nombre">
               <textarea id="desc-${p.id}" placeholder="Descripción">${p.descripcion}</textarea>
               <input type="number" value="${p.precio}" id="precio-${p.id}" step="0.01" min="0" placeholder="Precio">
+              <select id="categoria-${p.id}">
+                <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
+                <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
+                <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
+              </select>
               <input type="file" id="img-${p.id}" accept="image/*">
               <div class="producto-actions">
                 <button onclick="guardarCambios('${p.id}')" class="guardar-btn">Guardar Cambios</button>
@@ -180,6 +193,7 @@
       const nombre = document.getElementById(`nombre-${id}`).value;
       const descripcion = document.getElementById(`desc-${id}`).value;
       const precio = parseFloat(document.getElementById(`precio-${id}`).value);
+      const categoria = document.getElementById(`categoria-${id}`).value;
       const nuevaImagen = document.getElementById(`img-${id}`).files[0];
 
       try {
@@ -189,6 +203,7 @@
           formData.append("nombre", nombre);
           formData.append("descripcion", descripcion);
           formData.append("precio", precio);
+          formData.append("categoria", categoria);
           formData.append("imagen", nuevaImagen);
 
           await fetch(`${API_URL}/productos/${id}`, { 
@@ -205,6 +220,7 @@
               nombre,
               descripcion,
               precio,
+              categoria,
               imagen: `/static/${id}.jpg`
             })
           });
