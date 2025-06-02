@@ -1,554 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catálogo con Modo Admin</title>
-
-  <!-- Tu CSS personalizado -->
-  <link rel="stylesheet" href="styleprod.css">
-
-  <!-- Bootstrap CSS (opcional) -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous"
-  />
+  <meta charset="UTF-8">
+  <title>Catálogo de Muebles</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .producto {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 300px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .producto img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .producto h2 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+    }
+    .producto p {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
-  <!-- =========== HEADER / NAVBAR =========== -->
-  <header class="header">
-    <nav class="navbar navbar-expand-lg" style="background-color: black;">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="images/IMG_5160.JPG" alt="Logo" width="30" height="30">
-        </a>
-        <a class="navbar-brand" href="index.html" style="color: white; text-align: center;">
-          LINEAS RECTAS<br>
-          <span class="subheader">AMOBLAMIENTOS</span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon" style="color: white;"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html" style="color: white;">HOME</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style="color: white;"
-              >
-                PRODUCTOS
-              </a>
-              <ul class="dropdown-menu" style="background-color: black;">
-                <li>
-                  <a
-                    id="vertodos"
-                    class="dropdown-item"
-                    href="index.html"
-                    onclick="document.getElementById('categoria').value = 'todos'; mostrarProductos();"
-                    style="color: white;"
-                  >
-                    Ver Todos
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="index.html"
-                    onclick="document.getElementById('categoria').value = 'living'; mostrarProductos();"
-                    style="color: white;"
-                  >
-                    Living
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="index.html"
-                    onclick="document.getElementById('categoria').value = 'comedor'; mostrarProductos();"
-                    style="color: white;"
-                  >
-                    Comedor
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="index.html"
-                    onclick="document.getElementById('categoria').value = 'dormitorio'; mostrarProductos();"
-                    style="color: white;"
-                  >
-                    Dormitorio
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="catcolores.html" style="color: white;">CATÁLOGO DE COLORES</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contacto.html" style="color: white;">CONTACTO</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
 
-  <!-- =========== BREADCRUMB =========== -->
-  <nav aria-label="breadcrumb" class="ms-3 mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a id="home" href="index.html">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Productos</li>
-    </ol>
-  </nav>
-
-  <!-- =========== MAIN =========== -->
-  <main class="container">
-    <h1 class="producter">Productos</h1>
-
-    <!-- Filtro de Categorías -->
-    <div class="filtro-categorias mb-3">
-      <label for="categoria">Filtrar por categoría:</label>
-      <select id="categoria" class="form-select w-auto" onchange="mostrarProductos()">
-        <option value="todos">Todos</option>
-        <option value="living">Living</option>
-        <option value="comedor">Comedor</option>
-        <option value="dormitorio">Dormitorio</option>
-      </select>
-    </div>
-
-    <!-- Aquí inyectamos: buscador + cards -->
-    <div id="productos" class="d-flex flex-wrap"></div>
-
-    <!-- =========== PANEL ADMIN (oculto inicialmente) =========== -->
-    <div id="adminPanel" class="admin-panel d-none">
-      <!-- → FORMULARIO AGREGAR -->
-      <div id="formAgregarContainer" class="formulario-producto">
-        <h3>Agregar Nuevo Producto</h3>
-        <form id="formAgregarProducto">
-          <div class="mb-3">
-            <label for="nombreNuevo" class="form-label">Nombre</label>
-            <input type="text" id="nombreNuevo" class="form-control" required />
-          </div>
-          <div class="mb-3">
-            <label for="categoriaNuevo" class="form-label">Categoría</label>
-            <select id="categoriaNuevo" class="form-select" required>
-              <option value="" disabled selected>Seleccione categoría</option>
-              <option value="living">Living</option>
-              <option value="comedor">Comedor</option>
-              <option value="dormitorio">Dormitorio</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="medidasNuevo" class="form-label">Medidas</label>
-            <input type="text" id="medidasNuevo" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
-          </div>
-          <div class="mb-3">
-            <label for="precioNuevo" class="form-label">Precio</label>
-            <input type="number" id="precioNuevo" class="form-control" min="0" step="0.01" required />
-          </div>
-          <div class="mb-3">
-            <label for="imagenFileNuevo" class="form-label">Imagen (JPG)</label>
-            <input type="file" id="imagenFileNuevo" class="form-control" accept=".jpg,.jpeg" required />
-          </div>
-          <button type="submit" class="btn btn-success">Agregar Producto</button>
-        </form>
-      </div>
-
-      <!-- → FORMULARIO EDITAR -->
-      <div id="formEditarContainer" class="formulario-producto d-none">
-        <h3>Editar Producto</h3>
-        <form id="formEditarProducto">
-          <input type="hidden" id="idEditar">
-          <div class="mb-3">
-            <label for="nombreEditar" class="form-label">Nombre</label>
-            <input type="text" id="nombreEditar" class="form-control" required />
-          </div>
-          <div class="mb-3">
-            <label for="categoriaEditar" class="form-label">Categoría</label>
-            <select id="categoriaEditar" class="form-select" required>
-              <option value="living">Living</option>
-              <option value="comedor">Comedor</option>
-              <option value="dormitorio">Dormitorio</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="medidasEditar" class="form-label">Medidas</label>
-            <input type="text" id="medidasEditar" class="form-control" placeholder="Ej: 2m x 1m x 1.5m" />
-          </div>
-          <div class="mb-3">
-            <label for="precioEditar" class="form-label">Precio</label>
-            <input type="number" id="precioEditar" class="form-control" min="0" step="0.01" required />
-          </div>
-          <div class="mb-3">
-            <label for="imagenFileEditar" class="form-label">Imagen (JPG)</label>
-            <input type="file" id="imagenFileEditar" class="form-control" accept=".jpg,.jpeg" />
-            <small class="text-muted">Dejar en blanco para mantener la imagen actual.</small>
-          </div>
-          <div class="mb-3">
-            <img id="imagenActual" src="" class="img-thumbnail" style="max-width: 200px; display: none;" alt="Imagen actual">
-          </div>
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-          <button type="button" class="btn btn-secondary ms-2" onclick="cancelarEdicion()">Cancelar</button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <!-- =========== FOOTER =========== -->
-  <footer>
-    <div id="contacto" class="footer-info">
-      <img class="logoabajo" src="images/IMG_5160.JPG" alt="Logo abajo">
-      <h3>LINEAS RECTAS</h3>
-      <p>Villa Maria, CBA.</p>
-      <p>Porfirio Seppey 315</p>
-      <p>+54-9353 6574696</p>
-      <p>lineasrectas@gmail.com</p>
-    </div>
-    <div class="footer-redes">
-      <ul>
-        <li>
-          <img id="fotou" src="images/instagram-new.png" alt="Instagram">
-          <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/?hl=es" target="_blank" rel="noopener noreferrer">
-            Instagram
-          </a>
-        </li>
-        <li>
-          <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
-          <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank" rel="noopener noreferrer">
-            WhatsApp
-          </a>
-        </li>
-        <li>
-          <img id="fotou" src="images/facebook.png" alt="Facebook">
-          <a class="fb-footer" href="https://www.facebook.com/lineasrectas.amoblamientos" target="_blank" rel="noopener noreferrer">
-            Facebook
-          </a>
-        </li>
-      </ul>
-    </div>
-    <button id="btnModoAdminFooter">Modo Admin</button>
-  </footer>
-
-  <!-- Bootstrap JS (opcional) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"
-  ></script>
+  <h1>Catálogo de Productos</h1>
+  <div id="catalogo"></div>
 
   <script>
-    /**
-     * Parámetros de configuración (repón con tus valores)
-     */
-    const GITHUB_USER = 'lineasrectas2332';
-    const GITHUB_REPO = 'lineasrectasPage';
-    const GITHUB_TOKEN = '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'; 
-    const FILE_PATH = 'productos.json';
+    const API_URL = 'https://tu-backend.onrender.com'; // ⚠️ Cambiá esta URL por la tuya real
 
-    let productos = [];
-    let modoAdminActivo = false;
-
-    // 1) Al cargar la página, leemos productos.json desde GitHub y luego pintamos
-    document.addEventListener('DOMContentLoaded', async () => {
-      await cargarProductosDesdeGitHub();
-      mostrarProductos();
-
-      // Formularios y botones
-      document.getElementById('formAgregarProducto').addEventListener('submit', e => {
-        e.preventDefault();
-        guardarProducto('nuevo');
-      });
-      document.getElementById('formEditarProducto').addEventListener('submit', e => {
-        e.preventDefault();
-        guardarProducto('editar');
-      });
-      document.getElementById('btnModoAdminFooter').addEventListener('click', toggleModoAdmin);
-      document.getElementById('categoria').addEventListener('change', mostrarProductos);
-    });
-
-    // 2) Alternar modo admin
-    function toggleModoAdmin() {
-      if (!modoAdminActivo) {
-        const pass = prompt('Ingrese la contraseña de administrador:');
-        if (pass === 'admin123') {
-          modoAdminActivo = true;
-          document.getElementById('adminPanel').classList.remove('d-none');
-        } else if (pass !== null) {
-          alert('Contraseña incorrecta.');
-          return;
-        }
-      } else {
-        modoAdminActivo = false;
-        cancelarEdicion();
-        document.getElementById('adminPanel').classList.add('d-none');
-      }
-      mostrarProductos();
-    }
-
-    // 3) Leer productos.json desde GitHub usando la API REST
-    async function cargarProductosDesdeGitHub() {
-      try {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('No se pudo leer productos.json');
-        const data = await response.json();
-        // data.content viene en base64
-        const contenidoBase64 = data.content;
-        const jsonString = atob(contenidoBase64.replace(/\n/g, ''));
-        productos = JSON.parse(jsonString);
-      } catch (err) {
-        console.error('Error al cargar productos desde GitHub:', err);
-        productos = [];
-      }
-    }
-
-    // 4) Actualizar productos.json en GitHub (modo admin)
-    async function actualizarProductosEnGitHub(nuevoArray) {
-      try {
-        // 4.1) Obtener SHA actual del archivo
-        const getUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
-        const getResp = await fetch(getUrl, {
-          headers: { Authorization: 'token ' + GITHUB_TOKEN }
+    fetch(`${API_URL}/productos`)
+      .then(response => response.json())
+      .then(productos => {
+        const contenedor = document.getElementById('catalogo');
+        productos.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'producto';
+          div.innerHTML = `
+            <img src="${p.imagen}" alt="${p.nombre}">
+            <h2>${p.nombre}</h2>
+            <p>${p.descripcion}</p>
+            <p><strong>$${p.precio}</strong></p>
+          `;
+          contenedor.appendChild(div);
         });
-        if (!getResp.ok) throw new Error('No se pudo obtener SHA de productos.json');
-        const getData = await getResp.json();
-        const currentSha = getData.sha;
-
-        // 4.2) Convertir el array a JSON formateado y luego a base64
-        const nuevoContenido = btoa(JSON.stringify(nuevoArray, null, 2));
-
-        // 4.3) Hacer PUT para sobrescribir el archivo en el repo
-        const putUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
-        const commitMessage = 'Actualización de productos desde modo admin (front-end)';
-        const body = {
-          message: commitMessage,
-          content: nuevoContenido,
-          sha: currentSha
-        };
-
-        const putResp = await fetch(putUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'token ' + GITHUB_TOKEN
-          },
-          body: JSON.stringify(body)
-        });
-        if (!putResp.ok) {
-          const errorData = await putResp.json();
-          throw new Error('Error al actualizar productos.json: ' + JSON.stringify(errorData));
-        }
-        alert('Productos actualizados correctamente en GitHub.');
-      } catch (err) {
+      })
+      .catch(err => {
+        document.getElementById('catalogo').innerText = 'Error al cargar productos.';
         console.error(err);
-        alert('Hubo un error al intentar actualizar GitHub:\n' + err.message);
-      }
-    }
-
-    // 5) Pintar productos en la página (crea buscador + cards)
-    function mostrarProductos() {
-      const contenedor = document.getElementById('productos');
-      contenedor.innerHTML = '';
-
-      // 5.1) Crear buscador
-      const buscadorDiv = document.createElement('div');
-      buscadorDiv.className = 'mb-3 w-100';
-      buscadorDiv.innerHTML = `
-        <label for="busquedaInput" class="form-label">Buscar por nombre o categoría:</label>
-        <input type="text" id="busquedaInput" class="form-control" placeholder="Ej: sofá, mesa..." />
-      `;
-      contenedor.appendChild(buscadorDiv);
-
-      // Al tipear en el buscador, filtramos en tiempo real
-      document.getElementById('busquedaInput').addEventListener('input', filtrarYMostrar);
-
-      // Mostrar inicialmente (sin texto)
-      filtrarYMostrar();
-    }
-
-    // 6) Filtrar array y dibujar las tarjetas
-    function filtrarYMostrar() {
-      const contenedor = document.getElementById('productos');
-      // Borrar todo excepto el buscador (índice 0)
-      Array.from(contenedor.children).forEach((child, idx) => {
-        if (idx > 0) contenedor.removeChild(child);
       });
-
-      const texto = document.getElementById('busquedaInput').value.toLowerCase();
-      const categoriaFiltro = document.getElementById('categoria').value;
-
-      const filtrados = productos.filter(p => {
-        const coincideTexto =
-          p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto);
-        const coincideCat =
-          categoriaFiltro === 'todos' || p.categoria === categoriaFiltro;
-        return coincideTexto && coincideCat;
-      });
-
-      if (filtrados.length === 0) {
-        const alerta = document.createElement('div');
-        alerta.className = 'alert alert-info w-100';
-        alerta.textContent = 'No hay productos para mostrar.';
-        contenedor.appendChild(alerta);
-        return;
-      }
-
-      filtrados.forEach(producto => {
-        const card = document.createElement('div');
-        card.className = 'card producto';
-        let srcImg = producto.imagen || '';
-        if (!srcImg) {
-          srcImg = 'https://via.placeholder.com/300x200?text=Sin+imagen';
-        }
-        card.innerHTML = `
-          <img src="${srcImg}" class="card-img-top" alt="${producto.nombre}">
-          <div class="card-body">
-            <h5 class="card-title">${producto.nombre}</h5>
-            <p class="card-text">Categoría: ${producto.categoria}</p>
-            <p class="card-text">Medidas: ${producto.medidas || '-'}</p>
-            <p class="card-text fw-bold">$${producto.precio.toLocaleString('es-AR')}</p>
-            ${modoAdminActivo
-              ? `<div class="d-flex">
-                   <button class="btn btn-warning flex-grow-1 me-1" onclick="editarProducto(${producto.id})">Editar</button>
-                   <button class="btn btn-danger flex-grow-1" onclick="eliminarProducto(${producto.id})">Eliminar</button>
-                 </div>`
-              : `<button class="btn btn-primary">Comprar</button>`}
-          </div>
-        `;
-        contenedor.appendChild(card);
-      });
-    }
-
-    // 7) Guardar producto (nuevo o editar) y luego subir a GitHub
-    async function guardarProducto(tipo) {
-      const datos = {};
-      if (tipo === 'nuevo') {
-        datos.id = productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1;
-        datos.nombre = document.getElementById('nombreNuevo').value.trim();
-        datos.categoria = document.getElementById('categoriaNuevo').value;
-        datos.medidas = document.getElementById('medidasNuevo').value.trim();
-        datos.precio = parseFloat(document.getElementById('precioNuevo').value);
-        datos.imagenFile = document.getElementById('imagenFileNuevo');
-      } else {
-        datos.id = parseInt(document.getElementById('idEditar').value);
-        datos.nombre = document.getElementById('nombreEditar').value.trim();
-        datos.categoria = document.getElementById('categoriaEditar').value;
-        datos.medidas = document.getElementById('medidasEditar').value.trim();
-        datos.precio = parseFloat(document.getElementById('precioEditar').value);
-        datos.imagenFile = document.getElementById('imagenFileEditar');
-        datos.imagenActual = document.getElementById('imagenActual').src;
-      }
-
-      // Validaciones
-      if (!datos.nombre || !datos.categoria || isNaN(datos.precio)) {
-        alert('Por favor complete todos los campos obligatorios.');
-        return;
-      }
-      if (tipo === 'nuevo' && datos.imagenFile.files.length === 0) {
-        alert('Por favor seleccione una imagen para el producto.');
-        return;
-      }
-
-      // Leer y convertir imagen a Base64
-      const procesarImagen = callback => {
-        if (datos.imagenFile.files.length > 0) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            callback(e.target.result);
-          };
-          reader.readAsDataURL(datos.imagenFile.files[0]);
-        } else {
-          callback(datos.imagenActual || '');
-        }
-      };
-
-      procesarImagen(async imagenBase64 => {
-        const nuevoProd = {
-          id: datos.id,
-          nombre: datos.nombre,
-          categoria: datos.categoria,
-          medidas: datos.medidas,
-          precio: datos.precio,
-          imagen: imagenBase64
-        };
-
-        if (tipo === 'nuevo') {
-          productos.push(nuevoProd);
-          document.getElementById('formAgregarProducto').reset();
-        } else {
-          const idx = productos.findIndex(p => p.id === datos.id);
-          if (idx !== -1) productos[idx] = nuevoProd;
-          cancelarEdicion();
-        }
-
-        // 7.1) Sobrescribo productos.json en GitHub
-        await actualizarProductosEnGitHub(productos);
-        // 7.2) Releo el JSON recién subido y actualizo la vista
-        await cargarProductosDesdeGitHub();
-        mostrarProductos();
-      });
-    }
-
-    // 8) Rellenar formulario para edición
-    function editarProducto(id) {
-      const prod = productos.find(p => p.id === id);
-      if (!prod) {
-        alert('Producto no encontrado');
-        return;
-      }
-      document.getElementById('idEditar').value = prod.id;
-      document.getElementById('nombreEditar').value = prod.nombre;
-      document.getElementById('categoriaEditar').value = prod.categoria;
-      document.getElementById('medidasEditar').value = prod.medidas;
-      document.getElementById('precioEditar').value = prod.precio;
-
-      const imgAct = document.getElementById('imagenActual');
-      imgAct.src = prod.imagen || '';
-      imgAct.style.display = prod.imagen ? 'block' : 'none';
-
-      document.getElementById('formAgregarContainer').classList.add('d-none');
-      document.getElementById('formEditarContainer').classList.remove('d-none');
-      window.scrollTo({
-        top: document.getElementById('formEditarContainer').offsetTop,
-        behavior: 'smooth'
-      });
-    }
-
-    // 9) Cancelar edición
-    function cancelarEdicion() {
-      document.getElementById('formEditarProducto').reset();
-      document.getElementById('imagenActual').style.display = 'none';
-      document.getElementById('formEditarContainer').classList.add('d-none');
-      document.getElementById('formAgregarContainer').classList.remove('d-none');
-    }
-
-    // 10) Eliminar producto y subir JSON actualizado
-    async function eliminarProducto(id) {
-      if (confirm('¿Está seguro que desea eliminar este producto?')) {
-        productos = productos.filter(p => p.id !== id);
-        await actualizarProductosEnGitHub(productos);
-        await cargarProductosDesdeGitHub();
-        mostrarProductos();
-      }
-    }
   </script>
+
 </body>
 </html>

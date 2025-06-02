@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Administrador de Productos</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    .producto { border: 1px solid #ccc; margin: 10px; padding: 10px; background: white; }
+    img { width: 100px; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>Administrador de Productos</h1>
+
+  <form id="formulario">
+    <input type="text" name="nombre" placeholder="Nombre" required><br>
+    <textarea name="descripcion" placeholder="Descripción" required></textarea><br>
+    <input type="number" name="precio" placeholder="Precio" step="0.01" required><br>
+    <input type="file" name="imagen" accept="image/*" required><br>
+    <button type="submit">Agregar Producto</button>
+  </form>
+
+  <div id="productos"></div>
+
+  <script>
+    const API_URL = "https://productos-backend-d1di.onrender.com"; // Cambiar por tu URL real
+
+    async function cargarProductos() {
+      const res = await fetch(`${API_URL}/productos`);
+      const productos = await res.json();
+      const contenedor = document.getElementById("productos");
+      contenedor.innerHTML = "";
+      productos.forEach(p => {
+        contenedor.innerHTML += `
+          <div class="producto">
+            <img src="${API_URL}${p.imagen}" alt="${p.nombre}">
+            <h3>${p.nombre}</h3>
+            <p>${p.descripcion}</p>
+            <p><strong>$${p.precio}</strong></p>
+            <button onclick="eliminarProducto('${p.id}')">Eliminar</button>
+          </div>
+        `;
+      });
+    }
+
+    async function eliminarProducto(id) {
+      await fetch(`${API_URL}/productos/${id}`, { method: "DELETE" });
+      cargarProductos();
+    }
+
+    document.getElementById("formulario").addEventListener("submit", async e => {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      await fetch(`${API_URL}/productos`, { method: "POST", body: data });
+      form.reset();
+      cargarProductos();
+    });
+
+    cargarProductos();
+  </script>
+</body>
+</html>
