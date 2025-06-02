@@ -41,7 +41,7 @@
   <div id="catalogo"></div>
 
   <script>
-    const API_URL = 'https://tu-backend.onrender.com'; // ⚠️ Cambiá esta URL por la tuya real
+    const API_URL = 'https://productos-backend-d1di.onrender.com';
 
     fetch(`${API_URL}/productos`)
       .then(response => response.json())
@@ -51,7 +51,7 @@
           const div = document.createElement('div');
           div.className = 'producto';
           div.innerHTML = `
-            <img src="${p.imagen}" alt="${p.nombre}">
+            <img src="${API_URL}${p.imagen}" alt="${p.nombre}">
             <h2>${p.nombre}</h2>
             <p>${p.descripcion}</p>
             <p><strong>$${p.precio}</strong></p>
