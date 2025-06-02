@@ -121,12 +121,24 @@
 
     async function cargarProductos() {
       try {
+        console.log("Cargando productos...");
         const res = await fetch(`${API_URL}/productos`);
-        if (!res.ok) throw new Error('Error al cargar productos');
+        
+        if (!res.ok) {
+          const error = await res.text();
+          throw new Error(`Error ${res.status}: ${error}`);
+        }
         
         const productos = await res.json();
+        console.log("Productos recibidos:", productos);
+        
         const contenedor = document.getElementById("productos");
         contenedor.innerHTML = "";
+        
+        if (productos.length === 0) {
+          contenedor.innerHTML = "<p>No hay productos registrados</p>";
+          return;
+        }
         
         productos.forEach(p => {
           contenedor.innerHTML += `
@@ -136,9 +148,9 @@
               <textarea id="desc-${p.id}" placeholder="Descripción">${p.descripcion}</textarea>
               <input type="number" value="${p.precio}" id="precio-${p.id}" step="0.01" min="0" placeholder="Precio">
               <select id="categoria-${p.id}">
-                <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
-                <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
-                <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
+                <option value="living" ${p.categoria.toLowerCase() === 'living' ? 'selected' : ''}>Living</option>
+                <option value="dormitorio" ${p.categoria.toLowerCase() === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
+                <option value="comedor" ${p.categoria.toLowerCase() === 'comedor' ? 'selected' : ''}>Comedor</option>
               </select>
               <input type="file" id="img-${p.id}" accept="image/*">
               <div class="producto-actions">
@@ -149,8 +161,13 @@
           `;
         });
       } catch (error) {
-        console.error("Error:", error);
-        alert("Error al cargar productos: " + error.message);
+        console.error("Error al cargar productos:", error);
+        document.getElementById("productos").innerHTML = `
+          <div class="error">
+            <p>Error al cargar productos</p>
+            <p>${error.message}</p>
+          </div>
+        `;
       }
     }
 
@@ -159,33 +176,79 @@
       
       try {
         const res = await fetch(`${API_URL}/productos/${id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error('Error al eliminar');
-        cargarProductos();
+        
+        if (!res.ok) {
+          const error = await res.text();
+          throw new Error(`Error ${res.status}: ${error}`);
+        }
+        
+        await cargarProductos();
+        alert("Producto eliminado con éxito!");
       } catch (error) {
-        console.error("Error:", error);
-        alert("Error al eliminar producto: " + error.message);
+        console.error("Error al eliminar producto:", error);
+        alert(`Error al eliminar producto: ${error.message}`);
       }
     }
 
     document.getElementById("formulario").addEventListener("submit", async e => {
       e.preventDefault();
       const form = e.target;
-      const data = new FormData(form);
+      const submitBtn = form.querySelector('button[type="submit"]');
       
       try {
+        // Deshabilitar botón durante el envío
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Enviando...";
+        
+        const data = new FormData(form);
+        
+        // Validación básica en el cliente
+        if (!data.get('nombre') || !data.get('descripcion')) {
+          throw new Error("Nombre y descripción son requeridos");
+        }
+        
+        if (parseFloat(data.get('precio')) <= 0) {
+          throw new Error("El precio debe ser mayor a 0");
+        }
+        
+        if (!data.get('categoria')) {
+          throw new Error("Debe seleccionar una categoría");
+        }
+        
+        if (!data.get('imagen').name) {
+          throw new Error("Debe seleccionar una imagen");
+        }
+        
+        console.log("Enviando datos:", {
+          nombre: data.get('nombre'),
+          descripcion: data.get('descripcion'),
+          precio: data.get('precio'),
+          categoria: data.get('categoria'),
+          imagen: data.get('imagen').name
+        });
+        
         const res = await fetch(`${API_URL}/productos`, { 
           method: "POST", 
           body: data 
         });
         
-        if (!res.ok) throw new Error('Error al agregar producto');
+        if (!res.ok) {
+          const error = await res.text();
+          throw new Error(`Error ${res.status}: ${error}`);
+        }
+        
+        const resultado = await res.json();
+        console.log("Producto agregado:", resultado);
         
         form.reset();
-        cargarProductos();
+        await cargarProductos();
         alert("Producto agregado con éxito!");
       } catch (error) {
-        console.error("Error:", error);
-        alert("Error al agregar producto: " + error.message);
+        console.error("Error al agregar producto:", error);
+        alert(`Error: ${error.message}`);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Agregar Producto";
       }
     });
     
@@ -195,8 +258,14 @@
       const precio = parseFloat(document.getElementById(`precio-${id}`).value);
       const categoria = document.getElementById(`categoria-${id}`).value;
       const nuevaImagen = document.getElementById(`img-${id}`).files[0];
-
+      
+      const btn = document.querySelector(`button[onclick="guardarCambios('${id}')"]`);
+      const originalText = btn.textContent;
+      
       try {
+        btn.disabled = true;
+        btn.textContent = "Guardando...";
+        
         if (nuevaImagen) {
           // Si hay nueva imagen, actualizamos todo el producto
           const formData = new FormData();
@@ -206,13 +275,18 @@
           formData.append("categoria", categoria);
           formData.append("imagen", nuevaImagen);
 
-          await fetch(`${API_URL}/productos/${id}`, { 
+          const res = await fetch(`${API_URL}/productos/${id}`, { 
             method: "PUT",
             body: formData
           });
+          
+          if (!res.ok) {
+            const error = await res.text();
+            throw new Error(`Error ${res.status}: ${error}`);
+          }
         } else {
           // Si no hay nueva imagen, solo actualizamos los datos
-          await fetch(`${API_URL}/productos/${id}`, {
+          const res = await fetch(`${API_URL}/productos/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -221,16 +295,24 @@
               descripcion,
               precio,
               categoria,
-              imagen: `/static/${id}.jpg`
+              imagen: ""  // El backend manejará mantener la imagen existente
             })
           });
+          
+          if (!res.ok) {
+            const error = await res.text();
+            throw new Error(`Error ${res.status}: ${error}`);
+          }
         }
         
-        cargarProductos();
+        await cargarProductos();
         alert("Producto actualizado con éxito!");
       } catch (error) {
-        console.error("Error:", error);
-        alert("Error al actualizar producto: " + error.message);
+        console.error("Error al actualizar producto:", error);
+        alert(`Error: ${error.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
       }
     }
   </script>
