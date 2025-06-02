@@ -1,6 +1,4 @@
-/* ====================
-   Estilos Globales
-   ==================== */
+/* Estilos generales */
 html, body {
     background-color: #000000;
     font-family: "Montserrat", sans-serif;
@@ -9,79 +7,50 @@ html, body {
     padding: 0;
 }
 
-#busquedaInput,
-label[for="busquedaInput"] {
-    display: none;
-}
-
-/* ====================
-   Contenido Principal
-   ==================== */
-/* Mantenemos el mismo padding en todas las pantallas */
-main {
-    flex: 1;
-    padding: 20px 60px; /* Igual en escritorio, tablet y celular */
-}
-
-/* ====================
-   Navegación Principal
-   ==================== */
-.navprodprincipal {
-    background-color: #000000;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    font-family: "Montserrat", sans-serif;
-    color: #ffffff; /* Asegura que todos los textos sean blancos */
-}
-
-.navbar {
-    min-height: 65px; /* Igual en todas las pantallas */
-    line-height: 1;
-}
-
+/* Encabezado */
 .subheader {
-    font-size: 0.45em; /* Igual en todas las pantallas */
+    font-size: 0.45em;
     font-weight: normal;
     color: white;
     display: block;
+    margin-top: -5px;
 }
 
-.navprodprincipal div {
+.producto-filtrer {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 37px;
-    margin-bottom: 37px;
-    color: #ffffff;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.navprodprincipal div a {
+.filtro-categorias {
+    margin-left: 65px;
+    color: #555;
+}
+
+.filtro-categorias select {
+    padding: 5px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    background-color: rgb(255, 255, 255);
+    color: #010101;
+}
+
+.filtro-categorias select option:hover {
     color: white;
-    text-decoration: none;
+    background-color: #000000;
+    font-weight: bold;
 }
 
-.navprodprincipal div:hover {
-    font-size: large;
-    color: #6e5b5b;
+#categoria {
+    max-width: 650px;
+    margin-right: 250px;
 }
 
-.navprodprincipal div img {
-    width: 55px;
-}
-
-.navprodprincipal div a:hover {
-    color: #6e5b5b;
-}
-
-/* ====================
-   Breadcrumb y Título de Sección
-   ==================== */
-/* Mantenemos siempre los mismos márgenes sin cambios */
 .breadcrumb {
-    margin-top: 10px;     /* Igual en escritorio, tablet y celular */
+    margin-top: 38px;
     margin-left: 85px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 #home {
@@ -90,157 +59,105 @@ main {
 }
 
 .producter {
-    margin-top: 5px;      /* Igual en todas las pantallas */
+    margin-top: 26px;
     margin-left: 85px;
     font-family: "Montserrat", sans-serif;
     font-size: 2.6rem;
 }
 
-/* ====================
-   Filtro de Categorías
-   ==================== */
-.filtro-categorias {
-    display: flex;
-    justify-content: flex-end; /* Siempre alineado a la derecha */
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 0.95rem;
-    color: #333;
-    margin-top: 5px;          /* Igual en todas las pantallas */
-    margin-bottom: 10px;
-    margin-left: 85px;        /* Constante */
-    width: calc(100% - 85px);
-    padding-right: 0.5rem;     /* Constante */
-    box-sizing: border-box;
-}
-
-.filtro-categorias label {
-    margin-right: 10px;
-    white-space: nowrap;
-}
-
-.filtro-categorias select {
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background-color: #fff;
-    color: #000;
-    min-width: 140px;
-    outline: none;
-}
-
-.filtro-categorias select option:hover {
-    background-color: #000;
-    color: #fff;
-    font-weight: bold;
-}
-
-#categoria {
-    max-width: 650px;
-    margin-right: 20px;      /* Constante en todas las pantallas */
-}
-
-/* ====================
-   Productos (Cards)
-   ==================== */
-h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-.productos-container {
+/* Catálogo de productos */
+#catalogo {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
-    /* Sin cambios en móviles/tablets: mantiene exactamente el mismo layout */
+    justify-content: space-around;
+    padding: 20px;
 }
 
+/* Estilo para cada producto */
 .producto {
-    border: none !important;
-    box-shadow: none !important;
-    width: 250px;    /* Constante: igual en escritorio y dispositivos */
+    background-color: white;
+    width: 250px;
+    margin: 20px;
+    border-radius: 8px;
+    overflow: hidden;
     text-align: center;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: none !important; /* Elimina cualquier sombra */
+    filter: none !important; /* Elimina filtros */
+    -webkit-box-shadow: none !important; /* Para Safari */
+}
+
+
+.producto h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.producto p {
+    font-size: 1em;
+    color: #555;
+}
+
+.producto button {
+    background-color: #000000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.producto button:hover {
+    background-color: #ffffff;
+    color: black;
+    border: solid 1px black;
+    font-weight: bold;
 }
 
 .producto img {
     width: 100%;
+    max-width: 300px;
     height: auto;
-    object-fit: cover;
-    margin-bottom: 15px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
 }
 
-.producto h4 {
-    font-size: 1.2rem;
-    margin: 10px 0 5px;
-    font-weight: bold;
-}
-
-.producto p {
-    margin: 5px 0;
-    font-size: 0.95rem;
-    color: #333;
-}
-
-.producto button {
-    background-color: black;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.producto button:hover {
-    background-color: #333;
-}
-
-/* ====================
-   Imagen de Productos en Cards
-   ==================== */
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-/* ====================
-   Pie de Página
-   ==================== */
+/* Pie de página */
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 10px;
     background-color: black;
     color: white;
     width: 100%;
-    margin-top: auto;
 }
 
 .footer-info {
     margin-bottom: 20px;
 }
-
-.footer-info h3,
-.footer-info p {
+.footer-info h3, .footer-info p {
     margin: 10px 0;
 }
 
 .footer-redes {
     display: flex;
     justify-content: center;
-    gap: 20px;
 }
 
 .footer-redes ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+
+.wpp-footer, .ig-footer {
+    text-decoration: none;
+    color: white;
 }
 
 .footer-redes li {
@@ -250,15 +167,8 @@ footer {
     margin-bottom: 10px;
 }
 
-.wpp-footer,
-.ig-footer {
-    text-decoration: none;
-    color: white;
-}
-
 .footer-copy {
     margin-top: 20px;
-    font-size: 0.9rem;
 }
 
 #fotou {
@@ -272,31 +182,64 @@ footer {
     margin: 0 auto;
 }
 
-/* ====================
-   Botón Modo Admin
-   ==================== */
-#btnModoAdminFooter {
-    background-color: #000;
-    color: #d6d6d6;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    margin-top: 10px;
+/* Responsive: tablet */
+@media (max-width: 768px) {
+    #catalogo {
+        justify-content: center;
+    }
+
+    .producto {
+        width: 45%;
+        margin: 10px;
+    }
+
+    .filtro-categorias {
+        margin-right: 5px;
+    }
+
+    #categoria {
+        max-width: 200px;
+    }
+
+    .breadcrumb {
+        margin-top: 20px;
+        margin-left: 30px;
+    }
+
+    .producter {
+        margin-left: 30px;
+    }
 }
 
-#btnModoAdminFooter:hover {
-    background-color: #fff;
-    color: #000;
-}
+/* Responsive: celular */
+@media (max-width: 480px) {
+    #catalogo {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
 
-/* ====================
-   RESPONSIVIDAD ELIMINADA
-   ==================== */
-/* 
-   Cualquier media query que altere márgenes, anchos o disposición 
-   ha sido removida para que el diseño permanezca idéntico en móvil, tablet y escritorio. 
-   ¡Las tarjetas, el breadcrumb y el filtro siempre se verán exactamente igual!
-*/
+    .producto {
+        width: 100%;
+        margin: 0;
+        
+    }
+
+    .producto-filtrer {
+        flex-direction: column;
+    }
+
+    .producter {
+        margin-left: 10px;
+        font-size: 1.7rem;
+    }
+
+    .producto h3 {
+        font-size: 1.1em;
+    }
+
+    .producto p {
+        font-size: 0.9em;
+    }
+}
