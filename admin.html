@@ -2,116 +2,364 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Administrador de Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Productos | Líneas Rectas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { 
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --success: #27ae60;
+      --danger: #e74c3c;
+      --light: #ecf0f1;
+      --dark: #2c3e50;
+      --gray: #95a5a6;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px; 
-      background: #f5f5f5; 
+      background-color: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
       max-width: 1200px;
       margin: 0 auto;
-    }
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    #formulario {
-      background: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 15px 0;
+      box-shadow: var(--shadow);
       margin-bottom: 30px;
     }
-    input, textarea, select, button {
-      margin: 8px 0;
-      padding: 10px;
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    textarea {
-      min-height: 80px;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .admin-nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .admin-nav a:hover {
+      color: var(--secondary);
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--secondary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
       resize: vertical;
     }
-    button {
-      color: white;
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
       border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
+      transition: var(--transition);
+      text-align: center;
     }
-    #productos {
+
+    .btn-primary {
+      background-color: var(--secondary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background-color: #219955;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--white);
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-sm {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
-    .producto {
-      background: white;
+
+    .product-card {
+      background-color: var(--white);
       border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
     }
-    .producto img {
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
       width: 100%;
       height: 200px;
-      object-fit: contain;
-      margin-bottom: 15px;
-      border-radius: 4px;
+      object-fit: cover;
     }
-    .producto-actions {
+
+    .product-body {
+      padding: 20px;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .product-price {
+      font-weight: bold;
+      color: var(--success);
+      font-size: 1.2rem;
+    }
+
+    .product-actions {
       display: flex;
       gap: 10px;
       margin-top: 15px;
     }
-    .producto-actions button {
-      flex: 1;
+
+    .alert {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
     }
-    .guardar-btn {
-      background-color: #2196F3;
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
     }
-    .guardar-btn:hover {
-      background-color: #0b7dda;
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
     }
-    .eliminar-btn {
-      background-color: #f44336;
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
     }
-    .eliminar-btn:hover {
-      background-color: #d32f2f;
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--light);
     }
-    .submit-btn {
-      background-color: #4CAF50;
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--white);
+      animation: spin 1s ease-in-out infinite;
     }
-    .submit-btn:hover {
-      background-color: #45a049;
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
+
     @media (max-width: 768px) {
-      #productos {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .admin-nav {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .products-grid {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Administrador de Productos</h1>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="https://via.placeholder.com/40" alt="Logo">
+        <h1>Líneas Rectas - Admin</h1>
+      </div>
+      <nav class="admin-nav">
+        <a href="#"><i class="fas fa-home"></i> Inicio</a>
+        <a href="#"><i class="fas fa-box-open"></i> Productos</a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i> Salir</a>
+      </nav>
+    </div>
+  </header>
 
-  <form id="formulario">
-    <h2>Agregar Nuevo Producto</h2>
-    <input type="text" name="nombre" placeholder="Nombre del producto" required>
-    <textarea name="descripcion" placeholder="Descripción del producto" required></textarea>
-    <input type="number" name="precio" placeholder="Precio (ej: 19.99)" step="0.01" min="0" required>
-    <select name="categoria" required>
-      <option value="" disabled selected>Seleccione categoría</option>
-      <option value="living">Living</option>
-      <option value="dormitorio">Dormitorio</option>
-      <option value="comedor">Comedor</option>
-    </select>
-    <input type="file" name="imagen" accept="image/*" required>
-    <button type="submit" class="submit-btn">Agregar Producto</button>
-  </form>
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title"><i class="fas fa-plus-circle"></i> Agregar Nuevo Producto</h2>
+      <form id="formulario">
+        <div class="form-group">
+          <label for="nombre">Nombre del Producto</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej: Sofá moderno" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion" class="form-control" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="precio">Precio ($)</label>
+          <input type="number" id="precio" name="precio" class="form-control" step="0.01" min="0" placeholder="Ej: 199.99" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" name="categoria" class="form-control" required>
+            <option value="" disabled selected>Seleccione una categoría</option>
+            <option value="living">Living</option>
+            <option value="dormitorio">Dormitorio</option>
+            <option value="comedor">Comedor</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="imagen">Imagen del Producto</label>
+          <input type="file" id="imagen" name="imagen" class="form-control" accept="image/*" required>
+          <small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+          <span id="submit-text">Agregar Producto</span>
+        </button>
+      </form>
+    </section>
 
-  <div id="productos"></div>
+    <section class="card">
+      <h2 class="card-title"><i class="fas fa-boxes"></i> Lista de Productos</h2>
+      <div id="productos" class="products-grid">
+        <!-- Los productos se cargarán aquí dinámicamente -->
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <p>No hay productos registrados</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     const API_URL = "https://productos-backend-d1di.onrender.com";
@@ -121,71 +369,107 @@
 
     async function cargarProductos() {
       try {
-        console.log("Cargando productos...");
+        const productosContainer = document.getElementById("productos");
+        productosContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="loading"></div>
+            <p>Cargando productos...</p>
+          </div>
+        `;
+        
         const res = await fetch(`${API_URL}/productos`);
         
         if (!res.ok) {
-          const error = await res.text();
-          throw new Error(`Error ${res.status}: ${error}`);
+          throw new Error('Error al cargar productos');
         }
         
         const productos = await res.json();
-        console.log("Productos recibidos:", productos);
-        
-        const contenedor = document.getElementById("productos");
-        contenedor.innerHTML = "";
         
         if (productos.length === 0) {
-          contenedor.innerHTML = "<p>No hay productos registrados</p>";
+          productosContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-box-open"></i>
+              <p>No hay productos registrados</p>
+            </div>
+          `;
           return;
         }
         
+        productosContainer.innerHTML = '';
+        
         productos.forEach(p => {
-          contenedor.innerHTML += `
-            <div class="producto" data-id="${p.id}">
-              <img src="${API_URL}${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
-              <input type="text" value="${p.nombre}" id="nombre-${p.id}" placeholder="Nombre">
-              <textarea id="desc-${p.id}" placeholder="Descripción">${p.descripcion}</textarea>
-              <input type="number" value="${p.precio}" id="precio-${p.id}" step="0.01" min="0" placeholder="Precio">
-              <select id="categoria-${p.id}">
-                <option value="living" ${p.categoria.toLowerCase() === 'living' ? 'selected' : ''}>Living</option>
-                <option value="dormitorio" ${p.categoria.toLowerCase() === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
-                <option value="comedor" ${p.categoria.toLowerCase() === 'comedor' ? 'selected' : ''}>Comedor</option>
-              </select>
-              <input type="file" id="img-${p.id}" accept="image/*">
-              <div class="producto-actions">
-                <button onclick="guardarCambios('${p.id}')" class="guardar-btn">Guardar Cambios</button>
-                <button onclick="eliminarProducto('${p.id}')" class="eliminar-btn">Eliminar</button>
+          const productCard = document.createElement('div');
+          productCard.className = 'product-card';
+          productCard.dataset.id = p.id;
+          productCard.innerHTML = `
+            <img src="${API_URL}${p.imagen}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+            <div class="product-body">
+              <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
+              <div class="product-meta">
+                <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
+                <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
+              </div>
+              <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
+              <div class="form-group">
+                <select id="categoria-${p.id}" class="form-control">
+                  <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
+                  <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
+                  <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="img-${p.id}">Cambiar imagen:</label>
+                <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
+              </div>
+              <div class="product-actions">
+                <button onclick="guardarCambios('${p.id}')" class="btn btn-success btn-sm">
+                  <i class="fas fa-save"></i> Guardar
+                </button>
+                <button onclick="eliminarProducto('${p.id}')" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
               </div>
             </div>
           `;
+          productosContainer.appendChild(productCard);
         });
       } catch (error) {
-        console.error("Error al cargar productos:", error);
         document.getElementById("productos").innerHTML = `
-          <div class="error">
-            <p>Error al cargar productos</p>
-            <p>${error.message}</p>
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
           </div>
         `;
+        console.error("Error:", error);
       }
     }
 
     async function eliminarProducto(id) {
-      if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+      if (!confirm("¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) return;
       
       try {
+        const btn = document.querySelector(`button[onclick="eliminarProducto('${id}')"]`);
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<div class="loading"></div>';
+        btn.disabled = true;
+        
         const res = await fetch(`${API_URL}/productos/${id}`, { method: "DELETE" });
         
         if (!res.ok) {
-          const error = await res.text();
-          throw new Error(`Error ${res.status}: ${error}`);
+          throw new Error('Error al eliminar producto');
         }
         
         await cargarProductos();
-        alert("Producto eliminado con éxito!");
+        
+        // Mostrar notificación de éxito
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto eliminado correctamente';
+        document.querySelector('main').prepend(notification);
+        
+        // Eliminar notificación después de 3 segundos
+        setTimeout(() => notification.remove(), 3000);
       } catch (error) {
-        console.error("Error al eliminar producto:", error);
+        console.error("Error:", error);
         alert(`Error al eliminar producto: ${error.message}`);
       }
     }
@@ -194,38 +478,13 @@
       e.preventDefault();
       const form = e.target;
       const submitBtn = form.querySelector('button[type="submit"]');
+      const submitText = submitBtn.querySelector('#submit-text') || submitBtn;
       
       try {
-        // Deshabilitar botón durante el envío
         submitBtn.disabled = true;
-        submitBtn.textContent = "Enviando...";
+        submitText.innerHTML = '<div class="loading"></div>';
         
         const data = new FormData(form);
-        
-        // Validación básica en el cliente
-        if (!data.get('nombre') || !data.get('descripcion')) {
-          throw new Error("Nombre y descripción son requeridos");
-        }
-        
-        if (parseFloat(data.get('precio')) <= 0) {
-          throw new Error("El precio debe ser mayor a 0");
-        }
-        
-        if (!data.get('categoria')) {
-          throw new Error("Debe seleccionar una categoría");
-        }
-        
-        if (!data.get('imagen').name) {
-          throw new Error("Debe seleccionar una imagen");
-        }
-        
-        console.log("Enviando datos:", {
-          nombre: data.get('nombre'),
-          descripcion: data.get('descripcion'),
-          precio: data.get('precio'),
-          categoria: data.get('categoria'),
-          imagen: data.get('imagen').name
-        });
         
         const res = await fetch(`${API_URL}/productos`, { 
           method: "POST", 
@@ -233,22 +492,35 @@
         });
         
         if (!res.ok) {
-          const error = await res.text();
-          throw new Error(`Error ${res.status}: ${error}`);
+          const error = await res.json();
+          throw new Error(error.detail || 'Error al agregar producto');
         }
-        
-        const resultado = await res.json();
-        console.log("Producto agregado:", resultado);
         
         form.reset();
         await cargarProductos();
-        alert("Producto agregado con éxito!");
+        
+        // Mostrar notificación de éxito
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
+        document.querySelector('main').prepend(notification);
+        
+        // Eliminar notificación después de 3 segundos
+        setTimeout(() => notification.remove(), 3000);
       } catch (error) {
-        console.error("Error al agregar producto:", error);
-        alert(`Error: ${error.message}`);
+        console.error("Error:", error);
+        
+        // Mostrar notificación de error
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-danger';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
+        document.querySelector('main').prepend(notification);
+        
+        // Eliminar notificación después de 5 segundos
+        setTimeout(() => notification.remove(), 5000);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Agregar Producto";
+        submitText.textContent = 'Agregar Producto';
       }
     });
     
@@ -258,16 +530,15 @@
       const precio = parseFloat(document.getElementById(`precio-${id}`).value);
       const categoria = document.getElementById(`categoria-${id}`).value;
       const nuevaImagen = document.getElementById(`img-${id}`).files[0];
-      
-      const btn = document.querySelector(`button[onclick="guardarCambios('${id}')"]`);
-      const originalText = btn.textContent;
+
+      const btn = document.querySelector(`.product-card[data-id="${id}"] button[onclick="guardarCambios('${id}')"]`);
+      const originalHtml = btn.innerHTML;
       
       try {
+        btn.innerHTML = '<div class="loading"></div>';
         btn.disabled = true;
-        btn.textContent = "Guardando...";
         
         if (nuevaImagen) {
-          // Si hay nueva imagen, actualizamos todo el producto
           const formData = new FormData();
           formData.append("nombre", nombre);
           formData.append("descripcion", descripcion);
@@ -281,11 +552,10 @@
           });
           
           if (!res.ok) {
-            const error = await res.text();
-            throw new Error(`Error ${res.status}: ${error}`);
+            const error = await res.json();
+            throw new Error(error.detail || 'Error al actualizar producto');
           }
         } else {
-          // Si no hay nueva imagen, solo actualizamos los datos
           const res = await fetch(`${API_URL}/productos/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -294,25 +564,41 @@
               nombre,
               descripcion,
               precio,
-              categoria,
-              imagen: ""  // El backend manejará mantener la imagen existente
+              categoria
+              // No enviamos imagen para que el backend mantenga la existente
             })
           });
           
           if (!res.ok) {
-            const error = await res.text();
-            throw new Error(`Error ${res.status}: ${error}`);
+            const error = await res.json();
+            throw new Error(error.detail || 'Error al actualizar producto');
           }
         }
         
         await cargarProductos();
-        alert("Producto actualizado con éxito!");
+        
+        // Mostrar notificación de éxito
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto actualizado correctamente';
+        document.querySelector('main').prepend(notification);
+        
+        // Eliminar notificación después de 3 segundos
+        setTimeout(() => notification.remove(), 3000);
       } catch (error) {
-        console.error("Error al actualizar producto:", error);
-        alert(`Error: ${error.message}`);
+        console.error("Error:", error);
+        
+        // Mostrar notificación de error
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-danger';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
+        document.querySelector('main').prepend(notification);
+        
+        // Eliminar notificación después de 5 segundos
+        setTimeout(() => notification.remove(), 5000);
       } finally {
+        btn.innerHTML = originalHtml;
         btn.disabled = false;
-        btn.textContent = originalText;
       }
     }
   </script>
