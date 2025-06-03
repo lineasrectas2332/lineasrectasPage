@@ -30,6 +30,27 @@
       font-size: 18px;
       margin-top: 10px;
     }
+    
+    /* Estilos corregidos para el navbar */
+    .navbar.bg-dark {
+      background-color: #000 !important; /* Negro sólido */
+    }
+    
+    .dropdown-menu.bg-dark {
+      background-color: #000 !important; /* Negro sólido para el menú desplegable */
+    }
+    
+    .navbar-nav .nav-link {
+      color: white !important;
+    }
+    
+    .dropdown-item {
+      color: white !important;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #333 !important;
+    }
   </style>
 </head>
 <body>
@@ -45,18 +66,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link text-white" href="index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html">HOME</a></li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">PRODUCTOS</a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">PRODUCTOS</a>
               <ul class="dropdown-menu bg-dark">
-                <li><a class="dropdown-item text-white" href="indexprod.html" onclick="localStorage.setItem('categoria', 'todos')">Ver Todos</a></li>
-                <li><a class="dropdown-item text-white" href="indexprod.html" onclick="localStorage.setItem('categoria', 'living')">Living</a></li>
-                <li><a class="dropdown-item text-white" href="indexprod.html" onclick="localStorage.setItem('categoria', 'dormitorio')">Dormitorio</a></li>
-                <li><a class="dropdown-item text-white" href="indexprod.html" onclick="localStorage.setItem('categoria', 'comedor')">Comedor</a></li>
+                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'todos')">Ver Todos</a></li>
+                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'living')">Living</a></li>
+                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'dormitorio')">Dormitorio</a></li>
+                <li><a class="dropdown-item" href="indexprod.html" onclick="localStorage.setItem('categoria', 'comedor')">Comedor</a></li>
               </ul>
             </li>
-            <li class="nav-item"><a class="nav-link text-white" href="catcolores.html">CATALOGO DE COLORES</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="contacto.html">CONTACTO</a></li>
+            <li class="nav-item"><a class="nav-link" href="catcolores.html">CATALOGO DE COLORES</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.html">CONTACTO</a></li>
           </ul>
         </div>
       </div>
@@ -157,7 +178,6 @@
       console.error(err);
     });
 </script>
-
 
 </body>
 </html>
