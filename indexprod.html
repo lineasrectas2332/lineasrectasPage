@@ -130,7 +130,7 @@
   </footer>
 
   <script>
-  const API_URL = 'https://productos-backend-d1di.onrender.com';
+  const API_URL = 'https://backend-lr.onrender.com';
 
   function renderizarProductos(productos) {
     const contenedor = document.getElementById("catalogo");
@@ -138,7 +138,7 @@
     productos.forEach(p => {
       const div = document.createElement("div");
       div.className = "producto";
-      div.setAttribute("data-categoria", p.descripcion.toLowerCase());
+      div.setAttribute("data-categoria", p.categoria.toLowerCase());
 
       div.innerHTML = `
         <img src="${API_URL}${p.imagen}" alt="${p.nombre}">
