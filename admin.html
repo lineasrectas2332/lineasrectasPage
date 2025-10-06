@@ -365,266 +365,156 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-    
-    // Inicializar Supabase
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // Cargar productos al iniciar
-    document.addEventListener('DOMContentLoaded', cargarProductos);
+  const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
 
-    async function cargarProductos() {
-      try {
-        const productosContainer = document.getElementById("productos");
+  // ✅ Inicializar Supabase correctamente
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  document.addEventListener('DOMContentLoaded', cargarProductos);
+
+  async function cargarProductos() {
+    try {
+      const productosContainer = document.getElementById("productos");
+      productosContainer.innerHTML = `
+        <div class="empty-state">
+          <div class="loading"></div>
+          <p>Cargando productos...</p>
+        </div>
+      `;
+
+      const { data: productos, error } = await client
+        .from('productos')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) throw error;
+
+      if (!productos || productos.length === 0) {
         productosContainer.innerHTML = `
           <div class="empty-state">
-            <div class="loading"></div>
-            <p>Cargando productos...</p>
+            <i class="fas fa-box-open"></i>
+            <p>No hay productos registrados</p>
           </div>
         `;
-        
-        const { data: productos, error } = await supabase
-          .from('productos')
-          .select('*')
-          .order('id', { ascending: true });
-        
-        if (error) throw error;
-        
-        if (!productos || productos.length === 0) {
-          productosContainer.innerHTML = `
-            <div class="empty-state">
-              <i class="fas fa-box-open"></i>
-              <p>No hay productos registrados</p>
+        return;
+      }
+
+      productosContainer.innerHTML = '';
+
+      productos.forEach(p => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.dataset.id = p.id;
+        productCard.innerHTML = `
+          <img src="${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+          <div class="product-body">
+            <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
+            <div class="product-meta">
+              <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
+              <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
             </div>
-          `;
-          return;
-        }
-        
-        productosContainer.innerHTML = '';
-        
-        productos.forEach(p => {
-          const productCard = document.createElement('div');
-          productCard.className = 'product-card';
-          productCard.dataset.id = p.id;
-          productCard.innerHTML = `
-            <img src="${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
-            <div class="product-body">
-              <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
-              <div class="product-meta">
-                <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
-                <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
-              </div>
-              <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
-              <div class="form-group">
-                <select id="categoria-${p.id}" class="form-control">
-                  <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
-                  <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
-                  <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="img-${p.id}">Cambiar imagen:</label>
-                <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
-              </div>
-              <div class="product-actions">
-                <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">
-                  <i class="fas fa-save"></i> Guardar
-                </button>
-                <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash"></i> Eliminar
-                </button>
-              </div>
+            <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
+            <div class="form-group">
+              <select id="categoria-${p.id}" class="form-control">
+                <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
+                <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
+                <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
+              </select>
             </div>
-          `;
-          productosContainer.appendChild(productCard);
-        });
-      } catch (error) {
-        document.getElementById("productos").innerHTML = `
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
+            <div class="form-group">
+              <label for="img-${p.id}">Cambiar imagen:</label>
+              <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
+            </div>
+            <div class="product-actions">
+              <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">
+                <i class="fas fa-save"></i> Guardar
+              </button>
+              <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash"></i> Eliminar
+              </button>
+            </div>
           </div>
         `;
-        console.error("Error:", error);
-      }
+        productosContainer.appendChild(productCard);
+      });
+    } catch (error) {
+      document.getElementById("productos").innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
+        </div>
+      `;
+      console.error("Error:", error);
     }
+  }
 
-    async function subirImagen(file) {
-      // Generar nombre único para la imagen
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await supabase
-        .storage
-        .from('productos')
-        .upload(fileName, file);
-      
-      if (error) {
-        console.error('Error subiendo imagen:', error);
-        throw error;
-      }
-      
-      return `${SUPABASE_URL}/storage/v1/object/public/productos/${fileName}`;
+  async function subirImagen(file) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+
+    const { error } = await client.storage.from('productos').upload(fileName, file);
+    if (error) throw error;
+
+    return `${SUPABASE_URL}/storage/v1/object/public/productos/${fileName}`;
+  }
+
+  async function eliminarProducto(id) {
+    if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+
+    try {
+      const { error } = await client.from('productos').delete().eq('id', id);
+      if (error) throw error;
+
+      await cargarProductos();
+      alert("✅ Producto eliminado correctamente");
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
+  }
 
-    async function eliminarProducto(id) {
-      if (!confirm("¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) return;
-      
-      try {
-        const btn = document.querySelector(`button[onclick="eliminarProducto(${id})"]`);
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<div class="loading"></div>';
-        btn.disabled = true;
-        
-        const { error } = await supabase
-          .from('productos')
-          .delete()
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        await cargarProductos();
-        
-        // Mostrar notificación de éxito
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-success';
-        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto eliminado correctamente';
-        document.querySelector('main').prepend(notification);
-        
-        // Eliminar notificación después de 3 segundos
-        setTimeout(() => notification.remove(), 3000);
-      } catch (error) {
-        console.error("Error:", error);
-        alert(`Error al eliminar producto: ${error.message}`);
-      }
+  document.getElementById("formulario").addEventListener("submit", async e => {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const descripcion = document.getElementById('descripcion').value;
+    const precio = parseFloat(document.getElementById('precio').value);
+    const categoria = document.getElementById('categoria').value;
+    const imagenFile = document.getElementById('imagen').files[0];
+
+    try {
+      const imagenUrl = await subirImagen(imagenFile);
+      const { error } = await client.from('productos').insert([{ nombre, descripcion, precio, categoria, imagen_url: imagenUrl }]);
+      if (error) throw error;
+      alert("✅ Producto agregado correctamente");
+      e.target.reset();
+      await cargarProductos();
+    } catch (error) {
+      alert(`Error al agregar: ${error.message}`);
     }
+  });
 
-    document.getElementById("formulario").addEventListener("submit", async e => {
-      e.preventDefault();
-      const form = e.target;
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const submitText = submitBtn.querySelector('#submit-text') || submitBtn;
-      
-      try {
-        submitBtn.disabled = true;
-        submitText.innerHTML = '<div class="loading"></div>';
-        
-        const nombre = document.getElementById('nombre').value;
-        const descripcion = document.getElementById('descripcion').value;
-        const precio = parseFloat(document.getElementById('precio').value);
-        const categoria = document.getElementById('categoria').value;
-        const imagenFile = document.getElementById('imagen').files[0];
-        
-        if (!imagenFile) {
-          throw new Error('Debes seleccionar una imagen');
-        }
-        
-        // Subir imagen
-        const imagenUrl = await subirImagen(imagenFile);
-        
-        const { data, error } = await supabase
-          .from('productos')
-          .insert([
-            {
-              nombre,
-              descripcion,
-              precio,
-              categoria,
-              imagen_url: imagenUrl
-            }
-          ])
-          .select();
-        
-        if (error) throw error;
-        
-        form.reset();
-        await cargarProductos();
-        
-        // Mostrar notificación de éxito
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-success';
-        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
-        document.querySelector('main').prepend(notification);
-        
-        // Eliminar notificación después de 3 segundos
-        setTimeout(() => notification.remove(), 3000);
-      } catch (error) {
-        console.error("Error:", error);
-        
-        // Mostrar notificación de error
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-danger';
-        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
-        document.querySelector('main').prepend(notification);
-        
-        // Eliminar notificación después de 5 segundos
-        setTimeout(() => notification.remove(), 5000);
-      } finally {
-        submitBtn.disabled = false;
-        submitText.textContent = 'Agregar Producto';
-      }
-    });
-    
-    async function guardarCambios(id) {
-      const nombre = document.getElementById(`nombre-${id}`).value;
-      const descripcion = document.getElementById(`desc-${id}`).value;
-      const precio = parseFloat(document.getElementById(`precio-${id}`).value);
-      const categoria = document.getElementById(`categoria-${id}`).value;
-      const nuevaImagen = document.getElementById(`img-${id}`).files[0];
+  async function guardarCambios(id) {
+    const nombre = document.getElementById(`nombre-${id}`).value;
+    const descripcion = document.getElementById(`desc-${id}`).value;
+    const precio = parseFloat(document.getElementById(`precio-${id}`).value);
+    const categoria = document.getElementById(`categoria-${id}`).value;
+    const nuevaImagen = document.getElementById(`img-${id}`).files[0];
+    const datosActualizacion = { nombre, descripcion, precio, categoria, updated_at: new Date().toISOString() };
 
-      const btn = document.querySelector(`.product-card[data-id="${id}"] button[onclick="guardarCambios(${id})"]`);
-      const originalHtml = btn.innerHTML;
-      
-      try {
-        btn.innerHTML = '<div class="loading"></div>';
-        btn.disabled = true;
-        
-        const datosActualizacion = {
-          nombre,
-          descripcion,
-          precio,
-          categoria,
-          updated_at: new Date().toISOString()
-        };
-        
-        // Subir nueva imagen si se proporcionó
-        if (nuevaImagen) {
-          datosActualizacion.imagen_url = await subirImagen(nuevaImagen);
-        }
-        
-        const { error } = await supabase
-          .from('productos')
-          .update(datosActualizacion)
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        await cargarProductos();
-        
-        // Mostrar notificación de éxito
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-success';
-        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto actualizado correctamente';
-        document.querySelector('main').prepend(notification);
-        
-        // Eliminar notificación después de 3 segundos
-        setTimeout(() => notification.remove(), 3000);
-      } catch (error) {
-        console.error("Error:", error);
-        
-        // Mostrar notificación de error
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-danger';
-        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
-        document.querySelector('main').prepend(notification);
-        
-        // Eliminar notificación después de 5 segundos
-        setTimeout(() => notification.remove(), 5000);
-      } finally {
-        btn.innerHTML = originalHtml;
-        btn.disabled = false;
+    try {
+      if (nuevaImagen) {
+        datosActualizacion.imagen_url = await subirImagen(nuevaImagen);
       }
+
+      const { error } = await client.from('productos').update(datosActualizacion).eq('id', id);
+      if (error) throw error;
+
+      alert("✅ Producto actualizado correctamente");
+      await cargarProductos();
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
+  }
 </script>
+
 </body>
 </html>

@@ -148,71 +148,43 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const productoId = parseInt(urlParams.get('id'));
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function cargarProducto() {
-      try {
-        const { data: producto, error } = await supabase
-          .from('productos')
-          .select('*')
-          .eq('id', productoId)
-          .single();
-        
-        if (error) throw error;
-        
-        if (producto) {
-          document.getElementById('producto-detalle').innerHTML = `
-            <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="${producto.imagen_url}" class="d-block w-100" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/500?text=Imagen+no+disponible'">
-                </div>
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-              </button>
-            </div>
-            <h2>${producto.nombre}</h2>
-            <p>${producto.descripcion}</p>
-            <p><strong>Precio:</strong> $${producto.precio.toLocaleString("es-AR")}</p>
-            <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20el%20producto%20${encodeURIComponent(producto.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
-          `;
+  const urlParams = new URLSearchParams(window.location.search);
+  const productoId = parseInt(urlParams.get('id'));
 
-          // Agregar funcionalidad de ampliar imagen
-          const imagenCarrusel = document.querySelector('#carruselProducto .carousel-item img');
-          if (imagenCarrusel) {
-            imagenCarrusel.addEventListener('click', () => {
-              const modal = new bootstrap.Modal(document.getElementById('modalImagen'));
-              const imagenAmpliada = document.getElementById('imagenAmpliada');
-              imagenAmpliada.src = imagenCarrusel.src;
-              modal.show();
-            });
-          }
-        } else {
-          document.getElementById('producto-detalle').innerHTML = `
-            <p>Producto no encontrado.</p>
-          `;
-        }
-      } catch (error) {
+  async function cargarProducto() {
+    try {
+      const { data: producto, error } = await client.from('productos').select('*').eq('id', productoId).single();
+      if (error) throw error;
+
+      if (producto) {
         document.getElementById('producto-detalle').innerHTML = `
-          <p>Error al cargar el producto: ${error.message}</p>
+          <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="${producto.imagen_url}" class="d-block w-100" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/500?text=Imagen+no+disponible'">
+              </div>
+            </div>
+          </div>
+          <h2>${producto.nombre}</h2>
+          <p>${producto.descripcion}</p>
+          <p><strong>Precio:</strong> $${producto.precio.toLocaleString("es-AR")}</p>
+          <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20el%20producto%20${encodeURIComponent(producto.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
         `;
-        console.error("Error:", error);
+      } else {
+        document.getElementById('producto-detalle').innerHTML = `<p>Producto no encontrado.</p>`;
       }
+    } catch (error) {
+      document.getElementById('producto-detalle').innerHTML = `<p>Error al cargar el producto: ${error.message}</p>`;
     }
+  }
 
-    // Cargar producto al iniciar
-    document.addEventListener('DOMContentLoaded', cargarProducto);
+  document.addEventListener('DOMContentLoaded', cargarProducto);
 </script>
+
 </body>
 </html>

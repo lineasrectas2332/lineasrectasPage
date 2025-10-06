@@ -118,64 +118,58 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-    
-    // Inicializar Supabase
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
 
-    async function renderizarProductos() {
-      try {
-        const { data: productos, error } = await supabase
-          .from('productos')
-          .select('*')
-          .order('id', { ascending: true });
-        
-        if (error) throw error;
-        
-        const contenedor = document.getElementById("catalogo");
-        contenedor.innerHTML = "";
-        
-        productos.forEach(p => {
-          const div = document.createElement("div");
-          div.className = "producto";
-          div.setAttribute("data-categoria", p.categoria.toLowerCase());
-          div.innerHTML = `
-            <img src="${p.imagen_url}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
-            <h3>${p.nombre}</h3>
-            <p>${p.descripcion}</p>
-            <p><strong>$${p.precio.toLocaleString("es-AR")}</strong></p>
-            <a href="detalle-producto.html?id=${p.id}" class="btn btn-dark mt-2">Ver Producto</a>
-          `;
-          contenedor.appendChild(div);
-        });
-        
-        aplicarFiltro();
-      } catch (error) {
-        document.getElementById("catalogo").innerHTML = `<p class="text-danger">Error al cargar productos: ${error.message}</p>`;
-        console.error("Error:", error);
-      }
-    }
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function filtrarProductos() {
-      const categoriaSeleccionada = document.getElementById("categoria").value;
-      const productos = document.querySelectorAll(".producto");
+  async function renderizarProductos() {
+    try {
+      const { data: productos, error } = await client.from('productos').select('*').order('id', { ascending: true });
+      if (error) throw error;
+
+      const contenedor = document.getElementById("catalogo");
+      contenedor.innerHTML = "";
+
       productos.forEach(p => {
-        const cat = p.getAttribute("data-categoria");
-        p.style.display = (categoriaSeleccionada === "todos" || cat === categoriaSeleccionada) ? "block" : "none";
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.setAttribute("data-categoria", p.categoria.toLowerCase());
+        div.innerHTML = `
+          <img src="${p.imagen_url}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+          <h3>${p.nombre}</h3>
+          <p>${p.descripcion}</p>
+          <p><strong>$${p.precio.toLocaleString("es-AR")}</strong></p>
+          <a href="detalle-producto.html?id=${p.id}" class="btn btn-dark mt-2">Ver Producto</a>
+        `;
+        contenedor.appendChild(div);
       });
-    }
 
-    function aplicarFiltro() {
-      const cat = localStorage.getItem("categoria");
-      if (cat) {
-        document.getElementById("categoria").value = cat;
-        filtrarProductos();
-      }
+      aplicarFiltro();
+    } catch (error) {
+      document.getElementById("catalogo").innerHTML = `<p class="text-danger">Error al cargar productos: ${error.message}</p>`;
+      console.error("Error:", error);
     }
+  }
 
-    // Cargar productos al iniciar
-    document.addEventListener('DOMContentLoaded', renderizarProductos);
+  function filtrarProductos() {
+    const categoriaSeleccionada = document.getElementById("categoria").value;
+    const productos = document.querySelectorAll(".producto");
+    productos.forEach(p => {
+      const cat = p.getAttribute("data-categoria");
+      p.style.display = (categoriaSeleccionada === "todos" || cat === categoriaSeleccionada) ? "block" : "none";
+    });
+  }
+
+  function aplicarFiltro() {
+    const cat = localStorage.getItem("categoria");
+    if (cat) {
+      document.getElementById("categoria").value = cat;
+      filtrarProductos();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', renderizarProductos);
 </script>
 
 </body>
