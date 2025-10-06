@@ -90,6 +90,19 @@
             transform: scale(1.05);
         }
 
+        /* Estilos adicionales para asegurar que las imágenes se muestren */
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+        }
+
+        /* Indicadores del carrusel */
+        .carousel-indicators button {
+            background-color: #000;
+        }
+
     </style>
 </head>
 <body>
@@ -165,36 +178,55 @@
       return;
     }
 
+    console.log("Producto cargado:", p); // Para depuración
+
     const imagenes = p.imagenes_urls && p.imagenes_urls.length > 0 ? p.imagenes_urls : ['https://via.placeholder.com/500?text=Sin+imagen'];
 
     let slides = '';
+    let indicators = '';
     imagenes.forEach((url, i) => {
       slides += `
         <div class="carousel-item ${i === 0 ? 'active' : ''}">
-          <img src="${url}" class="d-block w-100" alt="Imagen ${i+1}">
+          <img src="${url}" class="d-block w-100" alt="Imagen ${i+1}" onerror="this.src='https://via.placeholder.com/500?text=Error+al+cargar+imagen'">
         </div>`;
+      
+      indicators += `
+        <button type="button" data-bs-target="#carruselProducto" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}" aria-label="Slide ${i+1}"></button>`;
     });
 
     cont.innerHTML = `
       <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
+        ${imagenes.length > 1 ? `<div class="carousel-indicators">${indicators}</div>` : ''}
         <div class="carousel-inner">${slides}</div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-        </button>
+        ${imagenes.length > 1 ? `
+          <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        ` : ''}
       </div>
       <h2>${p.nombre}</h2>
       <p>${p.descripcion}</p>
       <p><strong>Precio:</strong> $${p.precio.toLocaleString("es-AR")}</p>
       <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20${encodeURIComponent(p.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
     `;
+
+    // Agregar funcionalidad para abrir imagen en modal al hacer clic
+    document.querySelectorAll('.carousel-item img').forEach(img => {
+      img.addEventListener('click', function() {
+        document.getElementById('imagenAmpliada').src = this.src;
+        const modal = new bootstrap.Modal(document.getElementById('modalImagen'));
+        modal.show();
+      });
+    });
   }
 
   document.addEventListener('DOMContentLoaded', cargarProducto);
 </script>
-
 
 </body>
 </html>
