@@ -384,7 +384,10 @@
 
     cont.innerHTML = '';
     productos.forEach(p => {
-      const img = (p.imagenes_urls && p.imagenes_urls.length > 0) ? p.imagenes_urls[0] : 'https://via.placeholder.com/300?text=Sin+imagen';
+      const img = (p.imagenes_urls && p.imagenes_urls.length > 0)
+  ? p.imagenes_urls[0]
+  : (p.imagen_url ? p.imagen_url : 'https://via.placeholder.com/300?text=Sin+imagen');
+
       const div = document.createElement('div');
       div.className = 'product-card';
       div.innerHTML = `
@@ -455,7 +458,12 @@
     }
 
     const update = { nombre, descripcion, precio, categoria };
-    if (urls.length > 0) update.imagenes_urls = urls;
+    if (urls.length > 0) {
+  const { data: existente } = await client.from('productos').select('imagenes_urls').eq('id', id).single();
+  const actuales = existente?.imagenes_urls || [];
+  update.imagenes_urls = [...actuales, ...urls]; // 🔥 combina las viejas con las nuevas
+}
+
 
     const { error } = await client.from('productos').update(update).eq('id', id);
     if (error) return alert("Error: " + error.message);
