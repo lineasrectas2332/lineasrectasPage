@@ -372,80 +372,81 @@
     document.addEventListener('DOMContentLoaded', cargarProductos);
 
     async function cargarProductos() {
-      try {
-        const productosContainer = document.getElementById("productos");
-        productosContainer.innerHTML = `
-          <div class="empty-state">
-            <div class="loading"></div>
-            <p>Cargando productos...</p>
-          </div>
-        `;
-        
-        const { data: productos, error } = await supabase
-          .from('productos')
-          .select('*')
-          .order('id', { ascending: true });
-        
-        if (error) throw error;
-        
-        if (productos.length === 0) {
-          productosContainer.innerHTML = `
-            <div class="empty-state">
-              <i class="fas fa-box-open"></i>
-              <p>No hay productos registrados</p>
-            </div>
-          `;
-          return;
-        }
-        
-        productosContainer.innerHTML = '';
-        
-        productos.forEach(p => {
-          const productCard = document.createElement('div');
-          productCard.className = 'product-card';
-          productCard.dataset.id = p.id;
-          productCard.innerHTML = `
-            <img src="${SUPABASE_URL}/storage/v1/object/public/productos/${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
-            <div class="product-body">
-              <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
-              <div class="product-meta">
-                <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
-                <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
-              </div>
-              <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
-              <div class="form-group">
-                <select id="categoria-${p.id}" class="form-control">
-                  <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
-                  <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
-                  <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="img-${p.id}">Cambiar imagen:</label>
-                <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
-              </div>
-              <div class="product-actions">
-                <button onclick="guardarCambios('${p.id}')" class="btn btn-success btn-sm">
-                  <i class="fas fa-save"></i> Guardar
-                </button>
-                <button onclick="eliminarProducto('${p.id}')" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash"></i> Eliminar
-                </button>
-              </div>
-            </div>
-          `;
-          productosContainer.appendChild(productCard);
-        });
-      } catch (error) {
-        document.getElementById("productos").innerHTML = `
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
-          </div>
-        `;
-        console.error("Error:", error);
-      }
+  try {
+    const productosContainer = document.getElementById("productos");
+    productosContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="loading"></div>
+        <p>Cargando productos...</p>
+      </div>
+    `;
+    
+    const { data: productos, error } = await supabase
+      .from('productos')
+      .select('*')
+      .order('id', { ascending: true });
+    
+    if (error) throw error;
+    
+    console.log('Productos cargados:', productos); // Para debug
+    
+    if (productos.length === 0) {
+      productosContainer.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <p>No hay productos registrados</p>
+        </div>
+      `;
+      return;
     }
-
+    
+    productosContainer.innerHTML = '';
+    
+    productos.forEach(p => {
+      const productCard = document.createElement('div');
+      productCard.className = 'product-card';
+      productCard.dataset.id = p.id;
+      productCard.innerHTML = `
+        <img src="${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+        <div class="product-body">
+          <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
+          <div class="product-meta">
+            <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
+            <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
+          </div>
+          <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
+          <div class="form-group">
+            <select id="categoria-${p.id}" class="form-control">
+              <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
+              <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
+              <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="img-${p.id}">Cambiar imagen:</label>
+            <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
+          </div>
+          <div class="product-actions">
+            <button onclick="guardarCambios('${p.id}')" class="btn btn-success btn-sm">
+              <i class="fas fa-save"></i> Guardar
+            </button>
+            <button onclick="eliminarProducto('${p.id}')" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      `;
+      productosContainer.appendChild(productCard);
+    });
+  } catch (error) {
+    document.getElementById("productos").innerHTML = `
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
+      </div>
+    `;
+    console.error("Error:", error);
+  }
+}
     async function subirImagen(file, nombreArchivo) {
       const { data, error } = await supabase
         .storage
