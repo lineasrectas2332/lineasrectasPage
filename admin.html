@@ -363,132 +363,81 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-
-  // ✅ Inicializar Supabase correctamente
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   document.addEventListener('DOMContentLoaded', cargarProductos);
 
   async function cargarProductos() {
-    try {
-      const productosContainer = document.getElementById("productos");
-      productosContainer.innerHTML = `
-        <div class="empty-state">
-          <div class="loading"></div>
-          <p>Cargando productos...</p>
-        </div>
-      `;
+    const cont = document.getElementById("productos");
+    cont.innerHTML = `<div class="empty-state"><div class="loading"></div><p>Cargando productos...</p></div>`;
 
-      const { data: productos, error } = await client
-        .from('productos')
-        .select('*')
-        .order('id', { ascending: true });
-
-      if (error) throw error;
-
-      if (!productos || productos.length === 0) {
-        productosContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-box-open"></i>
-            <p>No hay productos registrados</p>
-          </div>
-        `;
-        return;
-      }
-
-      productosContainer.innerHTML = '';
-
-      productos.forEach(p => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        productCard.dataset.id = p.id;
-        productCard.innerHTML = `
-          <img src="${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
-          <div class="product-body">
-            <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
-            <div class="product-meta">
-              <span>${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</span>
-              <input type="number" id="precio-${p.id}" class="product-price form-control" value="${p.precio}" step="0.01" min="0">
-            </div>
-            <textarea id="desc-${p.id}" class="form-control" style="margin-bottom: 10px;">${p.descripcion}</textarea>
-            <div class="form-group">
-              <select id="categoria-${p.id}" class="form-control">
-                <option value="living" ${p.categoria === 'living' ? 'selected' : ''}>Living</option>
-                <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected' : ''}>Dormitorio</option>
-                <option value="comedor" ${p.categoria === 'comedor' ? 'selected' : ''}>Comedor</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="img-${p.id}">Cambiar imagen:</label>
-              <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
-            </div>
-            <div class="product-actions">
-              <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">
-                <i class="fas fa-save"></i> Guardar
-              </button>
-              <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash"></i> Eliminar
-              </button>
-            </div>
-          </div>
-        `;
-        productosContainer.appendChild(productCard);
-      });
-    } catch (error) {
-      document.getElementById("productos").innerHTML = `
-        <div class="alert alert-danger">
-          <i class="fas fa-exclamation-circle"></i> Error al cargar productos: ${error.message}
-        </div>
-      `;
-      console.error("Error:", error);
+    const { data: productos, error } = await client.from('productos').select('*').order('id', { ascending: true });
+    if (error) {
+      cont.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+      return;
     }
+
+    cont.innerHTML = '';
+    productos.forEach(p => {
+      const img = (p.imagenes_urls && p.imagenes_urls.length > 0) ? p.imagenes_urls[0] : 'https://via.placeholder.com/300?text=Sin+imagen';
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `
+        <img src="${img}" class="product-image">
+        <div class="product-body">
+          <input id="nombre-${p.id}" class="form-control" value="${p.nombre}">
+          <textarea id="desc-${p.id}" class="form-control">${p.descripcion}</textarea>
+          <input id="precio-${p.id}" class="form-control" type="number" value="${p.precio}">
+          <select id="categoria-${p.id}" class="form-control">
+            <option value="living" ${p.categoria === 'living' ? 'selected':''}>Living</option>
+            <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected':''}>Dormitorio</option>
+            <option value="comedor" ${p.categoria === 'comedor' ? 'selected':''}>Comedor</option>
+          </select>
+          <label>Múltiples imágenes:</label>
+          <input type="file" id="imgs-${p.id}" class="form-control" accept="image/*" multiple>
+          <div class="product-actions">
+            <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">Guardar</button>
+            <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">Eliminar</button>
+          </div>
+        </div>`;
+      cont.appendChild(div);
+    });
   }
 
-  async function subirImagen(file) {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
-
-    const { error } = await client.storage.from('productos').upload(fileName, file);
-    if (error) throw error;
-
-    return `${SUPABASE_URL}/storage/v1/object/public/productos/${fileName}`;
-  }
-
-  async function eliminarProducto(id) {
-    if (!confirm("¿Estás seguro de eliminar este producto?")) return;
-
-    try {
-      const { error } = await client.from('productos').delete().eq('id', id);
-      if (error) throw error;
-
-      await cargarProductos();
-      alert("✅ Producto eliminado correctamente");
-    } catch (error) {
-      alert(`Error: ${error.message}`);
+  async function subirMultiplesImagenes(files) {
+    const urls = [];
+    for (const file of files) {
+      const ext = file.name.split('.').pop();
+      const name = `${Math.random().toString(36).slice(2)}_${Date.now()}.${ext}`;
+      const { error } = await client.storage.from('productos').upload(name, file);
+      if (!error) urls.push(`${SUPABASE_URL}/storage/v1/object/public/productos/${name}`);
     }
+    return urls;
   }
 
   document.getElementById("formulario").addEventListener("submit", async e => {
     e.preventDefault();
-    const nombre = document.getElementById('nombre').value;
-    const descripcion = document.getElementById('descripcion').value;
-    const precio = parseFloat(document.getElementById('precio').value);
-    const categoria = document.getElementById('categoria').value;
-    const imagenFile = document.getElementById('imagen').files[0];
+    const nombre = nombre.value;
+    const descripcion = descripcion.value;
+    const precio = parseFloat(precio.value);
+    const categoria = categoria.value;
+    const files = imagen.files;
+
+    if (!files.length) return alert("Seleccioná al menos una imagen");
 
     try {
-      const imagenUrl = await subirImagen(imagenFile);
-      const { error } = await client.from('productos').insert([{ nombre, descripcion, precio, categoria, imagen_url: imagenUrl }]);
+      const urls = await subirMultiplesImagenes(files);
+      const { error } = await client.from('productos').insert([{ nombre, descripcion, precio, categoria, imagenes_urls: urls }]);
       if (error) throw error;
-      alert("✅ Producto agregado correctamente");
+      alert("✅ Producto agregado con éxito");
       e.target.reset();
       await cargarProductos();
-    } catch (error) {
-      alert(`Error al agregar: ${error.message}`);
+    } catch (err) {
+      alert("Error: " + err.message);
     }
   });
 
@@ -497,24 +446,31 @@
     const descripcion = document.getElementById(`desc-${id}`).value;
     const precio = parseFloat(document.getElementById(`precio-${id}`).value);
     const categoria = document.getElementById(`categoria-${id}`).value;
-    const nuevaImagen = document.getElementById(`img-${id}`).files[0];
-    const datosActualizacion = { nombre, descripcion, precio, categoria, updated_at: new Date().toISOString() };
+    const nuevasImgs = document.getElementById(`imgs-${id}`).files;
+    let urls = [];
 
-    try {
-      if (nuevaImagen) {
-        datosActualizacion.imagen_url = await subirImagen(nuevaImagen);
-      }
-
-      const { error } = await client.from('productos').update(datosActualizacion).eq('id', id);
-      if (error) throw error;
-
-      alert("✅ Producto actualizado correctamente");
-      await cargarProductos();
-    } catch (error) {
-      alert(`Error: ${error.message}`);
+    if (nuevasImgs.length > 0) {
+      urls = await subirMultiplesImagenes(nuevasImgs);
     }
+
+    const update = { nombre, descripcion, precio, categoria };
+    if (urls.length > 0) update.imagenes_urls = urls;
+
+    const { error } = await client.from('productos').update(update).eq('id', id);
+    if (error) return alert("Error: " + error.message);
+    alert("✅ Cambios guardados");
+    await cargarProductos();
+  }
+
+  async function eliminarProducto(id) {
+    if (!confirm("¿Eliminar este producto?")) return;
+    const { error } = await client.from('productos').delete().eq('id', id);
+    if (error) return alert("Error: " + error.message);
+    alert("✅ Producto eliminado");
+    await cargarProductos();
   }
 </script>
+
 
 </body>
 </html>

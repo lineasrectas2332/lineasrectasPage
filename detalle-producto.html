@@ -146,45 +146,55 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const productoId = parseInt(urlParams.get('id'));
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'));
 
   async function cargarProducto() {
-    try {
-      const { data: producto, error } = await client.from('productos').select('*').eq('id', productoId).single();
-      if (error) throw error;
+    const cont = document.getElementById('producto-detalle');
+    cont.innerHTML = `<p>Cargando...</p>`;
 
-      if (producto) {
-        document.getElementById('producto-detalle').innerHTML = `
-          <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="${producto.imagen_url}" class="d-block w-100" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/500?text=Imagen+no+disponible'">
-              </div>
-            </div>
-          </div>
-          <h2>${producto.nombre}</h2>
-          <p>${producto.descripcion}</p>
-          <p><strong>Precio:</strong> $${producto.precio.toLocaleString("es-AR")}</p>
-          <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20el%20producto%20${encodeURIComponent(producto.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
-        `;
-      } else {
-        document.getElementById('producto-detalle').innerHTML = `<p>Producto no encontrado.</p>`;
-      }
-    } catch (error) {
-      document.getElementById('producto-detalle').innerHTML = `<p>Error al cargar el producto: ${error.message}</p>`;
+    const { data: p, error } = await client.from('productos').select('*').eq('id', id).single();
+    if (error) {
+      cont.innerHTML = `<p>Error: ${error.message}</p>`;
+      return;
     }
+
+    const imagenes = p.imagenes_urls && p.imagenes_urls.length > 0 ? p.imagenes_urls : ['https://via.placeholder.com/500?text=Sin+imagen'];
+
+    let slides = '';
+    imagenes.forEach((url, i) => {
+      slides += `
+        <div class="carousel-item ${i === 0 ? 'active' : ''}">
+          <img src="${url}" class="d-block w-100" alt="Imagen ${i+1}">
+        </div>`;
+    });
+
+    cont.innerHTML = `
+      <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">${slides}</div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+      <h2>${p.nombre}</h2>
+      <p>${p.descripcion}</p>
+      <p><strong>Precio:</strong> $${p.precio.toLocaleString("es-AR")}</p>
+      <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20${encodeURIComponent(p.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
+    `;
   }
 
   document.addEventListener('DOMContentLoaded', cargarProducto);
 </script>
+
 
 </body>
 </html>
