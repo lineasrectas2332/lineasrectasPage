@@ -421,19 +421,32 @@
 
   // 🔹 SUBIR VARIAS IMÁGENES AL STORAGE
   async function subirMultiplesImagenes(files) {
-    const urls = [];
-    for (const file of files) {
-      const ext = file.name.split('.').pop();
-      const name = `${Math.random().toString(36).slice(2)}_${Date.now()}.${ext}`;
-      const { error } = await client.storage.from('productos').upload(name, file);
-      if (!error) {
-        urls.push(`${SUPABASE_URL}/storage/v1/object/public/productos/${name}`);
-      } else {
-        console.error('Error subiendo imagen:', error);
-      }
+  const urls = [];
+
+  for (const file of files) {
+    const ext = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
+
+    const { data, error } = await client.storage
+      .from('productos')
+      .upload(fileName, file);
+
+    if (error) {
+      console.error("Error al subir imagen:", error);
+      continue;
     }
-    return urls;
+
+    // Genera la URL pública automáticamente
+    const { data: publicUrlData } = client.storage
+      .from('productos')
+      .getPublicUrl(fileName);
+
+    urls.push(publicUrlData.publicUrl);
   }
+
+  return urls;
+}
+
 
   // 🔹 FORMULARIO NUEVO PRODUCTO
   document.getElementById("formulario").addEventListener("submit", async e => {
