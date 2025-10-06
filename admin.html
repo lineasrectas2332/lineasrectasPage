@@ -362,7 +362,11 @@
   </main>
 
   <script>
-    const API_URL = "https://productos-backend2.onrender.com";
+    const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
+    
+    // Inicializar Supabase
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     // Cargar productos al iniciar
     document.addEventListener('DOMContentLoaded', cargarProductos);
@@ -377,13 +381,12 @@
           </div>
         `;
         
-        const res = await fetch(`${API_URL}/productos`);
+        const { data: productos, error } = await supabase
+          .from('productos')
+          .select('*')
+          .order('id', { ascending: true });
         
-        if (!res.ok) {
-          throw new Error('Error al cargar productos');
-        }
-        
-        const productos = await res.json();
+        if (error) throw error;
         
         if (productos.length === 0) {
           productosContainer.innerHTML = `
@@ -402,7 +405,7 @@
           productCard.className = 'product-card';
           productCard.dataset.id = p.id;
           productCard.innerHTML = `
-            <img src="${API_URL}${p.imagen}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
+            <img src="${SUPABASE_URL}/storage/v1/object/public/productos/${p.imagen_url}" alt="${p.nombre}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+disponible'">
             <div class="product-body">
               <input type="text" id="nombre-${p.id}" class="product-title form-control" value="${p.nombre}">
               <div class="product-meta">
@@ -443,6 +446,17 @@
       }
     }
 
+    async function subirImagen(file, nombreArchivo) {
+      const { data, error } = await supabase
+        .storage
+        .from('productos')
+        .upload(nombreArchivo, file);
+      
+      if (error) throw error;
+      
+      return `${SUPABASE_URL}/storage/v1/object/public/productos/${nombreArchivo}`;
+    }
+
     async function eliminarProducto(id) {
       if (!confirm("¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) return;
       
@@ -452,11 +466,12 @@
         btn.innerHTML = '<div class="loading"></div>';
         btn.disabled = true;
         
-        const res = await fetch(`${API_URL}/productos/${id}`, { method: "DELETE" });
+        const { error } = await supabase
+          .from('productos')
+          .delete()
+          .eq('id', id);
         
-        if (!res.ok) {
-          throw new Error('Error al eliminar producto');
-        }
+        if (error) throw error;
         
         await cargarProductos();
         
@@ -484,17 +499,34 @@
         submitBtn.disabled = true;
         submitText.innerHTML = '<div class="loading"></div>';
         
-        const data = new FormData(form);
+        const nombre = document.getElementById('nombre').value;
+        const descripcion = document.getElementById('descripcion').value;
+        const precio = parseFloat(document.getElementById('precio').value);
+        const categoria = document.getElementById('categoria').value;
+        const imagenFile = document.getElementById('imagen').files[0];
         
-        const res = await fetch(`${API_URL}/productos`, { 
-          method: "POST", 
-          body: data 
-        });
+        let imagenUrl = '';
         
-        if (!res.ok) {
-          const error = await res.json();
-          throw new Error(error.detail || 'Error al agregar producto');
+        // Subir imagen si se proporcionó
+        if (imagenFile) {
+          const nombreArchivo = `${Date.now()}-${imagenFile.name}`;
+          imagenUrl = await subirImagen(imagenFile, nombreArchivo);
         }
+        
+        const { data, error } = await supabase
+          .from('productos')
+          .insert([
+            {
+              nombre,
+              descripcion,
+              precio,
+              categoria,
+              imagen_url: imagenUrl
+            }
+          ])
+          .select();
+        
+        if (error) throw error;
         
         form.reset();
         await cargarProductos();
@@ -538,42 +570,26 @@
         btn.innerHTML = '<div class="loading"></div>';
         btn.disabled = true;
         
+        const datosActualizacion = {
+          nombre,
+          descripcion,
+          precio,
+          categoria,
+          updated_at: new Date().toISOString()
+        };
+        
+        // Subir nueva imagen si se proporcionó
         if (nuevaImagen) {
-          const formData = new FormData();
-          formData.append("nombre", nombre);
-          formData.append("descripcion", descripcion);
-          formData.append("precio", precio);
-          formData.append("categoria", categoria);
-          formData.append("imagen", nuevaImagen);
-
-          const res = await fetch(`${API_URL}/productos/${id}`, { 
-            method: "PUT",
-            body: formData
-          });
-          
-          if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.detail || 'Error al actualizar producto');
-          }
-        } else {
-          const res = await fetch(`${API_URL}/productos/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id,
-              nombre,
-              descripcion,
-              precio,
-              categoria
-              // No enviamos imagen para que el backend mantenga la existente
-            })
-          });
-          
-          if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.detail || 'Error al actualizar producto');
-          }
+          const nombreArchivo = `${Date.now()}-${nuevaImagen.name}`;
+          datosActualizacion.imagen_url = await subirImagen(nuevaImagen, nombreArchivo);
         }
+        
+        const { error } = await supabase
+          .from('productos')
+          .update(datosActualizacion)
+          .eq('id', id);
+        
+        if (error) throw error;
         
         await cargarProductos();
         
@@ -601,6 +617,6 @@
         btn.disabled = false;
       }
     }
-  </script>
+</script>
 </body>
 </html>
