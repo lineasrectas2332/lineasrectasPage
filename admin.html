@@ -364,7 +364,8 @@
     </section>
   </main>
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
@@ -372,26 +373,32 @@
 
   document.addEventListener('DOMContentLoaded', cargarProductos);
 
+  // 🔹 CARGAR PRODUCTOS EXISTENTES
   async function cargarProductos() {
     const cont = document.getElementById("productos");
     cont.innerHTML = `<div class="empty-state"><div class="loading"></div><p>Cargando productos...</p></div>`;
 
-    const { data: productos, error } = await client.from('productos').select('*').order('id', { ascending: true });
+    const { data: productos, error } = await client
+      .from('productos')
+      .select('*')
+      .order('id', { ascending: true });
+
     if (error) {
       cont.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
       return;
     }
 
     cont.innerHTML = '';
+
     productos.forEach(p => {
       const img = (p.imagenes_urls && p.imagenes_urls.length > 0)
-  ? p.imagenes_urls[0]
-  : (p.imagen_url ? p.imagen_url : 'https://via.placeholder.com/300?text=Sin+imagen');
+        ? p.imagenes_urls[0]
+        : (p.imagen_url ? p.imagen_url : 'https://via.placeholder.com/300?text=Sin+imagen');
 
       const div = document.createElement('div');
       div.className = 'product-card';
       div.innerHTML = `
-        <img src="${img}" class="product-image">
+        <img src="${img}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=Sin+imagen'">
         <div class="product-body">
           <input id="nombre-${p.id}" class="form-control" value="${p.nombre}">
           <textarea id="desc-${p.id}" class="form-control">${p.descripcion}</textarea>
@@ -412,73 +419,112 @@
     });
   }
 
+  // 🔹 SUBIR VARIAS IMÁGENES AL STORAGE
   async function subirMultiplesImagenes(files) {
     const urls = [];
     for (const file of files) {
       const ext = file.name.split('.').pop();
       const name = `${Math.random().toString(36).slice(2)}_${Date.now()}.${ext}`;
       const { error } = await client.storage.from('productos').upload(name, file);
-      if (!error) urls.push(`${SUPABASE_URL}/storage/v1/object/public/productos/${name}`);
+      if (!error) {
+        urls.push(`${SUPABASE_URL}/storage/v1/object/public/productos/${name}`);
+      } else {
+        console.error('Error subiendo imagen:', error);
+      }
     }
     return urls;
   }
 
+  // 🔹 FORMULARIO NUEVO PRODUCTO
   document.getElementById("formulario").addEventListener("submit", async e => {
     e.preventDefault();
-    const nombre = nombre.value;
-    const descripcion = descripcion.value;
-    const precio = parseFloat(precio.value);
-    const categoria = categoria.value;
-    const files = imagen.files;
 
-    if (!files.length) return alert("Seleccioná al menos una imagen");
+    const nombreInput = document.getElementById("nombre");
+    const descripcionInput = document.getElementById("descripcion");
+    const precioInput = document.getElementById("precio");
+    const categoriaSelect = document.getElementById("categoria");
+    const imagenInput = document.getElementById("imagen");
+
+    const nombre = nombreInput.value.trim();
+    const descripcion = descripcionInput.value.trim();
+    const precio = parseFloat(precioInput.value);
+    const categoria = categoriaSelect.value;
+    const files = imagenInput.files;
+
+    if (!nombre || !descripcion || isNaN(precio) || !categoria) {
+      return alert("⚠️ Completá todos los campos antes de guardar.");
+    }
+    if (!files.length) {
+      return alert("⚠️ Seleccioná al menos una imagen.");
+    }
 
     try {
       const urls = await subirMultiplesImagenes(files);
-      const { error } = await client.from('productos').insert([{ nombre, descripcion, precio, categoria, imagenes_urls: urls }]);
+      const { error } = await client
+        .from('productos')
+        .insert([{ nombre, descripcion, precio, categoria, imagenes_urls: urls }]);
+
       if (error) throw error;
-      alert("✅ Producto agregado con éxito");
+
+      alert("✅ Producto agregado con éxito.");
       e.target.reset();
       await cargarProductos();
     } catch (err) {
-      alert("Error: " + err.message);
+      console.error("Error al agregar producto:", err);
+      alert("❌ Error: " + err.message);
     }
   });
 
+  // 🔹 GUARDAR CAMBIOS DE PRODUCTO EXISTENTE
   async function guardarCambios(id) {
     const nombre = document.getElementById(`nombre-${id}`).value;
     const descripcion = document.getElementById(`desc-${id}`).value;
     const precio = parseFloat(document.getElementById(`precio-${id}`).value);
     const categoria = document.getElementById(`categoria-${id}`).value;
     const nuevasImgs = document.getElementById(`imgs-${id}`).files;
-    let urls = [];
-
-    if (nuevasImgs.length > 0) {
-      urls = await subirMultiplesImagenes(nuevasImgs);
-    }
 
     const update = { nombre, descripcion, precio, categoria };
-    if (urls.length > 0) {
-  const { data: existente } = await client.from('productos').select('imagenes_urls').eq('id', id).single();
-  const actuales = existente?.imagenes_urls || [];
-  update.imagenes_urls = [...actuales, ...urls]; // 🔥 combina las viejas con las nuevas
-}
+    let urls = [];
 
+    // Si hay imágenes nuevas, las sube y las combina con las anteriores
+    if (nuevasImgs.length > 0) {
+      urls = await subirMultiplesImagenes(nuevasImgs);
 
-    const { error } = await client.from('productos').update(update).eq('id', id);
-    if (error) return alert("Error: " + error.message);
-    alert("✅ Cambios guardados");
-    await cargarProductos();
+      const { data: existente } = await client
+        .from('productos')
+        .select('imagenes_urls')
+        .eq('id', id)
+        .single();
+
+      const actuales = existente?.imagenes_urls || [];
+      update.imagenes_urls = [...actuales, ...urls];
+    }
+
+    try {
+      const { error } = await client.from('productos').update(update).eq('id', id);
+      if (error) throw error;
+      alert("✅ Cambios guardados correctamente.");
+      await cargarProductos();
+    } catch (err) {
+      console.error("Error al guardar cambios:", err);
+      alert("❌ Error: " + err.message);
+    }
   }
 
+  // 🔹 ELIMINAR PRODUCTO
   async function eliminarProducto(id) {
     if (!confirm("¿Eliminar este producto?")) return;
-    const { error } = await client.from('productos').delete().eq('id', id);
-    if (error) return alert("Error: " + error.message);
-    alert("✅ Producto eliminado");
-    await cargarProductos();
+    try {
+      const { error } = await client.from('productos').delete().eq('id', id);
+      if (error) throw error;
+      alert("✅ Producto eliminado correctamente.");
+      await cargarProductos();
+    } catch (err) {
+      alert("❌ Error: " + err.message);
+    }
   }
 </script>
+
 
 
 </body>
