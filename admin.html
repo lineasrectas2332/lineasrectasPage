@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- Agregar esto ANTES del script existente -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -278,6 +276,28 @@
       to { transform: rotate(360deg); }
     }
 
+    /* Estilos para vista previa de imágenes */
+    .image-preview {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 2px solid #ddd;
+    }
+    .d-flex {
+      display: flex;
+    }
+    .gap-2 {
+      gap: 10px;
+    }
+    .mt-2 {
+      margin-top: 10px;
+    }
+    .text-muted {
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
@@ -340,11 +360,14 @@
         </div>
         
         <div class="form-group">
-  <label for="imagen">Imágenes del Producto</label>
-  <input type="file" id="imagen" name="imagen" class="form-control" accept="image/*" multiple required>
-  <small class="text-muted">Podés seleccionar varias imágenes (JPG, PNG, máx. 2MB cada una)</small>
-</div>
-
+          <label for="imagenes">Imágenes del Producto (hasta 3)</label>
+          <input type="file" id="imagenes" name="imagenes" class="form-control" accept="image/*" multiple required>
+          <small class="text-muted">Podés seleccionar hasta 3 imágenes (JPG, PNG, máx. 2MB cada una)</small>
+          <div id="preview-container" class="mt-2" style="display: none;">
+            <p>Vista previa:</p>
+            <div id="image-previews" class="d-flex gap-2"></div>
+          </div>
+        </div>
         
         <button type="submit" class="btn btn-primary">
           <span id="submit-text">Agregar Producto</span>
@@ -364,263 +387,314 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://tldqbupxdkvolymtndrn.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZHFidXB4ZGt2b2x5bXRuZHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDE0NzYsImV4cCI6MjA3NTAxNzQ3Nn0.Y1YaA-qHYVAEn4rSA0LC6nGmG0RQ70zoxodLuMXOmW0';
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  document.addEventListener('DOMContentLoaded', cargarProductos);
-
-  // 🔹 CARGAR PRODUCTOS EXISTENTES
-  async function cargarProductos() {
-    const cont = document.getElementById("productos");
-    cont.innerHTML = `<div class="empty-state"><div class="loading"></div><p>Cargando productos...</p></div>`;
-
-    const { data: productos, error } = await client
-      .from('productos')
-      .select('*')
-      .order('id', { ascending: true });
-
-    if (error) {
-      cont.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
-      console.error('Error cargando productos:', error);
-      return;
-    }
-
-    console.log('Productos cargados:', productos); // Para debug
-
-    if (productos.length === 0) {
-      cont.innerHTML = `
-        <div class="empty-state">
-          <i class="fas fa-box-open"></i>
-          <p>No hay productos registrados</p>
-        </div>
-      `;
-      return;
-    }
-
-    cont.innerHTML = '';
-
-    productos.forEach(p => {
-      const img = p.imagen_url || 'https://via.placeholder.com/300?text=Sin+imagen';
-
-      const div = document.createElement('div');
-      div.className = 'product-card';
-      div.innerHTML = `
-        <img src="${img}" class="product-image" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Error+imagen'">
-        <div class="product-body">
-          <h3 class="product-title">${p.nombre}</h3>
-          <div class="form-group">
-            <label>Nombre:</label>
-            <input id="nombre-${p.id}" class="form-control" value="${p.nombre}">
-          </div>
-          <div class="form-group">
-            <label>Descripción:</label>
-            <textarea id="desc-${p.id}" class="form-control" rows="3">${p.descripcion}</textarea>
-          </div>
-          <div class="form-group">
-            <label>Precio:</label>
-            <input id="precio-${p.id}" class="form-control" type="number" step="0.01" value="${p.precio}">
-          </div>
-          <div class="form-group">
-            <label>Categoría:</label>
-            <select id="categoria-${p.id}" class="form-control">
-              <option value="living" ${p.categoria === 'living' ? 'selected':''}>Living</option>
-              <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected':''}>Dormitorio</option>
-              <option value="comedor" ${p.categoria === 'comedor' ? 'selected':''}>Comedor</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Cambiar imagen:</label>
-            <input type="file" id="img-${p.id}" class="form-control" accept="image/*">
-          </div>
-          <div class="product-actions">
-            <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">
-              <i class="fas fa-save"></i> Guardar
-            </button>
-            <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">
-              <i class="fas fa-trash"></i> Eliminar
-            </button>
-          </div>
-        </div>`;
-      cont.appendChild(div);
+    document.addEventListener('DOMContentLoaded', function() {
+      cargarProductos();
+      setupImagePreview();
     });
-  }
 
-  // 🔹 SUBIR UNA IMAGEN AL STORAGE
-  async function subirImagen(file) {
-    const ext = file.name.split('.').pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
-
-    const { data, error } = await client.storage
-      .from('productos')
-      .upload(fileName, file);
-
-    if (error) {
-      console.error("Error al subir imagen:", error);
-      throw error;
+    // 🔹 CONFIGURAR VISTA PREVIA DE IMÁGENES
+    function setupImagePreview() {
+      document.getElementById('imagenes').addEventListener('change', function(e) {
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreviews = document.getElementById('image-previews');
+        
+        imagePreviews.innerHTML = '';
+        
+        if (this.files.length > 0) {
+          previewContainer.style.display = 'block';
+          
+          // Limitar a 3 imágenes
+          const files = Array.from(this.files).slice(0, 3);
+          
+          files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.className = 'image-preview';
+              imagePreviews.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+          });
+          
+          // Actualizar files del input
+          const dt = new DataTransfer();
+          files.forEach(file => dt.items.add(file));
+          this.files = dt.files;
+          
+        } else {
+          previewContainer.style.display = 'none';
+        }
+      });
     }
 
-    // Obtener URL pública
-    const { data: publicUrlData } = client.storage
-      .from('productos')
-      .getPublicUrl(fileName);
+    // 🔹 CARGAR PRODUCTOS EXISTENTES
+    async function cargarProductos() {
+      const cont = document.getElementById("productos");
+      cont.innerHTML = `<div class="empty-state"><div class="loading"></div><p>Cargando productos...</p></div>`;
 
-    return publicUrlData.publicUrl;
-  }
-
-  // 🔹 FORMULARIO NUEVO PRODUCTO
-  document.getElementById("formulario").addEventListener("submit", async e => {
-    e.preventDefault();
-
-    const nombre = document.getElementById("nombre").value.trim();
-    const descripcion = document.getElementById("descripcion").value.trim();
-    const precio = parseFloat(document.getElementById("precio").value);
-    const categoria = document.getElementById("categoria").value;
-    const imagenFile = document.getElementById("imagen").files[0];
-
-    // Validaciones
-    if (!nombre || !descripcion || isNaN(precio) || !categoria) {
-      return alert("⚠️ Completá todos los campos antes de guardar.");
-    }
-    if (!imagenFile) {
-      return alert("⚠️ Seleccioná una imagen.");
-    }
-
-    const submitBtn = document.querySelector('#formulario button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    
-    try {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="loading"></div> Subiendo...';
-
-      // Subir imagen
-      const imagenUrl = await subirImagen(imagenFile);
-      
-      console.log('Imagen subida:', imagenUrl);
-
-      // Insertar producto
-      const { data, error } = await client
+      const { data: productos, error } = await client
         .from('productos')
-        .insert([{ 
-          nombre, 
-          descripcion, 
-          precio, 
-          categoria, 
-          imagen_url: imagenUrl 
-        }])
-        .select();
+        .select('*')
+        .order('id', { ascending: true });
 
-      if (error) throw error;
-
-      // Mostrar notificación
-      const notification = document.createElement('div');
-      notification.className = 'alert alert-success';
-      notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
-      document.querySelector('main').prepend(notification);
-      setTimeout(() => notification.remove(), 3000);
-
-      // Limpiar formulario y recargar
-      e.target.reset();
-      await cargarProductos();
-
-    } catch (err) {
-      console.error("Error al agregar producto:", err);
-      
-      // Mostrar notificación de error
-      const notification = document.createElement('div');
-      notification.className = 'alert alert-danger';
-      notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
-      document.querySelector('main').prepend(notification);
-      setTimeout(() => notification.remove(), 5000);
-      
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalText;
-    }
-  });
-
-  // 🔹 GUARDAR CAMBIOS DE PRODUCTO EXISTENTE
-  async function guardarCambios(id) {
-    const nombre = document.getElementById(`nombre-${id}`).value;
-    const descripcion = document.getElementById(`desc-${id}`).value;
-    const precio = parseFloat(document.getElementById(`precio-${id}`).value);
-    const categoria = document.getElementById(`categoria-${id}`).value;
-    const nuevaImagen = document.getElementById(`img-${id}`).files[0];
-
-    const updateData = { 
-      nombre, 
-      descripcion, 
-      precio, 
-      categoria,
-      updated_at: new Date().toISOString()
-    };
-
-    try {
-      // Si hay nueva imagen, subirla
-      if (nuevaImagen) {
-        const nuevaUrl = await subirImagen(nuevaImagen);
-        updateData.imagen_url = nuevaUrl;
+      if (error) {
+        cont.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+        console.error('Error cargando productos:', error);
+        return;
       }
 
-      const { error } = await client
-        .from('productos')
-        .update(updateData)
-        .eq('id', id);
+      console.log('Productos cargados:', productos);
 
-      if (error) throw error;
+      if (productos.length === 0) {
+        cont.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>No hay productos registrados</p>
+          </div>
+        `;
+        return;
+      }
 
-      // Mostrar notificación
-      const notification = document.createElement('div');
-      notification.className = 'alert alert-success';
-      notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto actualizado correctamente';
-      document.querySelector('main').prepend(notification);
-      setTimeout(() => notification.remove(), 3000);
+      cont.innerHTML = '';
 
-      await cargarProductos();
-      
-    } catch (err) {
-      console.error("Error al guardar cambios:", err);
-      
-      // Mostrar notificación de error
-      const notification = document.createElement('div');
-      notification.className = 'alert alert-danger';
-      notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
-      document.querySelector('main').prepend(notification);
-      setTimeout(() => notification.remove(), 5000);
+      productos.forEach(p => {
+        // Usar la primera imagen del array o la imagen individual
+        const img = (p.imagenes_urls && p.imagenes_urls.length > 0) 
+          ? p.imagenes_urls[0] 
+          : p.imagen_url || 'https://via.placeholder.com/300?text=Sin+imagen';
+
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `
+          <img src="${img}" class="product-image" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Error+imagen'">
+          <div class="product-body">
+            <h3 class="product-title">${p.nombre}</h3>
+            <div class="form-group">
+              <label>Nombre:</label>
+              <input id="nombre-${p.id}" class="form-control" value="${p.nombre}">
+            </div>
+            <div class="form-group">
+              <label>Descripción:</label>
+              <textarea id="desc-${p.id}" class="form-control" rows="3">${p.descripcion}</textarea>
+            </div>
+            <div class="form-group">
+              <label>Precio:</label>
+              <input id="precio-${p.id}" class="form-control" type="number" step="0.01" value="${p.precio}">
+            </div>
+            <div class="form-group">
+              <label>Categoría:</label>
+              <select id="categoria-${p.id}" class="form-control">
+                <option value="living" ${p.categoria === 'living' ? 'selected':''}>Living</option>
+                <option value="dormitorio" ${p.categoria === 'dormitorio' ? 'selected':''}>Dormitorio</option>
+                <option value="comedor" ${p.categoria === 'comedor' ? 'selected':''}>Comedor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cambiar imágenes (hasta 3):</label>
+              <input type="file" id="img-${p.id}" class="form-control" accept="image/*" multiple>
+              <small class="text-muted">${p.imagenes_urls ? p.imagenes_urls.length + ' imagen(es)' : '1 imagen'}</small>
+            </div>
+            <div class="product-actions">
+              <button onclick="guardarCambios(${p.id})" class="btn btn-success btn-sm">
+                <i class="fas fa-save"></i> Guardar
+              </button>
+              <button onclick="eliminarProducto(${p.id})" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>`;
+        cont.appendChild(div);
+      });
     }
-  }
 
-  // 🔹 ELIMINAR PRODUCTO
-  async function eliminarProducto(id) {
-    if (!confirm("¿Estás seguro de eliminar este producto?")) return;
-    
-    try {
-      const { error } = await client
-        .from('productos')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      // Mostrar notificación
-      const notification = document.createElement('div');
-      notification.className = 'alert alert-success';
-      notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto eliminado correctamente';
-      document.querySelector('main').prepend(notification);
-      setTimeout(() => notification.remove(), 3000);
-
-      await cargarProductos();
+    // 🔹 SUBIR MÚLTIPLES IMÁGENES
+    async function subirImagenes(files) {
+      const urls = [];
       
-    } catch (err) {
-      console.error("Error al eliminar producto:", err);
-      alert("❌ Error: " + err.message);
+      for (const file of files) {
+        const ext = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
+
+        const { data, error } = await client.storage
+          .from('productos')
+          .upload(fileName, file);
+
+        if (error) {
+          console.error("Error al subir imagen:", error);
+          throw error;
+        }
+
+        // Obtener URL pública
+        const { data: publicUrlData } = client.storage
+          .from('productos')
+          .getPublicUrl(fileName);
+
+        urls.push(publicUrlData.publicUrl);
+      }
+      
+      return urls;
     }
-  }
-</script>
 
+    // 🔹 FORMULARIO NUEVO PRODUCTO
+    document.getElementById("formulario").addEventListener("submit", async e => {
+      e.preventDefault();
 
+      const nombre = document.getElementById("nombre").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      const precio = parseFloat(document.getElementById("precio").value);
+      const categoria = document.getElementById("categoria").value;
+      const imagenFiles = document.getElementById("imagenes").files;
+
+      // Validaciones
+      if (!nombre || !descripcion || isNaN(precio) || !categoria) {
+        return alert("⚠️ Completá todos los campos antes de guardar.");
+      }
+      if (imagenFiles.length === 0) {
+        return alert("⚠️ Seleccioná al menos una imagen.");
+      }
+      if (imagenFiles.length > 3) {
+        return alert("⚠️ Máximo 3 imágenes permitidas.");
+      }
+
+      const submitBtn = document.querySelector('#formulario button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="loading"></div> Subiendo...';
+
+        // Subir imágenes (máximo 3)
+        const files = Array.from(imagenFiles).slice(0, 3);
+        const imagenesUrls = await subirImagenes(files);
+        
+        console.log('Imágenes subidas:', imagenesUrls);
+
+        // Insertar producto con array de imágenes
+        const { data, error } = await client
+          .from('productos')
+          .insert([{ 
+            nombre, 
+            descripcion, 
+            precio, 
+            categoria, 
+            imagenes_urls: imagenesUrls,
+            imagen_url: imagenesUrls[0] // Mantener la primera imagen como thumbnail
+          }])
+          .select();
+
+        if (error) throw error;
+
+        // Mostrar notificación
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
+        document.querySelector('main').prepend(notification);
+        setTimeout(() => notification.remove(), 3000);
+
+        // Limpiar formulario y recargar
+        e.target.reset();
+        document.getElementById('preview-container').style.display = 'none';
+        await cargarProductos();
+
+      } catch (err) {
+        console.error("Error al agregar producto:", err);
+        
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-danger';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
+        document.querySelector('main').prepend(notification);
+        setTimeout(() => notification.remove(), 5000);
+        
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+
+    // 🔹 GUARDAR CAMBIOS DE PRODUCTO EXISTENTE
+    async function guardarCambios(id) {
+      const nombre = document.getElementById(`nombre-${id}`).value;
+      const descripcion = document.getElementById(`desc-${id}`).value;
+      const precio = parseFloat(document.getElementById(`precio-${id}`).value);
+      const categoria = document.getElementById(`categoria-${id}`).value;
+      const nuevasImagenes = document.getElementById(`img-${id}`).files;
+
+      const updateData = { 
+        nombre, 
+        descripcion, 
+        precio, 
+        categoria,
+        updated_at: new Date().toISOString()
+      };
+
+      try {
+        // Si hay nuevas imágenes, subirlas
+        if (nuevasImagenes.length > 0) {
+          const files = Array.from(nuevasImagenes).slice(0, 3);
+          const nuevasUrls = await subirImagenes(files);
+          updateData.imagenes_urls = nuevasUrls;
+          updateData.imagen_url = nuevasUrls[0]; // Primera imagen como thumbnail
+        }
+
+        const { error } = await client
+          .from('productos')
+          .update(updateData)
+          .eq('id', id);
+
+        if (error) throw error;
+
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto actualizado correctamente';
+        document.querySelector('main').prepend(notification);
+        setTimeout(() => notification.remove(), 3000);
+
+        await cargarProductos();
+        
+      } catch (err) {
+        console.error("Error al guardar cambios:", err);
+        
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-danger';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
+        document.querySelector('main').prepend(notification);
+        setTimeout(() => notification.remove(), 5000);
+      }
+    }
+
+    // 🔹 ELIMINAR PRODUCTO
+    async function eliminarProducto(id) {
+      if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+      
+      try {
+        const { error } = await client
+          .from('productos')
+          .delete()
+          .eq('id', id);
+
+        if (error) throw error;
+
+        // Mostrar notificación
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success';
+        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto eliminado correctamente';
+        document.querySelector('main').prepend(notification);
+        setTimeout(() => notification.remove(), 3000);
+
+        await cargarProductos();
+        
+      } catch (err) {
+        console.error("Error al eliminar producto:", err);
+        alert("❌ Error: " + err.message);
+      }
+    }
+  </script>
 </body>
 </html>
