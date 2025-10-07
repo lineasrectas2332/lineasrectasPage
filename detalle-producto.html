@@ -83,6 +83,7 @@
             border-radius: 5px;
             transition: background-color 0.3s, transform 0.2s;
             text-align: center;
+            margin-bottom: 60px; /* 👈 ESPACIO AGREGADO */
         }
 
         .whatsapp-btn:hover {
@@ -102,6 +103,59 @@
         .carousel-indicators button {
             background-color: #000;
         }
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
+
+.footer-info {
+    margin-bottom: 20px;
+}
+.footer-info h3, .footer-info p {
+    margin: 10px 0;
+}
+
+.footer-redes {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-redes ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wpp-footer, .ig-footer {
+    text-decoration: none;
+    color: white;
+}
+
+.footer-redes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.footer-copy {
+    margin-top: 20px;
+}
+
+#fotou {
+    width: 30px;
+    height: auto;
+}
+
+.logoabajo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+}
 
     </style>
 </head>
@@ -144,10 +198,28 @@
         </div>
     </section>
 
-    <footer class="text-center mt-5">
-        <p>&copy; 2024 Todos los derechos reservados</p>
-    </footer>
-
+    <footer>
+  <div class="footer-info">
+    <img class="logoabajo" src="images/IMG_5013.JPG" alt="">
+    <h3>LINEAS RECTAS</h3>
+    <p>Villa Maria, CBA.</p>
+    <p>Porfirio Seppey 315</p>
+    <p>+54-9353 6574696</p>
+    <p>lineasrectas@gmail.com</p>
+  </div>
+  <div class="footer-redes">
+    <ul>
+      <li>
+        <img id="fotou" src="images/instagram-new.png" alt="Instagram">
+        <a class="ig-footer" href="https://www.instagram.com/lineasrectas_amoblamientos/" target="_blank">Instagram</a>
+      </li>
+      <li>
+        <img id="fotou" src="images/whatsapp.png" alt="WhatsApp">
+        <a class="wpp-footer" href="https://wa.me/5493536574696" target="_blank">WhatsApp</a>
+      </li>
+    </ul>
+  </div>
+</footer>
     <!-- Modal para ver imagen en detalle -->
     <div class="modal fade" id="modalImagen" tabindex="-1" aria-labelledby="modalImagenLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
