@@ -166,60 +166,140 @@
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get('id'));
+  const id = parseInt(params.get('id'), 10);
+
+  // Escape text to avoid HTML injection when inserting nombre/descripcion en innerHTML
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Normaliza/extrae un array de URLs desde p.imagenes_urls (array real, JSON-string, comma-separated, single URL)
+  function normalizeImages(p) {
+    if (!p) return [];
+
+    // 1) si ya es array
+    if (Array.isArray(p.imagenes_urls)) {
+      return p.imagenes_urls.filter(Boolean);
+    }
+
+    const field = p.imagenes_urls;
+
+    // 2) si es string -> intentar parse JSON, luego fallback a coma-separado o single-url
+    if (typeof field === 'string' && field.trim().length > 0) {
+      // intentar JSON.parse
+      try {
+        const parsed = JSON.parse(field);
+        if (Array.isArray(parsed)) return parsed.filter(Boolean);
+        if (typeof parsed === 'string' && parsed.trim()) return [parsed.trim()];
+        if (parsed && typeof parsed === 'object') {
+          // por si fuese un objeto con campos URL
+          return Object.values(parsed).filter(v => typeof v === 'string' && v.trim());
+        }
+      } catch (e) {
+        // no es JSON: puede ser lista separada por comas
+        if (field.includes(',')) {
+          return field.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        return [field.trim()];
+      }
+    }
+
+    // 3) fallback a imagen_url (campo individual)
+    if (p.imagen_url && typeof p.imagen_url === 'string' && p.imagen_url.trim()) {
+      return [p.imagen_url.trim()];
+    }
+
+    return [];
+  }
 
   async function cargarProducto() {
     const cont = document.getElementById('producto-detalle');
-    cont.innerHTML = `<p>Cargando...</p>`;
+    if (!cont) return console.error('No existe el contenedor #producto-detalle en el HTML');
 
-    const { data: p, error } = await client.from('productos').select('*').eq('id', id).single();
-    if (error) {
-      cont.innerHTML = `<p>Error: ${error.message}</p>`;
+    if (!id || isNaN(id)) {
+      cont.innerHTML = '<p>Id de producto inválido en la URL.</p>';
       return;
     }
 
-    console.log("Producto cargado:", p); // Para depuración
+    cont.innerHTML = `<p>Cargando...</p>`;
 
-    const imagenes = p.imagenes_urls && p.imagenes_urls.length > 0 ? p.imagenes_urls : ['https://via.placeholder.com/500?text=Sin+imagen'];
+    const { data: p, error } = await client.from('productos').select('*').eq('id', id).single();
+    if (error || !p) {
+      cont.innerHTML = `<p>Error al cargar producto${error ? ': ' + escapeHtml(error.message) : ''}</p>`;
+      console.error('Error cargando producto:', error);
+      return;
+    }
 
+    console.log("Producto cargado:", p); // depuración
+
+    // Obtener array de imágenes de forma defensiva
+    let imagenes = normalizeImages(p);
+    if (!imagenes || imagenes.length === 0) {
+      imagenes = [p.imagen_url || 'https://via.placeholder.com/500?text=Sin+imagen'];
+    }
+
+    const carouselId = `carruselProducto-${id}`;
+
+    // Generar slides e indicadores
     let slides = '';
     let indicators = '';
     imagenes.forEach((url, i) => {
+      const safeUrl = url || 'https://via.placeholder.com/500?text=Error+al+cargar+imagen';
       slides += `
         <div class="carousel-item ${i === 0 ? 'active' : ''}">
-          <img src="${url}" class="d-block w-100" alt="Imagen ${i+1}" onerror="this.src='https://via.placeholder.com/500?text=Error+al+cargar+imagen'">
+          <img src="${safeUrl}" class="d-block w-100" alt="Imagen ${i+1}" onerror="this.src='https://via.placeholder.com/500?text=Error+al+cargar+imagen'">
         </div>`;
-      
-      indicators += `
-        <button type="button" data-bs-target="#carruselProducto" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}" aria-label="Slide ${i+1}"></button>`;
+      if (imagenes.length > 1) {
+        indicators += `
+          <button type="button" data-bs-target="#${carouselId}" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}" aria-label="Slide ${i+1}" ${i === 0 ? 'aria-current="true"' : ''}></button>`;
+      }
     });
 
+    // Construir HTML final (uso escapeHtml en nombre/descr)
+    const nombreSafe = escapeHtml(p.nombre);
+    const descSafe = escapeHtml(p.descripcion);
+    const precioSafe = (typeof p.precio === 'number' && isFinite(p.precio)) ? p.precio.toLocaleString('es-AR') : escapeHtml(p.precio);
+
     cont.innerHTML = `
-      <div id="carruselProducto" class="carousel slide" data-bs-ride="carousel">
+      <div id="${carouselId}" class="carousel slide mb-3" data-bs-ride="${imagenes.length > 1 ? 'carousel' : 'false'}">
         ${imagenes.length > 1 ? `<div class="carousel-indicators">${indicators}</div>` : ''}
         <div class="carousel-inner">${slides}</div>
         ${imagenes.length > 1 ? `
-          <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
+          <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Anterior</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Siguiente</span>
           </button>
         ` : ''}
       </div>
-      <h2>${p.nombre}</h2>
-      <p>${p.descripcion}</p>
-      <p><strong>Precio:</strong> $${p.precio.toLocaleString("es-AR")}</p>
-      <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20${encodeURIComponent(p.nombre)}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
+
+      <h2>${nombreSafe}</h2>
+      <p>${descSafe}</p>
+      <p><strong>Precio:</strong> $${precioSafe}</p>
+      <a href="https://wa.me/5493536574696?text=Estoy%20interesado%20en%20${encodeURIComponent(p.nombre || '')}" class="whatsapp-btn" target="_blank">Comprar Producto</a>
     `;
 
     // Agregar funcionalidad para abrir imagen en modal al hacer clic
-    document.querySelectorAll('.carousel-item img').forEach(img => {
-      img.addEventListener('click', function() {
-        document.getElementById('imagenAmpliada').src = this.src;
-        const modal = new bootstrap.Modal(document.getElementById('modalImagen'));
+    // (selector limitado al carousel actual para evitar conflictos)
+    const imgs = document.querySelectorAll(`#${carouselId} .carousel-item img`);
+    imgs.forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', function () {
+        const modalImg = document.getElementById('imagenAmpliada');
+        if (!modalImg) return console.warn('No se encontró #imagenAmpliada para el modal');
+        modalImg.src = this.src;
+        const modalEl = document.getElementById('modalImagen');
+        if (!modalEl) return console.warn('No se encontró #modalImagen para el modal');
+        const modal = new bootstrap.Modal(modalEl);
         modal.show();
       });
     });
@@ -227,6 +307,7 @@
 
   document.addEventListener('DOMContentLoaded', cargarProducto);
 </script>
+
 
 </body>
 </html>

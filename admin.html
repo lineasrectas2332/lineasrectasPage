@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #2c3e50;
+      --primary: #242424;
       --secondary: #3498db;
       --success: #27ae60;
       --danger: #e74c3c;
@@ -361,7 +361,7 @@
         
         <div class="form-group">
           <label for="imagenes">Imágenes del Producto (hasta 3)</label>
-          <input type="file" id="imagenes" name="imagenes" class="form-control" accept="image/*" multiple required>
+          <input type="file" id="imagenes" name="imagenes" class="form-control" accept="image/*" multiple >
           <small class="text-muted">Podés seleccionar hasta 3 imágenes (JPG, PNG, máx. 2MB cada una)</small>
           <div id="preview-container" class="mt-2" style="display: none;">
             <p>Vista previa:</p>
@@ -516,107 +516,114 @@
 
     // 🔹 SUBIR MÚLTIPLES IMÁGENES
     async function subirImagenes(files) {
-      const urls = [];
-      
-      for (const file of files) {
-        const ext = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
+  if (!files || files.length === 0) return [];
+  const urls = [];
+  for (const file of files.slice(0, 3)) {
+    const ext = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
 
-        const { data, error } = await client.storage
-          .from('productos')
-          .upload(fileName, file);
+    const { data: uploadData, error: uploadError } = await client.storage.from('productos').upload(fileName, file);
+    if (uploadError) throw uploadError;
 
-        if (error) {
-          console.error("Error al subir imagen:", error);
-          throw error;
-        }
-
-        // Obtener URL pública
-        const { data: publicUrlData } = client.storage
-          .from('productos')
-          .getPublicUrl(fileName);
-
-        urls.push(publicUrlData.publicUrl);
-      }
-      
-      return urls;
-    }
+    // Obtener URL pública (defensivo)
+    const { data: publicUrlData } = client.storage.from('productos').getPublicUrl(fileName);
+    const publicUrl = publicUrlData && (publicUrlData.publicUrl || publicUrlData.public_url);
+    urls.push(publicUrl || '');
+  }
+  return urls;
+}
 
     // 🔹 FORMULARIO NUEVO PRODUCTO
-    document.getElementById("formulario").addEventListener("submit", async e => {
-      e.preventDefault();
+   document.getElementById("formulario").addEventListener("submit", async e => {
+  e.preventDefault();
 
-      const nombre = document.getElementById("nombre").value.trim();
-      const descripcion = document.getElementById("descripcion").value.trim();
-      const precio = parseFloat(document.getElementById("precio").value);
-      const categoria = document.getElementById("categoria").value;
-      const imagenFiles = document.getElementById("imagenes").files;
+  const nombre = document.getElementById("nombre").value.trim();
+  const descripcion = document.getElementById("descripcion").value.trim();
+  const precio = parseFloat(document.getElementById("precio").value);
+  const categoria = document.getElementById("categoria").value;
+  const imagenFiles = document.getElementById("imagenes").files;
 
-      // Validaciones
-      if (!nombre || !descripcion || isNaN(precio) || !categoria) {
-        return alert("⚠️ Completá todos los campos antes de guardar.");
-      }
-      if (imagenFiles.length === 0) {
-        return alert("⚠️ Seleccioná al menos una imagen.");
-      }
-      if (imagenFiles.length > 3) {
-        return alert("⚠️ Máximo 3 imágenes permitidas.");
-      }
+  // Validaciones mínimas
+  if (!nombre || !descripcion || isNaN(precio) || !categoria) {
+    return alert("⚠️ Completá todos los campos antes de guardar.");
+  }
+  if (imagenFiles.length > 3) {
+    return alert("⚠️ Máximo 3 imágenes permitidas.");
+  }
 
-      const submitBtn = document.querySelector('#formulario button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      
-      try {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<div class="loading"></div> Subiendo...';
+  const submitBtn = document.querySelector('#formulario button[type="submit"]');
+  const originalText = submitBtn.innerHTML;
 
-        // Subir imágenes (máximo 3)
-        const files = Array.from(imagenFiles).slice(0, 3);
-        const imagenesUrls = await subirImagenes(files);
-        
-        console.log('Imágenes subidas:', imagenesUrls);
+  try {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<div class="loading"></div> Subiendo...';
 
-        // Insertar producto con array de imágenes
-        const { data, error } = await client
-          .from('productos')
-          .insert([{ 
-            nombre, 
-            descripcion, 
-            precio, 
-            categoria, 
-            imagenes_urls: imagenesUrls,
-            imagen_url: imagenesUrls[0] // Mantener la primera imagen como thumbnail
-          }])
-          .select();
+    // Subir imágenes sólo si hay
+    let imagenesUrls = [];
+    if (imagenFiles.length > 0) {
+      const files = Array.from(imagenFiles).slice(0, 3);
+      imagenesUrls = await subirImagenes(files);
+    }
 
-        if (error) throw error;
+    // Preparar objeto a insertar (si no hay imágenes guardamos array vacío y imagen_url = null)
+    const toInsert = {
+      nombre,
+      descripcion,
+      precio,
+      categoria,
+      imagenes_urls: imagenesUrls,
+      imagen_url: imagenesUrls.length ? imagenesUrls[0] : null
+    };
 
-        // Mostrar notificación
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-success';
-        notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
-        document.querySelector('main').prepend(notification);
-        setTimeout(() => notification.remove(), 3000);
+    const { data, error } = await client
+      .from('productos')
+      .insert([toInsert])
+      .select();
 
-        // Limpiar formulario y recargar
-        e.target.reset();
-        document.getElementById('preview-container').style.display = 'none';
-        await cargarProductos();
+    if (error) throw error;
 
-      } catch (err) {
-        console.error("Error al agregar producto:", err);
-        
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-danger';
-        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
-        document.querySelector('main').prepend(notification);
-        setTimeout(() => notification.remove(), 5000);
-        
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }
-    });
+    // notificación y limpieza
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success';
+    notification.innerHTML = '<i class="fas fa-check-circle"></i> Producto agregado correctamente';
+    document.querySelector('main').prepend(notification);
+    setTimeout(() => notification.remove(), 3000);
+
+    e.target.reset();
+    document.getElementById('preview-container').style.display = 'none';
+    await cargarProductos();
+
+  } catch (err) {
+    console.error("Error al agregar producto:", err);
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-danger';
+    notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err.message}`;
+    document.querySelector('main').prepend(notification);
+    setTimeout(() => notification.remove(), 5000);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  }
+});
+
+function getImagenesArray(p) {
+  if (!p) return [];
+  // 1) Si ya es array
+  if (Array.isArray(p.imagenes_urls)) return p.imagenes_urls;
+  // 2) Si viene como string (JSON), intentar parsear
+  if (typeof p.imagenes_urls === 'string') {
+    try {
+      const parsed = JSON.parse(p.imagenes_urls);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) {
+      // no es JSON, puede ser una URL sola
+      if (p.imagenes_urls) return [p.imagenes_urls];
+    }
+  }
+  // 3) fallback a imagen_url si existe
+  if (p.imagen_url) return [p.imagen_url];
+  return [];
+}
 
     // 🔹 GUARDAR CAMBIOS DE PRODUCTO EXISTENTE
     async function guardarCambios(id) {
